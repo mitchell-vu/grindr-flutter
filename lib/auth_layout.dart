@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grindr_flutter/pages/home.dart';
 import 'package:grindr_flutter/pages/login.dart';
 import 'package:grindr_flutter/services/auth_service.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class AuthLayout extends StatelessWidget {
   const AuthLayout({super.key});
@@ -14,6 +15,12 @@ class AuthLayout extends StatelessWidget {
         return StreamBuilder(
           stream: authService.authStateChanges,
           builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox.shrink();
+            }
+
+            FlutterNativeSplash.remove();
+
             if (snapshot.hasData) {
               return Home();
             }
