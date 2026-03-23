@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grindr_flutter/pages/chat_history.dart';
+import 'package:grindr_flutter/views/chat/chat_history.dart';
 
 class ChatListItem extends StatelessWidget {
   const ChatListItem({

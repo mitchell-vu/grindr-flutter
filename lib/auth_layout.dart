@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/pages/app.dart';
-import 'package:grindr_flutter/pages/login.dart';
+import 'package:grindr_flutter/views/app.dart';
+import 'package:grindr_flutter/views/auth/login.dart';
 import 'package:grindr_flutter/services/auth_service.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/pages/chat.dart';
-import 'package:grindr_flutter/pages/home.dart';
+import 'package:grindr_flutter/views/chat/chat.dart';
+import 'package:grindr_flutter/views/home.dart';
 import 'package:grindr_flutter/services/auth_service.dart';
 
 class App extends StatefulWidget {
