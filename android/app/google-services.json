@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "110612159836",
+    "project_id": "grindr-flutter-95d73",
+    "storage_bucket": "grindr-flutter-95d73.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110612159836:android:879473e178058e76cff599",
+        "android_client_info": {
+          "package_name": "com.example.grindr_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVjefOtLkvJl2C0m6uG18kebPygoacWMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
