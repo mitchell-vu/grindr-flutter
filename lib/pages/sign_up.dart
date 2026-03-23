@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/pages/home.dart';
+import 'package:grindr_flutter/pages/app.dart';
 import 'package:grindr_flutter/services/auth_service.dart';
 
 class SignUp extends StatefulWidget {
@@ -51,7 +51,7 @@ class _SignUpState extends State<SignUp> {
 
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => const App()),
         (route) => false,
       );
     } on FirebaseAuthException catch (e) {

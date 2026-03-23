@@ -3,6 +3,7 @@ import 'package:grindr_flutter/auth_layout.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.orange, brightness: .dark),
+        colorScheme: .fromSeed(seedColor: Colors.amber, brightness: .dark),
+        textTheme: GoogleFonts.ibmPlexSansTextTheme(),
       ),
       home: const AuthLayout(),
     );

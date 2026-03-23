@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/pages/home.dart';
 import 'package:grindr_flutter/pages/sign_up.dart';
 import 'package:grindr_flutter/services/auth_service.dart';
 
@@ -34,14 +33,6 @@ class _LoginState extends State<Login> {
       await authService.value.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
-      );
-
-      if (!mounted) return;
-
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-        (route) => false,
       );
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -78,6 +69,7 @@ class _LoginState extends State<Login> {
                 border: OutlineInputBorder(),
                 hintText: 'Email',
               ),
+              style: TextStyle(color: Colors.white),
             ),
             TextField(
               controller: _passwordController,
@@ -86,15 +78,12 @@ class _LoginState extends State<Login> {
                 border: OutlineInputBorder(),
                 hintText: 'Password',
               ),
+              style: TextStyle(color: Colors.white),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Home()),
-                );
-              },
-              child: const Text('Login'),
+            SizedBox(
+              width: double.infinity,
+              height: 64,
+              child: FilledButton(onPressed: login, child: const Text('Login')),
             ),
           ],
         ),

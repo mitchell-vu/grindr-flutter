@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/pages/home.dart';
+import 'package:grindr_flutter/pages/app.dart';
 import 'package:grindr_flutter/pages/login.dart';
 import 'package:grindr_flutter/services/auth_service.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -22,7 +22,7 @@ class AuthLayout extends StatelessWidget {
             FlutterNativeSplash.remove();
 
             if (snapshot.hasData) {
-              return Home();
+              return App();
             }
             return Login();
           },
