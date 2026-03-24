@@ -46,13 +46,9 @@ class _AppState extends State<App> {
       valueListenable: selectedPageIndex,
       builder: (context, value, child) {
         return Scaffold(
-          appBar: selectedPageIndex.value == 0
-              ? AppBar(
-                  title: Text(
-                    _pages.elementAt(selectedPageIndex.value)['label'],
-                  ),
-                )
-              : null,
+          appBar: AppBar(
+            title: Text(_pages.elementAt(selectedPageIndex.value)['label']),
+          ),
           drawer: Drawer(
             child: ListView(
               children: [

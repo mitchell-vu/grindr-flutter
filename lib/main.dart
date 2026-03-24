@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/auth_layout.dart';
+import 'package:grindr_flutter/widgets/auth_layout.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
