@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:grindr_flutter/configs/theme.dart';
+import 'package:grindr_flutter/features/auth/models/user_model.dart';
 import 'package:grindr_flutter/features/chat/views/chat_history.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -11,7 +13,19 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+UserModel mockUser = UserModel(
+  uid: '123123',
+  email: 'email',
+  displayName: 'The Mariás',
+  photoUrl:
+      'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+  isOnline: true,
+  lastSeen: DateTime.now(),
+  createdAt: DateTime.now(),
+);
+
 class _ProfilePageState extends State<ProfilePage> {
+  final UserModel user = mockUser;
   int currentPhotoIndex = 0;
   bool isFavorite = false;
 
@@ -32,27 +46,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       width: double.infinity,
                       height: 640,
                       child: Image.network(
-                        'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+                        user.photoUrl ??
+                            'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
                         fit: BoxFit.cover,
-                      ),
-                    ),
-
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: 640 * 0.25,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.black.withValues(alpha: 0.5),
-                              Colors.transparent,
-                            ],
-                          ),
-                        ),
                       ),
                     ),
 
@@ -124,13 +120,26 @@ class _ProfilePageState extends State<ProfilePage> {
                       spacing: 4,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "The Marías",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        Row(
+                          spacing: 8,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              user.displayName ?? "",
+                              style: GoogleFonts.ibmPlexSans(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              "31",
+                              style: GoogleFonts.ibmPlexSans(
+                                fontSize: 28,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
 
                         Row(
@@ -243,39 +252,64 @@ class ActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.close),
-              iconSize: 28,
+    return Stack(
+      children: [
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 640 * 0.25,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: 0.9),
+                  Colors.black.withValues(alpha: 0.5),
+                  Colors.transparent,
+                ],
+                stops: [0, 0.2, 0.8],
+              ),
             ),
-            Row(
+          ),
+        ),
+
+        SafeArea(
+          child: Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.block_outlined),
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(Icons.close),
                   iconSize: 28,
                 ),
-                IconButton(
-                  onPressed: onToggleFavorite,
-                  icon: Icon(
-                    isFavorite ? Icons.star : Icons.star_border,
-                    color: isFavorite
-                        ? Colors.amber
-                        : Theme.of(context).colorScheme.onSurface,
-                  ),
-                  iconSize: 28,
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.block_outlined),
+                      iconSize: 28,
+                    ),
+                    IconButton(
+                      onPressed: onToggleFavorite,
+                      icon: Icon(
+                        isFavorite ? Icons.star : Icons.star_border,
+                        color: isFavorite
+                            ? Colors.amber
+                            : Theme.of(context).colorScheme.onSurface,
+                      ),
+                      iconSize: 28,
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

@@ -30,6 +30,18 @@ class FirestoreService {
     }
   }
 
+  Future<List<UserModel>> getAllOtherUsers(String currentUserId) async {
+    try {
+      final QuerySnapshot snapshot = await _firestore.collection('users').get();
+      return snapshot.docs
+          .map((doc) => UserModel.fromMap(doc.data() as Map<String, dynamic>))
+          // .where((user) => user.uid != currentUserId)
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to get all users: ${e.toString()}');
+    }
+  }
+
   Stream<List<ChatModel>> getChatStream(String uid) {
     try {
       return _firestore
@@ -48,8 +60,8 @@ class FirestoreService {
   }
 }
 
-String _generateChatId(String user1, String user2) {
-  final List<String> users = [user1, user2];
-  users.sort();
-  return users.join('_');
-}
+// String _generateChatId(String user1, String user2) {
+//   final List<String> users = [user1, user2];
+//   users.sort();
+//   return users.join('_');
+// }

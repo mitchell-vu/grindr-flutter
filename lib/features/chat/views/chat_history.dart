@@ -7,32 +7,96 @@ import 'package:grindr_flutter/features/profile/profile.dart';
 class ChatMessage {
   final String message;
   final bool isMe;
+  final DateTime createdAt;
 
-  ChatMessage({required this.message, required this.isMe});
+  ChatMessage({
+    required this.message,
+    required this.isMe,
+    required this.createdAt,
+  });
 }
 
 final List<ChatMessage> _mockChatHistory = [
-  ChatMessage(message: 'Hi! u looking? 👀', isMe: false),
-  ChatMessage(message: 'Yeah', isMe: true),
-  ChatMessage(message: 'Where are you?', isMe: false),
-  ChatMessage(message: 'I am at home', isMe: true),
-  ChatMessage(message: 'Can you host?', isMe: false),
-  ChatMessage(message: 'Yeah, i can!', isMe: true),
-  ChatMessage(message: 'Ok, I will come to you', isMe: false),
-  ChatMessage(message: 'Ok, I will wait for you', isMe: true),
-  ChatMessage(message: 'Ok, I will see you soon', isMe: false),
-  ChatMessage(message: 'Ok, I will see you soon', isMe: true),
-  ChatMessage(message: 'Yeah, i can!', isMe: true),
-  ChatMessage(message: 'Ok, I will come to you', isMe: false),
-  ChatMessage(message: 'Ok, I will wait for you', isMe: true),
-  ChatMessage(message: 'Ok, I will see you soon', isMe: false),
-  ChatMessage(message: 'Ok, I will see you soon', isMe: true),
+  ChatMessage(
+    message: 'Hi! How you doing?',
+    isMe: false,
+    createdAt: DateTime.now(),
+  ),
+  ChatMessage(message: 'I am fine', isMe: true, createdAt: DateTime.now()),
+  ChatMessage(message: 'Hbu?', isMe: true, createdAt: DateTime.now()),
+  ChatMessage(message: 'I am cool too', isMe: false, createdAt: DateTime.now()),
+  ChatMessage(
+    message: 'So you looking? 👀',
+    isMe: false,
+    createdAt: DateTime.now(),
+  ),
+  ChatMessage(
+    message: 'Where are you?',
+    isMe: false,
+    createdAt: DateTime.now(),
+  ),
+  ChatMessage(message: 'I am at home', isMe: true, createdAt: DateTime.now()),
+  ChatMessage(message: 'Can you host?', isMe: false, createdAt: DateTime.now()),
+  ChatMessage(message: 'Yeah, i can!', isMe: true, createdAt: DateTime.now()),
+  ChatMessage(
+    message: 'Ok, I will come to you',
+    isMe: false,
+    createdAt: DateTime.now(),
+  ),
 ];
 
-class ChatHistoryPage extends StatelessWidget {
+ValueNotifier<List<ChatMessage>> chatHistory = ValueNotifier(_mockChatHistory);
+
+class ChatHistoryPage extends StatefulWidget {
   const ChatHistoryPage({super.key, required this.title});
 
   final String title;
+
+  @override
+  State<ChatHistoryPage> createState() => _ChatHistoryPageState();
+}
+
+class _ChatHistoryPageState extends State<ChatHistoryPage> {
+  final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollToBottom();
+  }
+
+  @override
+  void dispose() async {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void handleSendMessage() {
+    final message = _messageController.text;
+
+    if (message.isNotEmpty) {
+      chatHistory.value = [
+        ...chatHistory.value,
+        ChatMessage(message: message, isMe: true, createdAt: DateTime.now()),
+      ];
+      _messageController.clear();
+      scrollToBottom();
+    }
+  }
+
+  void scrollToBottom() {
+    //? TODO: Tìm hiểu SchedulerBinding với WidgetsBinding
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +104,7 @@ class ChatHistoryPage extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
+        surfaceTintColor: Colors.black,
         title: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
@@ -61,13 +126,13 @@ class ChatHistoryPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    spacing: 6,
+                    spacing: 4,
                     children: [
                       Icon(Icons.circle, size: 12, color: AppTheme.success),
                       Text(
-                        title,
+                        widget.title,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -90,16 +155,23 @@ class ChatHistoryPage extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: _mockChatHistory.length,
-                  itemBuilder: (context, index) {
-                    final chatMessage = _mockChatHistory[index];
+                child: ValueListenableBuilder(
+                  valueListenable: chatHistory,
+                  builder: (context, chatHistory, child) => ListView.builder(
+                    controller: _scrollController,
+                    itemCount: chatHistory.length,
+                    itemBuilder: (context, index) {
+                      final chatMessage = chatHistory[index];
+                      final isNextMessageSameUser =
+                          index < chatHistory.length - 1 &&
+                          chatHistory[index + 1].isMe == chatMessage.isMe;
 
-                    return MessageBubble(
-                      content: chatMessage.message,
-                      isMe: chatMessage.isMe,
-                    );
-                  },
+                      return MessageBubble(
+                        message: chatMessage,
+                        showTimestamp: !isNextMessageSameUser,
+                      );
+                    },
+                  ),
                 ),
               ),
               Padding(
@@ -120,18 +192,18 @@ class ChatHistoryPage extends StatelessWidget {
                         bottom: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainerHighest,
+                        color: Colors.grey.shade900,
                         borderRadius: BorderRadius.circular(100),
                       ),
                       child: Row(
                         children: [
                           Expanded(
                             child: TextField(
+                              controller: _messageController,
                               decoration: InputDecoration(
                                 hintText: 'Say something...',
                                 border: InputBorder.none,
+                                hintStyle: TextStyle(color: Colors.grey),
                               ),
                               style: TextStyle(color: Colors.white),
                             ),
@@ -139,7 +211,7 @@ class ChatHistoryPage extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.send),
                             color: AppTheme.primary,
-                            onPressed: () {},
+                            onPressed: handleSendMessage,
                           ),
                         ],
                       ),
@@ -150,15 +222,22 @@ class ChatHistoryPage extends StatelessWidget {
                         IconButton(
                           onPressed: () {},
                           icon: Icon(Icons.photo_camera),
+                          color: Colors.grey,
                         ),
-                        IconButton(onPressed: () {}, icon: Icon(Icons.gif_box)),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.gif_box),
+                          color: Colors.grey,
+                        ),
                         IconButton(
                           onPressed: () {},
                           icon: Icon(Icons.navigation_sharp),
+                          color: Colors.grey,
                         ),
                         IconButton(
                           onPressed: () {},
                           icon: Icon(Icons.emoji_emotions),
+                          color: Colors.grey,
                         ),
                       ],
                     ),

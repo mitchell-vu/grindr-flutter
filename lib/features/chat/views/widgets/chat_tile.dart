@@ -24,10 +24,9 @@ class ChatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final isUnread = unreadCount > 0;
     final isOnline = Random().nextInt(10) > 5;
-    final contentColor = isUnread ? Colors.white : colorScheme.onSurfaceVariant;
+    final contentColor = isUnread ? Colors.white : Colors.grey;
 
     return Row(
       children: [
@@ -62,61 +61,56 @@ class ChatListItem extends StatelessWidget {
                 ),
               );
             },
-            child: Container(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 2,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          spacing: 4,
-                          children: [
-                            if (isOnline)
-                              Icon(
-                                Icons.circle,
-                                size: 12,
-                                color: AppTheme.success,
-                              ),
-                            Text(
-                              name,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: contentColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          lastMessage,
-                          style: GoogleFonts.ibmPlexSans(
-                            fontSize: 16,
-                            fontWeight: isUnread
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color: contentColor,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
 
-                  // Time + unread badge
-                  Column(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 2,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 4,
+                        children: [
+                          if (isOnline)
+                            Icon(
+                              Icons.circle,
+                              size: 12,
+                              color: AppTheme.success,
+                            ),
+                          Text(
+                            name,
+                            style: TextStyle(fontSize: 16, color: contentColor),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        lastMessage,
+                        style: GoogleFonts.ibmPlexSans(
+                          fontSize: 16,
+                          fontWeight: isUnread
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: contentColor,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Time + unread badge
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 16),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     spacing: 8,
                     children: [
                       Text(
                         time,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                       if (isUnread)
                         Container(
@@ -140,8 +134,8 @@ class ChatListItem extends StatelessWidget {
                         const SizedBox(width: 24, height: 24),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

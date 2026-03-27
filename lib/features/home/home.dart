@@ -1,81 +1,178 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/configs/theme.dart';
-import 'package:grindr_flutter/shared/utils/page_transaction.dart';
-import 'package:grindr_flutter/features/profile/profile.dart';
+import 'package:grindr_flutter/features/auth/models/user_model.dart';
+import 'package:grindr_flutter/features/home/user_tile.dart';
+import 'package:grindr_flutter/shared/services/auth_service.dart';
+import 'package:grindr_flutter/shared/services/firestore_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  const Home({super.key, this.onOpenDrawer});
+
+  final VoidCallback? onOpenDrawer;
 
   @override
   State<Home> createState() => _HomeState();
 }
 
+UserModel mockUser = UserModel(
+  uid: '123123',
+  email: 'email',
+  displayName: 'The Mariás',
+  photoUrl:
+      'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+  isOnline: true,
+  lastSeen: DateTime.now(),
+  createdAt: DateTime.now(),
+);
+
 class _HomeState extends State<Home> {
+  late Future<List<UserModel>> users;
+
+  @override
+  void initState() {
+    super.initState();
+    users = FirestoreService().getAllOtherUsers(currentUser.value!.uid);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: GridView.count(
-        crossAxisCount: 3,
-        crossAxisSpacing: 2,
-        mainAxisSpacing: 2,
-        children: [
-          ...List.generate(33, (index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(
-                  context,
-                ).push(slideToTopPageTransaction(const ProfilePage()));
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Stack(
-                  children: [
-                    Image.network(
-                      'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                      fit: BoxFit.cover,
+    return Column(
+      children: [
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              spacing: 12,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    widget.onOpenDrawer?.call();
+                  },
+                  child: ValueListenableBuilder(
+                    valueListenable: currentUser,
+                    builder: (context, value, child) {
+                      return CircleAvatar(
+                        radius: 22,
+                        backgroundImage: NetworkImage(
+                          currentUser.value?.photoUrl ??
+                              'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: 44,
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      color: Colors.white.withValues(alpha: 0.12),
                     ),
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              Colors.black.withValues(alpha: 0.9),
-                              Colors.transparent,
-                            ],
-                            stops: const [0.0, 0.4],
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 8,
+                      children: [
+                        Icon(Icons.search, color: Colors.grey.shade300),
+                        Text(
+                          "Explore more profiles",
+                          style: TextStyle(
+                            color: Colors.grey.shade300,
+                            fontSize: 16,
                           ),
                         ),
-                      ),
+                      ],
                     ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: FutureBuilder(
+            future: users,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(child: Text("Something went wrong"));
+              }
 
-                    Positioned(
-                      bottom: 8,
-                      left: 8,
-                      child: Row(
-                        spacing: 4,
-                        children: [
-                          Icon(Icons.circle, color: AppTheme.success, size: 12),
-                          Text(
-                            "The Mariás",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverGrid.count(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2,
+                      children: List.generate(24, (index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade900,
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                        ],
-                      ),
+                        );
+                      }),
                     ),
                   ],
-                ),
-              ),
-            );
-          }),
-        ],
-      ),
+                );
+              }
+
+              if (snapshot.data == null || snapshot.data!.isEmpty) {
+                return Center(
+                  child: Column(
+                    spacing: 4,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "No results",
+                        style: GoogleFonts.ibmPlexSans(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "Try changing your filters",
+                        style: GoogleFonts.ibmPlexSans(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return CustomScrollView(
+                slivers: [
+                  SliverGrid.count(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 2,
+                    children: snapshot.data!.map((user) {
+                      return UserTile(user: user);
+                    }).toList(),
+                  ),
+                ],
+              );
+            },
+          ),
+          // child: CustomScrollView(
+          //   slivers: [
+          //     SliverGrid.count(
+          //       crossAxisCount: 3,
+          //       crossAxisSpacing: 2,
+          //       mainAxisSpacing: 2,
+          //       children: List.generate(24, (index) {
+          //         return UserTile(user: mockUser);
+          //       }),
+          //     ),
+          //   ],
+          // ),
+        ),
+      ],
     );
   }
 }

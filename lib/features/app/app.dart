@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/app/drawer.dart';
 import 'package:grindr_flutter/features/chat/views/chat.dart';
 import 'package:grindr_flutter/features/home/home.dart';
-import 'package:grindr_flutter/shared/services/auth_service.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -12,22 +13,10 @@ class App extends StatefulWidget {
 }
 
 final List<Map<String, dynamic>> _pages = [
-  {'icon': Icons.home_outlined, 'selectedIcon': Icons.home, 'label': 'Home'},
-  {
-    'icon': Icons.water_drop_outlined,
-    'selectedIcon': Icons.water_drop,
-    'label': 'Right Now',
-  },
-  {
-    'icon': Icons.remove_red_eye_outlined,
-    'selectedIcon': Icons.remove_red_eye,
-    'label': 'View',
-  },
-  {
-    'icon': Icons.chat_bubble_outline,
-    'selectedIcon': Icons.chat_bubble,
-    'label': 'Inbox',
-  },
+  {'icon': Icons.home_outlined, 'selectedIcon': Icons.home},
+  {'icon': Icons.water_drop_outlined, 'selectedIcon': Icons.water_drop},
+  {'icon': Icons.remove_red_eye_outlined, 'selectedIcon': Icons.remove_red_eye},
+  {'icon': Icons.chat_bubble_outline, 'selectedIcon': Icons.chat_bubble},
 ];
 
 ValueNotifier<int> selectedPageIndex = ValueNotifier<int>(0);
@@ -43,66 +32,99 @@ class _AppState extends State<App> {
         return Scaffold(
           key: _scaffoldKey,
           backgroundColor: Colors.black,
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: Text(_pages.elementAt(selectedPageIndex.value)['label']),
-            leading: GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    currentUser.value?.photoUrl ??
-                        'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                  ),
-                ),
-              ),
-              onTap: () => _scaffoldKey.currentState?.openDrawer(),
-            ),
-          ),
           drawer: AppDrawer(),
           body: ValueListenableBuilder(
             valueListenable: selectedPageIndex,
             builder: (context, value, child) {
               switch (value) {
-                case 0:
-                  return Home();
                 case 1:
-                  return Center(
-                    child: Text(
-                      'Right Now',
-                      style: TextStyle(color: Colors.white),
+                  return SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 8,
+                        bottom: 16,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Interest",
+                            style: GoogleFonts.ibmPlexSans(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
+
                 case 2:
-                  return Center(
-                    child: Text('View', style: TextStyle(color: Colors.white)),
+                  return SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 8,
+                        bottom: 16,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Promo",
+                            style: GoogleFonts.ibmPlexSans(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
+
                 case 3:
                   return ChatPage();
+
+                case 0:
                 default:
-                  return Home();
+                  return Home(
+                    onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
+                  );
               }
             },
           ),
           bottomNavigationBar: ValueListenableBuilder(
             valueListenable: selectedPageIndex,
             builder: (context, value, child) {
-              return NavigationBar(
-                backgroundColor: Colors.black,
-                destinations: _pages
-                    .map(
-                      (page) => NavigationDestination(
-                        icon: Icon(page['icon']),
-                        selectedIcon: Icon(page['selectedIcon']),
-                        label: page['label'],
-                      ),
-                    )
-                    .toList(),
-                labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-                selectedIndex: selectedPageIndex.value,
-                onDestinationSelected: (value) {
-                  selectedPageIndex.value = value;
-                },
+              return BottomAppBar(
+                color: Colors.black,
+                padding: EdgeInsets.zero,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: _pages
+                      .map(
+                        (page) => IconButton(
+                          iconSize: 28,
+                          padding: EdgeInsets.zero,
+
+                          icon: Icon(page['icon'], color: Colors.grey),
+                          selectedIcon: Icon(
+                            page['selectedIcon'],
+                            color: AppTheme.primary,
+                          ),
+                          isSelected: value == _pages.indexOf(page),
+                          onPressed: () {
+                            selectedPageIndex.value = _pages.indexOf(page);
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
               );
             },
           ),

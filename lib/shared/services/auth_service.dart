@@ -112,5 +112,6 @@ class AuthService {
     // TODO: Update user online status
     await firebaseAuth.signOut();
     await googleSignIn.signOut();
+    currentUser.value = null;
   }
 }

@@ -19,11 +19,21 @@ class AuthLayout extends StatelessWidget {
               return const SizedBox.shrink();
             }
 
-            FlutterNativeSplash.remove();
-
             if (snapshot.hasData) {
+              if (currentUser.value == null) {
+                AuthService().firestoreService.getUser(snapshot.data!.uid).then(
+                  (user) {
+                    currentUser.value = user;
+                  },
+                );
+              }
+
+              FlutterNativeSplash.remove();
               return App();
             }
+
+            FlutterNativeSplash.remove();
+            currentUser.value = null;
             return Login();
           },
         );
