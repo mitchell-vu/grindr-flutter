@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/views/app.dart';
-import 'package:grindr_flutter/views/auth/login.dart';
-import 'package:grindr_flutter/services/auth_service.dart';
+import 'package:grindr_flutter/features/app/app.dart';
+import 'package:grindr_flutter/features/auth/views/login.dart';
+import 'package:grindr_flutter/shared/services/auth_service.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class AuthLayout extends StatelessWidget {

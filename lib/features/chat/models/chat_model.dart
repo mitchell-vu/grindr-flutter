@@ -1,5 +1,6 @@
 class ChatModel {
   final String id;
+  final List<String> participants;
   final String lastMessage;
   final DateTime lastMessageTime;
   final String lastMessageSenderId;
@@ -9,6 +10,7 @@ class ChatModel {
 
   ChatModel({
     required this.id,
+    required this.participants,
     required this.lastMessage,
     required this.lastMessageTime,
     required this.lastMessageSenderId,
@@ -20,6 +22,7 @@ class ChatModel {
   factory ChatModel.fromMap(Map<String, dynamic> map) {
     return ChatModel(
       id: map['id'],
+      participants: map['participants'],
       lastMessage: map['lastMessage'],
       lastMessageTime: map['lastMessageTime'].toDate(),
       lastMessageSenderId: map['lastMessageSenderId'],
@@ -32,6 +35,7 @@ class ChatModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'participants': participants,
       'lastMessage': lastMessage,
       'lastMessageTime': lastMessageTime,
       'lastMessageSenderId': lastMessageSenderId,
