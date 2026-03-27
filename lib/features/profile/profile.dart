@@ -3,239 +3,264 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
 import 'package:grindr_flutter/features/chat/views/chat_history.dart';
+import 'package:grindr_flutter/shared/data.dart';
+import 'package:grindr_flutter/shared/services/auth_service.dart';
+import 'package:grindr_flutter/shared/services/firestore_service.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, this.isMe = false});
-
-  final bool isMe;
+  const ProfilePage({super.key, this.uid});
+  final String? uid;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-UserModel mockUser = UserModel(
-  uid: '123123',
-  email: 'email',
-  displayName: 'The Mariás',
-  photoUrl:
-      'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-  isOnline: true,
-  lastSeen: DateTime.now(),
-  createdAt: DateTime.now(),
-);
-
 class _ProfilePageState extends State<ProfilePage> {
-  final UserModel user = mockUser;
+  UserModel? user;
+  late final bool isMe;
+
   int currentPhotoIndex = 0;
   bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    isMe = widget.uid == currentUser.value?.uid;
+    _loadUser();
+  }
+
+  Future<void> _loadUser() async {
+    if (widget.uid != null) {
+      final fetchedUser = await FirestoreService().getUser(widget.uid!);
+
+      setState(() {
+        user = fetchedUser ?? mockUser;
+      });
+    } else {
+      setState(() {
+        user = mockUser;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            physics: const TopClampedScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: user == null
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
               children: [
-                Stack(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 640,
-                      child: Image.network(
-                        user.photoUrl ??
-                            'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                SingleChildScrollView(
+                  physics: const TopClampedScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            height: 640,
+                            child: Image.network(
+                              user!.photoUrl ??
+                                  'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
 
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(16),
-                              padding: EdgeInsets.symmetric(
-                                vertical: 14,
-                                horizontal: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.25),
-                                borderRadius: BorderRadius.circular(100),
-                              ),
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.centerRight,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                spacing: 6,
                                 children: [
-                                  ...List.generate(3, (index) {
-                                    final isSelected =
-                                        index == currentPhotoIndex;
+                                  Container(
+                                    margin: EdgeInsets.all(16),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 14,
+                                      horizontal: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.25,
+                                      ),
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      spacing: 6,
+                                      children: [
+                                        ...List.generate(3, (index) {
+                                          final isSelected =
+                                              index == currentPhotoIndex;
 
-                                    return Container(
-                                      width: 6,
-                                      height: 16,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(
-                                          alpha: isSelected ? 1 : 0.5,
+                                          return Container(
+                                            width: 6,
+                                            height: 16,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withValues(
+                                                alpha: isSelected ? 1 : 0.5,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          );
+                                        }),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 4,
+                                          ),
+                                          child: Icon(
+                                            Icons.lock,
+                                            size: 16,
+                                            color: Colors.white.withValues(
+                                              alpha: currentPhotoIndex == 3
+                                                  ? 1
+                                                  : 0.5,
+                                            ),
+                                          ),
                                         ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    );
-                                  }),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 4),
-                                    child: Icon(
-                                      Icons.lock,
-                                      size: 16,
-                                      color: Colors.white.withValues(
-                                        alpha: currentPhotoIndex == 3 ? 1 : 0.5,
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+
+                      SafeArea(
+                        top: false,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            top: 16,
+                            bottom: 110,
+                          ),
+                          child: Column(
+                            spacing: 4,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                spacing: 8,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    user!.displayName ?? "",
+                                    style: GoogleFonts.ibmPlexSans(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    "31",
+                                    style: GoogleFonts.ibmPlexSans(
+                                      fontSize: 28,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                spacing: 12,
+                                children: [
+                                  Row(
+                                    spacing: 4,
+                                    children: [
+                                      Icon(
+                                        Icons.circle,
+                                        color: AppTheme.success,
+                                        size: 14,
+                                      ),
+                                      Text(
+                                        "Online now",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: AppTheme.success,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    spacing: 4,
+                                    children: [
+                                      Icon(
+                                        Icons.navigation_rounded,
+                                        color: Colors.white,
+                                        size: 14,
+                                      ),
+                                      Text(
+                                        "152m away",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: 24),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                spacing: 12,
+                                children: [
+                                  Text(
+                                    "About me".toUpperCase(),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade900,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(16),
+                                        topRight: Radius.circular(16),
+                                        bottomRight: Radius.circular(16),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "The Marías is an American alternative pop band from Los Angeles. They are known for performing songs in both English and Spanish in addition to infusing their music with elements including jazz percussion, guitar riffs, and horn solos.[1] Their core lineup consists of lead vocalist María Zardoya, drummer/producer Josh Conway, guitarist Jesse Perlman, and keyboardist Edward James.[2] The band has released two EPs and two studio albums, including Submarine (2024). They received their first solo Grammy nomination for Best New Artist[3] for the 68th Annual Grammy Awards in 2026.",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-
-                SafeArea(
-                  top: false,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      top: 16,
-                      bottom: 110,
-                    ),
-                    child: Column(
-                      spacing: 4,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          spacing: 8,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              user.displayName ?? "",
-                              style: GoogleFonts.ibmPlexSans(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              "31",
-                              style: GoogleFonts.ibmPlexSans(
-                                fontSize: 28,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        Row(
-                          spacing: 12,
-                          children: [
-                            Row(
-                              spacing: 4,
-                              children: [
-                                Icon(
-                                  Icons.circle,
-                                  color: AppTheme.success,
-                                  size: 14,
-                                ),
-                                Text(
-                                  "Online now",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppTheme.success,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              spacing: 4,
-                              children: [
-                                Icon(
-                                  Icons.navigation_rounded,
-                                  color: Colors.white,
-                                  size: 14,
-                                ),
-                                Text(
-                                  "152m away",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 24),
-
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          spacing: 12,
-                          children: [
-                            Text(
-                              "About me".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade900,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(16),
-                                  topRight: Radius.circular(16),
-                                  bottomRight: Radius.circular(16),
-                                ),
-                              ),
-                              child: Text(
-                                "The Marías is an American alternative pop band from Los Angeles. They are known for performing songs in both English and Spanish in addition to infusing their music with elements including jazz percussion, guitar riffs, and horn solos.[1] Their core lineup consists of lead vocalist María Zardoya, drummer/producer Josh Conway, guitarist Jesse Perlman, and keyboardist Edward James.[2] The band has released two EPs and two studio albums, including Submarine (2024). They received their first solo Grammy nomination for Best New Artist[3] for the 68th Annual Grammy Awards in 2026.",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
+
+                ActionBar(
+                  isFavorite: isFavorite,
+                  onToggleFavorite: () {
+                    setState(() {
+                      isFavorite = !isFavorite;
+                    });
+                  },
+                ),
+
+                ChatBottom(isMe: isMe),
               ],
             ),
-          ),
-
-          ActionBar(
-            isFavorite: isFavorite,
-            onToggleFavorite: () {
-              setState(() {
-                isFavorite = !isFavorite;
-              });
-            },
-          ),
-
-          ChatBottom(isMe: widget.isMe),
-        ],
-      ),
     );
   }
 }
@@ -283,23 +308,21 @@ class ActionBar extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.close),
+                  icon: Icon(Icons.close, color: Colors.white),
                   iconSize: 28,
                 ),
                 Row(
                   children: [
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(Icons.block_outlined),
+                      icon: Icon(Icons.block_outlined, color: Colors.white),
                       iconSize: 28,
                     ),
                     IconButton(
                       onPressed: onToggleFavorite,
                       icon: Icon(
                         isFavorite ? Icons.star : Icons.star_border,
-                        color: isFavorite
-                            ? Colors.amber
-                            : Theme.of(context).colorScheme.onSurface,
+                        color: isFavorite ? Colors.amber : Colors.white,
                       ),
                       iconSize: 28,
                     ),

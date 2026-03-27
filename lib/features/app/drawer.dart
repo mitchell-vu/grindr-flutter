@@ -25,7 +25,9 @@ class AppDrawer extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          slideToTopPageTransaction(ProfilePage(isMe: true)),
+                          slideToTopPageTransaction(
+                            ProfilePage(uid: currentUser.value!.uid),
+                          ),
                         );
                       },
                       child: SizedBox(

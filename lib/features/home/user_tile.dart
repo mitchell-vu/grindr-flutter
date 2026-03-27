@@ -15,13 +15,12 @@ class UserTile extends StatelessWidget {
       onTap: () {
         Navigator.of(
           context,
-        ).push(slideToTopPageTransaction(const ProfilePage()));
+        ).push(slideToTopPageTransaction(ProfilePage(uid: user.uid)));
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
         child: Stack(
           children: [
-            Container(color: AppTheme.primary),
             Positioned.fill(
               child: Image.network(
                 user.photoUrl ??

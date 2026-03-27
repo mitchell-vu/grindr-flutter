@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
 import 'package:grindr_flutter/features/home/user_tile.dart';
+import 'package:grindr_flutter/features/profile/profile.dart';
 import 'package:grindr_flutter/shared/services/auth_service.dart';
 import 'package:grindr_flutter/shared/services/firestore_service.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,17 +14,6 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
-
-UserModel mockUser = UserModel(
-  uid: '123123',
-  email: 'email',
-  displayName: 'The Mariás',
-  photoUrl:
-      'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-  isOnline: true,
-  lastSeen: DateTime.now(),
-  createdAt: DateTime.now(),
-);
 
 class _HomeState extends State<Home> {
   late Future<List<UserModel>> users;

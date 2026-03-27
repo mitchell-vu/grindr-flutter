@@ -16,20 +16,26 @@ class AuthLayout extends StatelessWidget {
           stream: authService.authStateChanges,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox.shrink();
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (snapshot.hasData) {
-              if (currentUser.value == null) {
-                AuthService().firestoreService.getUser(snapshot.data!.uid).then(
-                  (user) {
-                    currentUser.value = user;
-                  },
-                );
-              }
+              final user = AuthService().firestoreService.getUser(
+                snapshot.data!.uid,
+              );
 
-              FlutterNativeSplash.remove();
-              return App();
+              return FutureBuilder(
+                future: user,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    currentUser.value = snapshot.data;
+                    FlutterNativeSplash.remove();
+                    return App();
+                  }
+
+                  return const Center(child: CircularProgressIndicator());
+                },
+              );
             }
 
             FlutterNativeSplash.remove();
