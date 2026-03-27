@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
 import 'package:grindr_flutter/features/home/user_tile.dart';
-import 'package:grindr_flutter/features/profile/profile.dart';
 import 'package:grindr_flutter/shared/services/auth_service.dart';
 import 'package:grindr_flutter/shared/services/firestore_service.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -149,18 +148,6 @@ class _HomeState extends State<Home> {
               );
             },
           ),
-          // child: CustomScrollView(
-          //   slivers: [
-          //     SliverGrid.count(
-          //       crossAxisCount: 3,
-          //       crossAxisSpacing: 2,
-          //       mainAxisSpacing: 2,
-          //       children: List.generate(24, (index) {
-          //         return UserTile(user: mockUser);
-          //       }),
-          //     ),
-          //   ],
-          // ),
         ),
       ],
     );
