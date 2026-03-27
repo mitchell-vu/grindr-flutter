@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/theme.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({super.key, required this.content, required this.isMe});
@@ -8,9 +9,7 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bubbleColor = isMe
-        ? const Color(0xFFFFCC00)
-        : const Color(0xFF64CFFC);
+    final bubbleColor = isMe ? AppTheme.primary : AppTheme.secondary;
 
     return Container(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/shared/utils/page_transaction.dart';
 import 'package:grindr_flutter/features/chat/views/chat_history.dart';
 import 'package:grindr_flutter/features/profile/profile.dart';
@@ -28,15 +29,16 @@ class ChatListItem extends StatelessWidget {
     final isOnline = Random().nextInt(10) > 5;
     final contentColor = isUnread ? Colors.white : colorScheme.onSurfaceVariant;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Row(
-        children: [
-          // Avatar
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context, slideToTopPageTransaction(ProfilePage()));
-            },
+    return Row(
+      children: [
+        // Avatar
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.push(context, slideToTopPageTransaction(ProfilePage()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: Image.network(
@@ -47,22 +49,22 @@ class ChatListItem extends StatelessWidget {
               ),
             ),
           ),
+        ),
 
-          Expanded(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatHistoryPage(title: name),
-                  ),
-                );
-              },
-              child: (Row(
+        Expanded(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatHistoryPage(title: name),
+                ),
+              );
+            },
+            child: Container(
+              child: Row(
                 children: [
-                  const SizedBox(width: 14),
-
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +75,11 @@ class ChatListItem extends StatelessWidget {
                           spacing: 4,
                           children: [
                             if (isOnline)
-                              Icon(Icons.circle, size: 12, color: Colors.green),
+                              Icon(
+                                Icons.circle,
+                                size: 12,
+                                color: AppTheme.success,
+                              ),
                             Text(
                               name,
                               style: TextStyle(
@@ -117,14 +123,14 @@ class ChatListItem extends StatelessWidget {
                           width: 24,
                           height: 24,
                           decoration: BoxDecoration(
-                            color: colorScheme.primary,
+                            color: AppTheme.primary,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           alignment: Alignment.center,
                           child: Text(
                             '$unreadCount',
                             style: GoogleFonts.ibmPlexSans(
-                              color: colorScheme.onPrimary,
+                              color: Colors.black,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
@@ -135,11 +141,11 @@ class ChatListItem extends StatelessWidget {
                     ],
                   ),
                 ],
-              )),
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

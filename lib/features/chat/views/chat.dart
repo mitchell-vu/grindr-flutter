@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/features/chat/widgets/chat_tile.dart';
+import 'package:grindr_flutter/features/chat/views/widgets/chat_tile.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -11,58 +11,54 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        spacing: 8,
-        children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                spacing: 24,
-                children: List.generate(8, (index) {
-                  return Column(
-                    spacing: 4,
-                    children: [
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundImage: NetworkImage(
-                          'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                        ),
+    return ListView(
+      children: [
+        // Horizontal stories row
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              spacing: 24,
+              children: List.generate(8, (index) {
+                return Column(
+                  spacing: 4,
+                  children: [
+                    CircleAvatar(
+                      radius: 32,
+                      backgroundImage: NetworkImage(
+                        'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
                       ),
-                      Text(
-                        "Mariás",
-                        style: TextStyle(color: Colors.white, fontSize: 14),
-                      ),
-                    ],
-                  );
-                }),
-              ),
+                    ),
+                    Text(
+                      "Mariás",
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  ],
+                );
+              }),
             ),
           ),
+        ),
 
-          Column(
-            children: List.generate(24, (index) {
-              final isUnread = index > 0 && index % 3 == 0;
+        // Chat list
+        ...List.generate(24, (index) {
+          final isUnread = index > 0 && index % 3 == 0;
 
-              return Dismissible(
-                key: ValueKey(index),
-                direction: DismissDirection.endToStart,
-                child: ChatListItem(
-                  avatarUrl:
-                      'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                  name: 'Mitchell',
-                  lastMessage: 'Hi! u looking? 👀',
-                  time: '12:00',
-                  unreadCount: isUnread ? index : 0,
-                ),
-              );
-            }),
-          ),
-        ],
-      ),
+          return Dismissible(
+            key: ValueKey(index),
+            direction: DismissDirection.endToStart,
+            child: ChatListItem(
+              avatarUrl:
+                  'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+              name: 'Mitchell',
+              lastMessage: 'Hi! u looking? 👀',
+              time: '12:00',
+              unreadCount: isUnread ? index : 0,
+            ),
+          );
+        }),
+      ],
     );
   }
 }

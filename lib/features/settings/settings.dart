@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/shared/services/auth_service.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -58,7 +59,8 @@ class SettingsPage extends StatelessWidget {
               child: FilledButton(
                 onPressed: () {},
                 style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.red),
+                  backgroundColor: WidgetStatePropertyAll(AppTheme.error),
+                  foregroundColor: WidgetStatePropertyAll(Colors.white),
                 ),
                 child: Text('Delete Profile'),
               ),

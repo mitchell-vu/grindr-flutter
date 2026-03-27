@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/chat/views/chat_history.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({super.key, this.isMe = false});
+
+  final bool isMe;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -138,14 +141,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 Icon(
                                   Icons.circle,
-                                  color: Colors.green,
+                                  color: AppTheme.success,
                                   size: 14,
                                 ),
                                 Text(
                                   "Online now",
                                   style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.green,
+                                    color: AppTheme.success,
                                   ),
                                 ),
                               ],
@@ -221,7 +224,7 @@ class _ProfilePageState extends State<ProfilePage> {
             },
           ),
 
-          ChatBottom(),
+          ChatBottom(isMe: widget.isMe),
         ],
       ),
     );
@@ -278,7 +281,9 @@ class ActionBar extends StatelessWidget {
 }
 
 class ChatBottom extends StatelessWidget {
-  const ChatBottom({super.key});
+  const ChatBottom({super.key, this.isMe = false});
+
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
@@ -304,6 +309,7 @@ class ChatBottom extends StatelessWidget {
               ),
             ),
           ),
+
           SafeArea(
             top: false,
             child: Padding(
@@ -313,59 +319,79 @@ class ChatBottom extends StatelessWidget {
                 bottom: 8,
                 top: 20,
               ),
-              child: Row(
-                spacing: 12,
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                        left: 20,
-                        right: 4,
-                        top: 4,
-                        bottom: 4,
+              child: isMe
+                  ? SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: FilledButton(
+                        onPressed: () {},
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppTheme.primary,
+                          foregroundColor: Colors.black,
+                        ),
+                        child: Text(
+                          "Edit Profile",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade900,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Say something...',
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
+                    )
+                  : Row(
+                      spacing: 12,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                              left: 20,
+                              right: 4,
+                              top: 4,
+                              bottom: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade900,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Say something...',
+                                      border: InputBorder.none,
+                                      hintStyle: TextStyle(
+                                        color: AppTheme.primary,
+                                      ),
+                                    ),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              ),
-                              style: TextStyle(color: Colors.white),
+                                IconButton(
+                                  icon: Icon(Icons.send),
+                                  color: AppTheme.primary,
+                                  onPressed: () {},
+                                ),
+                              ],
                             ),
                           ),
-                          IconButton(
-                            icon: Icon(Icons.send),
-                            color: Theme.of(context).colorScheme.primary,
-                            onPressed: () {},
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ChatHistoryPage(title: "Mitchell Vu"),
                         ),
-                      );
-                    },
-                    icon: Icon(Icons.chat_bubble_outline_rounded),
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ],
-              ),
+
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChatHistoryPage(title: "Mitchell Vu"),
+                              ),
+                            );
+                          },
+                          icon: Icon(Icons.chat_bubble_outline_rounded),
+                          color: AppTheme.primary,
+                        ),
+                      ],
+                    ),
             ),
           ),
         ],

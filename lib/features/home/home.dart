@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/shared/utils/page_transaction.dart';
 import 'package:grindr_flutter/features/profile/profile.dart';
 
@@ -60,7 +61,7 @@ class _HomeState extends State<Home> {
                       child: Row(
                         spacing: 4,
                         children: [
-                          Icon(Icons.circle, color: Colors.green, size: 12),
+                          Icon(Icons.circle, color: AppTheme.success, size: 12),
                           Text(
                             "The Mariás",
                             style: TextStyle(color: Colors.white, fontSize: 14),

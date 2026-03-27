@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/chat/views/widgets/message_bubble.dart';
 import 'package:grindr_flutter/shared/utils/page_transaction.dart';
 import 'package:grindr_flutter/features/profile/profile.dart';
@@ -62,7 +63,7 @@ class ChatHistoryPage extends StatelessWidget {
                   Row(
                     spacing: 6,
                     children: [
-                      Icon(Icons.circle, size: 12, color: Colors.green),
+                      Icon(Icons.circle, size: 12, color: AppTheme.success),
                       Text(
                         title,
                         style: TextStyle(
@@ -137,7 +138,7 @@ class ChatHistoryPage extends StatelessWidget {
                           ),
                           IconButton(
                             icon: Icon(Icons.send),
-                            color: Theme.of(context).colorScheme.primary,
+                            color: AppTheme.primary,
                             onPressed: () {},
                           ),
                         ],

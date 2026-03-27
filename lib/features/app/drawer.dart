@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/features/profile/profile.dart';
 import 'package:grindr_flutter/features/settings/settings.dart';
 import 'package:grindr_flutter/shared/services/auth_service.dart';
+import 'package:grindr_flutter/shared/utils/page_transaction.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -19,18 +21,27 @@ class AppDrawer extends StatelessWidget {
                 return Column(
                   spacing: 16,
                   children: [
-                    SizedBox(
-                      width: 120,
-                      height: 120,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: Image.network(
-                          currentUser.value?.photoUrl ??
-                              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                          fit: BoxFit.cover,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          slideToTopPageTransaction(ProfilePage(isMe: true)),
+                        );
+                      },
+                      child: SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.network(
+                            currentUser.value?.photoUrl ??
+                                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
+
                     Container(
                       padding: const EdgeInsets.only(
                         left: 16,
