@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/features/chat/views/widgets/message_bubble.dart';
 import 'package:grindr_flutter/shared/utils/page_transaction.dart';
 import 'package:grindr_flutter/features/profile/profile.dart';
 
@@ -93,43 +94,9 @@ class ChatHistoryPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final chatMessage = _mockChatHistory[index];
 
-                    return Container(
-                      alignment: chatMessage.isMe
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        constraints: BoxConstraints(maxWidth: 200),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: chatMessage.isMe
-                              ? Color(0xFFFFCC00)
-                              : Color(0xFF64CFFC),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8),
-                            bottomLeft: chatMessage.isMe
-                                ? Radius.circular(8)
-                                : Radius.circular(0),
-                            bottomRight: chatMessage.isMe
-                                ? Radius.circular(0)
-                                : Radius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          chatMessage.message,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                    return MessageBubble(
+                      content: chatMessage.message,
+                      isMe: chatMessage.isMe,
                     );
                   },
                 ),
