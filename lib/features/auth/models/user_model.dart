@@ -6,15 +6,18 @@ class UserModel {
   final String? displayName;
   final String? photoUrl;
   final bool isOnline;
+  final String? bio;
+
   final DateTime lastSeen;
   final DateTime createdAt;
 
   UserModel({
     required this.uid,
     required this.email,
-    required this.displayName,
-    required this.photoUrl,
+    this.displayName,
+    this.photoUrl,
     required this.isOnline,
+    this.bio,
     required this.lastSeen,
     required this.createdAt,
   });
@@ -26,6 +29,7 @@ class UserModel {
       displayName: map['displayName'],
       photoUrl: map['photoUrl'],
       isOnline: map['isOnline'],
+      bio: map['bio'],
       lastSeen: (map['lastSeen'] as Timestamp).toDate(),
       createdAt: (map['createdAt'] as Timestamp).toDate(),
     );
@@ -38,6 +42,7 @@ class UserModel {
       'displayName': displayName,
       'photoUrl': photoUrl,
       'isOnline': isOnline,
+      'bio': bio,
       'lastSeen': lastSeen,
       'createdAt': createdAt,
     };

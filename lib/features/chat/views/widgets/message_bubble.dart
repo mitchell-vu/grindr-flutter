@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grindr_flutter/configs/theme.dart';
-import 'package:grindr_flutter/features/chat/views/chat_history.dart';
+import 'package:grindr_flutter/features/chat/models/message_model.dart';
+import 'package:grindr_flutter/shared/services/auth_service.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
@@ -9,19 +10,22 @@ class MessageBubble extends StatelessWidget {
     this.showTimestamp = false,
   });
 
-  final ChatMessage message;
+  final MessageModel message;
   final bool showTimestamp;
 
   @override
   Widget build(BuildContext context) {
-    final bubbleColor = message.isMe ? AppTheme.primary : AppTheme.secondary;
+    final isMe = message.senderId == currentUser.value!.uid;
+    final bubbleColor = isMe ? AppTheme.primary : AppTheme.secondary;
 
     return Container(
-      alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: message.senderId == currentUser.value!.uid
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Column(
-          crossAxisAlignment: message.isMe
+          crossAxisAlignment: isMe
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: [
@@ -42,16 +46,16 @@ class MessageBubble extends StatelessWidget {
                       borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(8),
                         topRight: const Radius.circular(8),
-                        bottomLeft: message.isMe
+                        bottomLeft: isMe
                             ? const Radius.circular(8)
                             : Radius.zero,
-                        bottomRight: message.isMe
+                        bottomRight: isMe
                             ? Radius.zero
                             : const Radius.circular(8),
                       ),
                     ),
                     child: Text(
-                      message.message,
+                      message.content,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -61,13 +65,13 @@ class MessageBubble extends StatelessWidget {
                   // Triangle tail
                   Positioned(
                     bottom: 0,
-                    left: message.isMe ? null : -8,
-                    right: message.isMe ? -8 : null,
+                    left: isMe ? null : -8,
+                    right: isMe ? -8 : null,
                     child: CustomPaint(
                       size: const Size(10, 12),
                       painter: _BubbleTailPainter(
                         color: bubbleColor,
-                        isMe: message.isMe,
+                        isMe: isMe,
                       ),
                     ),
                   ),

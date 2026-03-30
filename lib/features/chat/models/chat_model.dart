@@ -1,20 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ChatModel {
   final String id;
-  final List<String> participants;
-  final String lastMessage;
-  final DateTime lastMessageTime;
-  final String lastMessageSenderId;
-  final DateTime lastMessageReadAt;
+  final List<String> participantIds;
+  final String? lastMessage;
+  final DateTime? lastMessageTime;
+  final String? lastMessageSenderId;
+  final DateTime? lastMessageReadAt;
   final DateTime createAt;
   final DateTime updateAt;
 
   ChatModel({
     required this.id,
-    required this.participants,
-    required this.lastMessage,
-    required this.lastMessageTime,
-    required this.lastMessageSenderId,
-    required this.lastMessageReadAt,
+    required this.participantIds,
+    this.lastMessage,
+    this.lastMessageTime,
+    this.lastMessageSenderId,
+    this.lastMessageReadAt,
     required this.createAt,
     required this.updateAt,
   });
@@ -22,20 +24,20 @@ class ChatModel {
   factory ChatModel.fromMap(Map<String, dynamic> map) {
     return ChatModel(
       id: map['id'],
-      participants: map['participants'],
+      participantIds: List<String>.from(map['participantIds'] ?? []),
       lastMessage: map['lastMessage'],
-      lastMessageTime: map['lastMessageTime'].toDate(),
+      lastMessageTime: (map['lastMessageTime'] as Timestamp?)?.toDate(),
       lastMessageSenderId: map['lastMessageSenderId'],
-      lastMessageReadAt: map['lastMessageReadAt'].toDate(),
-      createAt: map['createAt'].toDate(),
-      updateAt: map['updateAt'].toDate(),
+      lastMessageReadAt: (map['lastMessageReadAt'] as Timestamp?)?.toDate(),
+      createAt: (map['createAt'] as Timestamp).toDate(),
+      updateAt: (map['updateAt'] as Timestamp).toDate(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'participants': participants,
+      'participantIds': participantIds,
       'lastMessage': lastMessage,
       'lastMessageTime': lastMessageTime,
       'lastMessageSenderId': lastMessageSenderId,

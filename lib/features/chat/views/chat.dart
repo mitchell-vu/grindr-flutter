@@ -1,101 +1,258 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:grindr_flutter/features/chat/views/widgets/chat_tile.dart';
+import 'package:grindr_flutter/configs/theme.dart';
+import 'package:grindr_flutter/features/auth/models/user_model.dart';
+import 'package:grindr_flutter/features/chat/models/message_model.dart';
+import 'package:grindr_flutter/features/chat/services/chat_service.dart';
+import 'package:grindr_flutter/features/chat/views/widgets/message_bubble.dart';
+import 'package:grindr_flutter/shared/services/auth_service.dart';
+import 'package:grindr_flutter/shared/services/firestore_service.dart';
+import 'package:grindr_flutter/shared/utils/page_transaction.dart';
+import 'package:grindr_flutter/features/profile/profile.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  const ChatPage({super.key, required this.otherUserId});
+
+  final String otherUserId;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
+  UserModel? otherUser;
+  late final String chatId;
+  late Stream<List<MessageModel>> messagesStream;
+
+  final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOtherUser();
+
+    chatId = generateChatId(currentUser.value!.uid, widget.otherUserId);
+    messagesStream = ChatService().getChatStream(chatId);
+    scrollToBottom();
+  }
+
+  Future<void> _loadOtherUser() async {
+    final user = await FirestoreService().getUser(widget.otherUserId);
+    setState(() {
+      otherUser = user;
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void handleSendMessage() {
+    final message = _messageController.text;
+
+    if (message.isNotEmpty) {
+      final newMessage = MessageModel(
+        senderId: currentUser.value!.uid,
+        content: message,
+        type: MessageType.text,
+        isRead: false,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+      ChatService().sendMessage(
+        currentUser.value!.uid,
+        widget.otherUserId,
+        newMessage,
+      );
+
+      _messageController.clear();
+      scrollToBottom();
+    }
+  }
+
+  void scrollToBottom() {
+    //? TODO: Tìm hiểu SchedulerBinding với WidgetsBinding
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SafeArea(
-          bottom: false,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 8,
-              bottom: 16,
-            ),
-            child: Row(
-              children: [
-                Text(
-                  "Inbox",
-                  style: GoogleFonts.ibmPlexSans(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        Expanded(
-          child: ListView(
-            padding: EdgeInsets.zero,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        surfaceTintColor: Colors.black,
+        title: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.push(
+              context,
+              slideToTopPageTransaction(ProfilePage(uid: widget.otherUserId)),
+            );
+          },
+          child: Row(
+            spacing: 12,
             children: [
-              // Horizontal stories row
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    spacing: 24,
-                    children: List.generate(8, (index) {
-                      return Column(
-                        spacing: 4,
-                        children: [
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundImage: NetworkImage(
-                              'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                            ),
-                          ),
-                          Text(
-                            "Mariás",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                        ],
-                      );
-                    }),
-                  ),
-                ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: otherUser?.photoUrl != null
+                    ? Image.network(
+                        otherUser!.photoUrl!,
+                        fit: BoxFit.cover,
+                        width: 40,
+                        height: 40,
+                      )
+                    : Container(width: 40, height: 40, color: Colors.grey),
               ),
-
-              SizedBox(height: 8),
-
-              // Chat list
-              ...List.generate(24, (index) {
-                final isUnread = index > 0 && index % 3 == 0;
-
-                return Dismissible(
-                  key: ValueKey(index),
-                  direction: DismissDirection.endToStart,
-                  child: ChatListItem(
-                    avatarUrl:
-                        'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                    name: 'Mitchell',
-                    lastMessage: 'Hi! u looking? 👀',
-                    time: '12:00',
-                    unreadCount: isUnread ? index : 0,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    spacing: 4,
+                    children: [
+                      Icon(Icons.circle, size: 12, color: AppTheme.success),
+                      Text(
+                        otherUser?.displayName ?? '',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              }),
+                  Text('2km away', style: TextStyle(fontSize: 14)),
+                ],
+              ),
             ],
           ),
         ),
-      ],
+        centerTitle: false,
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz_rounded)),
+        ],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: StreamBuilder<List<MessageModel>>(
+                  stream: messagesStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    final messages = snapshot.data!;
+                    return ListView.builder(
+                      controller: _scrollController,
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final chatMessage = messages[index];
+                        final isNextMessageSameUser =
+                            index < messages.length - 1 &&
+                            messages[index + 1].senderId ==
+                                chatMessage.senderId;
+
+                        return MessageBubble(
+                          message: chatMessage,
+                          showTimestamp: !isNextMessageSameUser,
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 12.0,
+                  right: 12.0,
+                  top: 16.0,
+                  bottom: 8.0,
+                ),
+                child: Column(
+                  spacing: 8,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 4,
+                        top: 4,
+                        bottom: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade900,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _messageController,
+                              decoration: InputDecoration(
+                                hintText: 'Say something...',
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(color: Colors.grey),
+                              ),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.send),
+                            color: AppTheme.primary,
+                            onPressed: handleSendMessage,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.photo_camera),
+                          color: Colors.grey,
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.gif_box),
+                          color: Colors.grey,
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.navigation_sharp),
+                          color: Colors.grey,
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.emoji_emotions),
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

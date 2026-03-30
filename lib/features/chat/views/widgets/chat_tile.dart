@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/shared/utils/page_transaction.dart';
-import 'package:grindr_flutter/features/chat/views/chat_history.dart';
+import 'package:grindr_flutter/features/chat/views/chat.dart';
 import 'package:grindr_flutter/features/profile/profile.dart';
 
 class ChatListItem extends StatelessWidget {
   const ChatListItem({
     super.key,
+    required this.userId,
     required this.avatarUrl,
     required this.name,
     required this.lastMessage,
@@ -16,6 +17,7 @@ class ChatListItem extends StatelessWidget {
     this.unreadCount = 0,
   });
 
+  final String userId;
   final String avatarUrl;
   final String name;
   final String lastMessage;
@@ -34,7 +36,10 @@ class ChatListItem extends StatelessWidget {
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            Navigator.push(context, slideToTopPageTransaction(ProfilePage()));
+            Navigator.push(
+              context,
+              slideToTopPageTransaction(ProfilePage(uid: userId)),
+            );
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -57,7 +62,7 @@ class ChatListItem extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ChatHistoryPage(title: name),
+                  builder: (context) => ChatPage(otherUserId: userId),
                 ),
               );
             },

@@ -1,4 +1,4 @@
-# grindr_flutter
+# Fluttr
 
 A new Flutter project.
 

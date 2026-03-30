@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:grindr_flutter/features/chat/models/chat_model.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
 
 class FirestoreService {
@@ -41,27 +40,4 @@ class FirestoreService {
       throw Exception('Failed to get all users: ${e.toString()}');
     }
   }
-
-  Stream<List<ChatModel>> getChatStream(String uid) {
-    try {
-      return _firestore
-          .collection('chats')
-          .where('participants', arrayContains: uid)
-          .orderBy('updateAt', descending: true)
-          .snapshots()
-          .map(
-            (snapshot) => snapshot.docs
-                .map((doc) => ChatModel.fromMap(doc.data()))
-                .toList(),
-          );
-    } catch (e) {
-      throw Exception('Failed to get or create chat: ${e.toString()}');
-    }
-  }
 }
-
-// String _generateChatId(String user1, String user2) {
-//   final List<String> users = [user1, user2];
-//   users.sort();
-//   return users.join('_');
-// }

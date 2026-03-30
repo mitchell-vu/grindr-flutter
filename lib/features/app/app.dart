@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/app/drawer.dart';
-import 'package:grindr_flutter/features/chat/views/chat.dart';
+import 'package:grindr_flutter/features/chat/views/chat_list.dart';
 import 'package:grindr_flutter/features/home/home.dart';
+import 'package:grindr_flutter/features/interest/views/views.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -38,58 +39,10 @@ class _AppState extends State<App> {
             builder: (context, value, child) {
               switch (value) {
                 case 1:
-                  return SafeArea(
-                    bottom: false,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        top: 8,
-                        bottom: 16,
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Interest",
-                            style: GoogleFonts.ibmPlexSans(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-
                 case 2:
-                  return SafeArea(
-                    bottom: false,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        top: 8,
-                        bottom: 16,
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Promo",
-                            style: GoogleFonts.ibmPlexSans(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-
+                  return ViewsPage();
                 case 3:
-                  return ChatPage();
-
+                  return ChatListPage();
                 case 0:
                 default:
                   return Home(

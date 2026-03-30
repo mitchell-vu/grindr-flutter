@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
-import 'package:grindr_flutter/features/chat/views/chat_history.dart';
+import 'package:grindr_flutter/features/chat/views/chat.dart';
 import 'package:grindr_flutter/shared/data.dart';
 import 'package:grindr_flutter/shared/services/auth_service.dart';
 import 'package:grindr_flutter/shared/services/firestore_service.dart';
@@ -209,38 +209,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
                               SizedBox(height: 24),
 
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 12,
-                                children: [
-                                  Text(
-                                    "About me".toUpperCase(),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade900,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(16),
-                                        topRight: Radius.circular(16),
-                                        bottomRight: Radius.circular(16),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "The Marías is an American alternative pop band from Los Angeles. They are known for performing songs in both English and Spanish in addition to infusing their music with elements including jazz percussion, guitar riffs, and horn solos.[1] Their core lineup consists of lead vocalist María Zardoya, drummer/producer Josh Conway, guitarist Jesse Perlman, and keyboardist Edward James.[2] The band has released two EPs and two studio albums, including Submarine (2024). They received their first solo Grammy nomination for Best New Artist[3] for the 68th Annual Grammy Awards in 2026.",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              user?.bio != null
+                                  ? AboutMeSection(bio: user!.bio!)
+                                  : SizedBox.shrink(),
                             ],
                           ),
                         ),
@@ -258,7 +229,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                 ),
 
-                ChatBottom(isMe: isMe),
+                ChatBottom(isMe: isMe, uid: user!.uid),
               ],
             ),
     );
@@ -338,9 +309,10 @@ class ActionBar extends StatelessWidget {
 }
 
 class ChatBottom extends StatelessWidget {
-  const ChatBottom({super.key, this.isMe = false});
+  const ChatBottom({super.key, this.isMe = false, required this.uid});
 
   final bool isMe;
+  final String uid;
 
   @override
   Widget build(BuildContext context) {
@@ -440,7 +412,7 @@ class ChatBottom extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    ChatHistoryPage(title: "Mitchell Vu"),
+                                    ChatPage(otherUserId: uid),
                               ),
                             );
                           },
@@ -480,5 +452,41 @@ class TopClampedScrollPhysics extends ScrollPhysics {
     }
     // Let the parent handle the bottom edge (bouncy on iOS).
     return super.applyBoundaryConditions(position, value);
+  }
+}
+
+class AboutMeSection extends StatelessWidget {
+  const AboutMeSection({super.key, required this.bio});
+  final String bio;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 12,
+      children: [
+        Text(
+          "About me".toUpperCase(),
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(20),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade900,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+              bottomRight: Radius.circular(16),
+            ),
+          ),
+          child: Text(bio, style: TextStyle(fontSize: 16, color: Colors.white)),
+        ),
+      ],
+    );
   }
 }

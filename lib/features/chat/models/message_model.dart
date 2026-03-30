@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 enum MessageType { text, image }
 
 class MessageModel {
-  final String id;
   final String senderId;
-  final String receiverId;
   final String content;
   final MessageType type;
   final bool isRead;
@@ -11,9 +11,7 @@ class MessageModel {
   final DateTime updatedAt;
 
   MessageModel({
-    required this.id,
     required this.senderId,
-    required this.receiverId,
     required this.content,
     required this.type,
     required this.isRead,
@@ -23,25 +21,21 @@ class MessageModel {
 
   factory MessageModel.fromMap(Map<String, dynamic> map) {
     return MessageModel(
-      id: map['id'],
       senderId: map['senderId'],
-      receiverId: map['receiverId'],
       content: map['content'],
       type: MessageType.values.firstWhere(
         (e) => e.name == map['type'],
         orElse: () => MessageType.text,
       ),
       isRead: map['isRead'],
-      createdAt: map['createdAt'].toDate(),
-      updatedAt: map['updatedAt'].toDate(),
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
+      updatedAt: (map['updatedAt'] as Timestamp).toDate(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'senderId': senderId,
-      'receiverId': receiverId,
       'content': content,
       'type': type.name,
       'isRead': isRead,

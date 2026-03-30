@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
-import 'package:grindr_flutter/features/home/user_tile.dart';
+import 'package:grindr_flutter/features/home/widgets/empty.dart';
+import 'package:grindr_flutter/features/home/widgets/user_tile.dart';
 import 'package:grindr_flutter/shared/services/auth_service.dart';
 import 'package:grindr_flutter/shared/services/firestore_service.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key, this.onOpenDrawer});
@@ -108,30 +108,7 @@ class _HomeState extends State<Home> {
               }
 
               if (snapshot.data == null || snapshot.data!.isEmpty) {
-                return Center(
-                  child: Column(
-                    spacing: 4,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "No results",
-                        style: GoogleFonts.ibmPlexSans(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "Try changing your filters",
-                        style: GoogleFonts.ibmPlexSans(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return Empty();
               }
 
               return CustomScrollView(
