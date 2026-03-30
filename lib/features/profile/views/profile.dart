@@ -49,7 +49,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: user == null
           ? const Center(child: CircularProgressIndicator())
           : Stack(

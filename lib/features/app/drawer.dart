@@ -26,7 +26,7 @@ class AppDrawer extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          slideToTopPageTransaction(
+                          slideToTopPageTransition(
                             ProfilePage(uid: currentUser.value!.uid),
                           ),
                         );
@@ -79,7 +79,7 @@ class AppDrawer extends StatelessWidget {
           ),
 
           ListTile(
-            leading: Icon(Icons.edit),
+            leading: Icon(Icons.edit, color: Colors.grey),
             title: Text('Edit Profile'),
             onTap: () {
               Navigator.push(
@@ -90,13 +90,13 @@ class AppDrawer extends StatelessWidget {
           ),
 
           ListTile(
-            leading: Icon(Icons.photo),
+            leading: Icon(Icons.photo, color: Colors.grey),
             title: Text('My Albums'),
             onTap: () {},
           ),
 
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: Icon(Icons.settings, color: Colors.grey),
             title: Text('Settings'),
             onTap: () {
               Navigator.push(

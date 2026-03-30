@@ -96,7 +96,7 @@ class _ChatPageState extends State<ChatPage> {
           onTap: () {
             Navigator.push(
               context,
-              slideToTopPageTransaction(ProfilePage(uid: widget.otherUserId)),
+              slideToTopPageTransition(ProfilePage(uid: widget.otherUserId)),
             );
           },
           child: Row(

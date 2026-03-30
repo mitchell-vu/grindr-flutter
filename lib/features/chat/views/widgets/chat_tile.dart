@@ -37,7 +37,7 @@ class ChatListItem extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                slideToTopPageTransaction(ProfilePage(uid: user.uid)),
+                slideToTopPageTransition(ProfilePage(uid: user.uid)),
               );
             },
             child: Padding(

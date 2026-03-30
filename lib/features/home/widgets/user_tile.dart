@@ -16,7 +16,7 @@ class UserTile extends StatelessWidget {
       onTap: () {
         Navigator.of(
           context,
-        ).push(slideToTopPageTransaction(ProfilePage(uid: user.uid)));
+        ).push(slideToTopPageTransition(ProfilePage(uid: user.uid)));
       },
       child: ClipRRect(
         borderRadius: .circular(4),
