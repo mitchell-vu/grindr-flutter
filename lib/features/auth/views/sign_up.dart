@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttr/configs/theme.dart';
 import 'package:fluttr/features/app/app.dart';
+import 'package:fluttr/features/auth/views/widgets/socials_login.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 
 class SignUp extends StatefulWidget {
@@ -64,6 +64,23 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
+  void signUpWithGoogle() async {
+    try {
+      await authService.value.signInWithGoogle();
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const App()),
+        (route) => false,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+      debugPrint("Sign-in error: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +96,6 @@ class _SignUpState extends State<SignUp> {
                 border: UnderlineInputBorder(),
                 hintText: 'Email',
               ),
-              style: TextStyle(color: AppTheme.textColor),
             ),
             TextField(
               controller: _passwordController,
@@ -88,7 +104,6 @@ class _SignUpState extends State<SignUp> {
                 border: UnderlineInputBorder(),
                 hintText: 'Password',
               ),
-              style: TextStyle(color: AppTheme.textColor),
             ),
             TextField(
               controller: _confirmPasswordController,
@@ -97,20 +112,17 @@ class _SignUpState extends State<SignUp> {
                 border: UnderlineInputBorder(),
                 hintText: 'Confirm Password',
               ),
-              style: TextStyle(color: AppTheme.textColor),
             ),
             SizedBox(
               width: double.infinity,
-              height: 56,
               child: FilledButton(
                 onPressed: signUp,
-                child: const Text(
-                  'Create Account',
-                  style: TextStyle(fontSize: 16, fontWeight: .bold),
-                ),
+                child: Text('Create Account'),
               ),
             ),
+
             SizedBox(height: 24),
+
             Align(
               alignment: .centerLeft,
               child: Text(
@@ -122,59 +134,7 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
             ),
-            Column(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        await authService.value.signInWithGoogle();
-
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const App()),
-                          (route) => false,
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(e.toString())));
-                        debugPrint("Sign-in error: $e");
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHigh,
-                    ),
-                    child: Row(
-                      spacing: 8,
-                      mainAxisAlignment: .center,
-                      children: [
-                        SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: SvgPicture.asset(
-                            'assets/svgs/google.svg',
-                            semanticsLabel: 'Google',
-                          ),
-                        ),
-                        Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: .bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            SocialsLogin(),
           ],
         ),
       ),

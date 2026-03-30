@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/configs/theme.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
-import 'package:fluttr/features/profile/profile.dart';
+import 'package:fluttr/features/profile/views/profile.dart';
 import 'package:fluttr/shared/utils/page_transaction.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
+import 'package:fluttr/theme/color.dart';
 
 class UserTile extends StatelessWidget {
   const UserTile({super.key, required this.user});
@@ -19,7 +19,7 @@ class UserTile extends StatelessWidget {
         ).push(slideToTopPageTransaction(ProfilePage(uid: user.uid)));
       },
       child: ClipRRect(
-        borderRadius: .circular(6),
+        borderRadius: .circular(4),
         child: Stack(
           children: [
             Avatar(url: user.photoUrl, size: double.infinity, radius: 0),
@@ -49,7 +49,7 @@ class UserTile extends StatelessWidget {
               child: Row(
                 spacing: 4,
                 children: [
-                  Icon(Icons.circle, color: AppTheme.success, size: 12),
+                  Icon(Icons.circle, color: AppColors.success, size: 12),
                   Text(
                     user.displayName ?? "",
                     style: TextStyle(color: Colors.white, fontSize: 14),

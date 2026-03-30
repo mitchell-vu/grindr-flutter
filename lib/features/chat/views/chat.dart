@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/configs/theme.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
 import 'package:fluttr/features/chat/models/message_model.dart';
 import 'package:fluttr/features/chat/services/chat_service.dart';
@@ -7,8 +6,9 @@ import 'package:fluttr/features/chat/views/widgets/message_bubble.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/shared/services/firestore_service.dart';
 import 'package:fluttr/shared/utils/page_transaction.dart';
-import 'package:fluttr/features/profile/profile.dart';
+import 'package:fluttr/features/profile/views/profile.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
+import 'package:fluttr/theme/color.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.otherUserId});
@@ -90,10 +90,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        surfaceTintColor: Colors.black,
         title: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
@@ -112,7 +109,7 @@ class _ChatPageState extends State<ChatPage> {
                   Row(
                     spacing: 4,
                     children: [
-                      Icon(Icons.circle, size: 12, color: AppTheme.success),
+                      Icon(Icons.circle, size: 12, color: AppColors.success),
                       Text(
                         otherUser?.displayName ?? '',
                         style: TextStyle(fontSize: 14, fontWeight: .w700),
@@ -203,7 +200,7 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                           IconButton(
                             icon: Icon(Icons.send),
-                            color: AppTheme.primary,
+                            color: AppColors.primary,
                             onPressed: handleSendMessage,
                           ),
                         ],

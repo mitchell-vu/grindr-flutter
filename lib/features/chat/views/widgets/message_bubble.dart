@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/configs/theme.dart';
 import 'package:fluttr/features/chat/models/message_model.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 
@@ -16,7 +15,9 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMe = message.senderId == currentUser.value!.uid;
-    final bubbleColor = isMe ? AppTheme.primary : AppTheme.secondary;
+    final bubbleColor = isMe
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.secondary;
 
     return Container(
       alignment: message.senderId == currentUser.value!.uid

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/configs/theme.dart';
 import 'package:fluttr/features/app/drawer.dart';
 import 'package:fluttr/features/chat/views/chat_list.dart';
 import 'package:fluttr/features/home/home.dart';
@@ -31,7 +30,6 @@ class _AppState extends State<App> {
       builder: (context, value, child) {
         return Scaffold(
           key: _scaffoldKey,
-          backgroundColor: Colors.black,
           drawer: AppDrawer(),
           body: ValueListenableBuilder(
             valueListenable: selectedPageIndex,
@@ -54,7 +52,6 @@ class _AppState extends State<App> {
             valueListenable: selectedPageIndex,
             builder: (context, value, child) {
               return BottomAppBar(
-                color: Colors.black,
                 padding: .zero,
                 child: Row(
                   mainAxisAlignment: .spaceEvenly,
@@ -67,7 +64,7 @@ class _AppState extends State<App> {
                           icon: Icon(page['icon'], color: Colors.grey),
                           selectedIcon: Icon(
                             page['selectedIcon'],
-                            color: AppTheme.primary,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           isSelected: value == _pages.indexOf(page),
                           onPressed: () {

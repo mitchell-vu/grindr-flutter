@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttr/features/profile/views/edit_profile.dart';
+import 'package:fluttr/theme/color.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fluttr/configs/theme.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
 import 'package:fluttr/features/chat/views/chat.dart';
 import 'package:fluttr/shared/data.dart';
@@ -170,14 +171,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                     children: [
                                       Icon(
                                         Icons.circle,
-                                        color: AppTheme.success,
+                                        color: AppColors.success,
                                         size: 14,
                                       ),
                                       Text(
                                         "Online now",
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: AppTheme.success,
+                                          color: AppColors.success,
                                         ),
                                       ),
                                     ],
@@ -343,9 +344,16 @@ class ChatBottom extends StatelessWidget {
                       width: double.infinity,
                       height: 48,
                       child: FilledButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditProfilePage(),
+                            ),
+                          );
+                        },
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
+                          backgroundColor: AppColors.primary,
                           foregroundColor: Colors.black,
                         ),
                         child: Text(
@@ -377,7 +385,7 @@ class ChatBottom extends StatelessWidget {
                                       hintText: 'Say something...',
                                       border: InputBorder.none,
                                       hintStyle: TextStyle(
-                                        color: AppTheme.primary,
+                                        color: AppColors.primary,
                                       ),
                                     ),
                                     style: TextStyle(color: Colors.white),
@@ -385,7 +393,7 @@ class ChatBottom extends StatelessWidget {
                                 ),
                                 IconButton(
                                   icon: Icon(Icons.send),
-                                  color: AppTheme.primary,
+                                  color: AppColors.primary,
                                   onPressed: () {},
                                 ),
                               ],
@@ -403,7 +411,7 @@ class ChatBottom extends StatelessWidget {
                             );
                           },
                           icon: Icon(Icons.chat_bubble_outline_rounded),
-                          color: AppTheme.primary,
+                          color: AppColors.primary,
                         ),
                       ],
                     ),

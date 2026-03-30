@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttr/features/app/auth_layout.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fluttr/theme/theme.dart';
 import 'configs/firebase_options.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -23,10 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fluttr',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.amber, brightness: .dark),
-        textTheme: GoogleFonts.ibmPlexSansTextTheme(),
-      ),
+      darkTheme: AppTheme.darkTheme,
       themeMode: .dark,
       home: const AuthLayout(),
     );

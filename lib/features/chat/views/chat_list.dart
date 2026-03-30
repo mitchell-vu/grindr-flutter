@@ -23,7 +23,9 @@ class _ChatListPageState extends State<ChatListPage> {
           bottom: false,
           child: Padding(
             padding: const .only(left: 16, right: 16, top: 8, bottom: 16),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: .stretch,
+              spacing: 4,
               children: [
                 Text(
                   "Inbox",
@@ -32,6 +34,10 @@ class _ChatListPageState extends State<ChatListPage> {
                     fontWeight: .bold,
                     color: Colors.white,
                   ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: .horizontal,
+                  child: ChatsFilter(),
                 ),
               ],
             ),
@@ -94,6 +100,43 @@ class _ChatListPageState extends State<ChatListPage> {
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class ChatsFilter extends StatelessWidget {
+  const ChatsFilter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: 8,
+      children: [
+        ChoiceChip(
+          label: Text(
+            "Unread",
+            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+          ),
+          selected: true,
+          onSelected: (value) {},
+        ),
+        ChoiceChip(
+          label: Text(
+            "Online",
+            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+          ),
+          selected: false,
+          onSelected: (value) {},
+        ),
+        ChoiceChip(
+          label: Text(
+            "Distance",
+            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+          ),
+          selected: false,
+          onSelected: (value) {},
         ),
       ],
     );

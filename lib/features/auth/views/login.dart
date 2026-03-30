@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fluttr/features/auth/views/sign_up.dart';
+import 'package:fluttr/features/auth/views/widgets/socials_login.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 
 class Login extends StatefulWidget {
@@ -24,9 +24,12 @@ class _LoginState extends State<Login> {
 
   void login() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Please fill in all fields')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
       return;
     }
 
@@ -57,16 +60,19 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: Text('Login'),
         actions: [
           TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.primary,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SignUp()),
               );
             },
-            child: const Text('Sign Up'),
+            child: Text('Sign Up'),
           ),
         ],
       ),
@@ -81,7 +87,6 @@ class _LoginState extends State<Login> {
                 border: UnderlineInputBorder(),
                 hintText: 'Email',
               ),
-              style: TextStyle(color: Colors.white),
             ),
             TextField(
               controller: _passwordController,
@@ -90,75 +95,24 @@ class _LoginState extends State<Login> {
                 border: UnderlineInputBorder(),
                 hintText: 'Password',
               ),
-              style: TextStyle(color: Colors.white),
             ),
+
             SizedBox(
               width: double.infinity,
-              height: 56,
-              child: FilledButton(
-                onPressed: login,
-                child: const Text(
-                  'Login',
-                  style: TextStyle(fontSize: 16, fontWeight: .bold),
-                ),
-              ),
+              child: FilledButton(onPressed: login, child: Text('Login')),
             ),
+
             SizedBox(
               width: double.infinity,
-              height: 56,
               child: TextButton(
                 onPressed: () {},
-                child: const Text(
-                  'Forgot Password',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    fontWeight: .bold,
-                  ),
-                ),
+                child: const Text('Forgot Password'),
               ),
             ),
 
             SizedBox(height: 24),
 
-            Column(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: loginWithGoogle,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHigh,
-                    ),
-                    child: Row(
-                      spacing: 8,
-                      mainAxisAlignment: .center,
-                      children: [
-                        SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: SvgPicture.asset(
-                            'assets/svgs/google.svg',
-                            semanticsLabel: 'Google',
-                          ),
-                        ),
-                        Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: .bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            SocialsLogin(),
           ],
         ),
       ),

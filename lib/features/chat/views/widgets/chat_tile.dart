@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fluttr/theme/color.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fluttr/configs/theme.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
 import 'package:fluttr/shared/utils/page_transaction.dart';
 import 'package:fluttr/features/chat/views/chat.dart';
-import 'package:fluttr/features/profile/profile.dart';
+import 'package:fluttr/features/profile/views/profile.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 
 class ChatListItem extends StatelessWidget {
@@ -41,7 +41,7 @@ class ChatListItem extends StatelessWidget {
               );
             },
             child: Padding(
-              padding: const .symmetric(horizontal: 16, vertical: 10),
+              padding: .symmetric(horizontal: 16, vertical: 10),
               child: Avatar(url: user.photoUrl, size: 72),
             ),
           ),
@@ -83,7 +83,7 @@ class ChatListItem extends StatelessWidget {
                               Icon(
                                 Icons.circle,
                                 size: 12,
-                                color: AppTheme.success,
+                                color: AppColors.success,
                               ),
                             Text(
                               user.displayName ?? '',
@@ -108,7 +108,7 @@ class ChatListItem extends StatelessWidget {
                     ),
 
                     Container(
-                      padding: const .only(left: 8, right: 16),
+                      padding: .only(left: 8, right: 16),
                       child: Column(
                         crossAxisAlignment: .end,
                         mainAxisAlignment: .center,
@@ -118,26 +118,25 @@ class ChatListItem extends StatelessWidget {
                             '${time?.hour.toString().padLeft(2, '0')}:${time?.minute.toString().padLeft(2, '0')}',
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
-                          if (isUnread)
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: AppTheme.primary,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              alignment: .center,
-                              child: Text(
-                                '$unreadCount',
-                                style: GoogleFonts.ibmPlexSans(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: .bold,
-                                ),
-                              ),
-                            )
-                          else
-                            const SizedBox(width: 24, height: 24),
+                          isUnread
+                              ? Container(
+                                  width: 24,
+                                  height: 24,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  alignment: .center,
+                                  child: Text(
+                                    '$unreadCount',
+                                    style: GoogleFonts.ibmPlexSans(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: .bold,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(width: 24, height: 24),
                         ],
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/features/profile/profile.dart';
+import 'package:fluttr/features/profile/views/edit_profile.dart';
+import 'package:fluttr/features/profile/views/profile.dart';
 import 'package:fluttr/features/settings/settings.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/shared/utils/page_transaction.dart';
@@ -11,7 +12,6 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.black,
       child: ListView(
         children: [
           Padding(
@@ -46,9 +46,7 @@ class AppDrawer extends StatelessWidget {
                         bottom: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainerHighest,
+                        color: Theme.of(context).colorScheme.surfaceBright,
                         borderRadius: BorderRadius.circular(100),
                       ),
                       child: Row(
@@ -83,7 +81,12 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.edit),
             title: Text('Edit Profile'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditProfilePage()),
+              );
+            },
           ),
 
           ListTile(
