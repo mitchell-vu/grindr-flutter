@@ -19,7 +19,7 @@ class UserTile extends StatelessWidget {
         ).push(slideToTopPageTransaction(ProfilePage(uid: user.uid)));
       },
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: .circular(6),
         child: Stack(
           children: [
             Avatar(url: user.photoUrl, size: double.infinity, radius: 0),
@@ -31,8 +31,8 @@ class UserTile extends StatelessWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+                    begin: .bottomCenter,
+                    end: .topCenter,
                     colors: [
                       Colors.black.withValues(alpha: 0.9),
                       Colors.transparent,
@@ -54,7 +54,7 @@ class UserTile extends StatelessWidget {
                     user.displayName ?? "",
                     style: TextStyle(color: Colors.white, fontSize: 14),
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: .ellipsis,
                   ),
                 ],
               ),

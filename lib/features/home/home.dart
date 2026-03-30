@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
       children: [
         SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            padding: .symmetric(horizontal: 20, vertical: 16),
             child: Row(
               spacing: 12,
               children: [
@@ -52,14 +52,14 @@ class _HomeState extends State<Home> {
                 Expanded(
                   child: Container(
                     height: 44,
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    alignment: .centerLeft,
+                    padding: .symmetric(horizontal: 14),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: .circular(24),
                       color: Colors.white.withValues(alpha: 0.12),
                     ),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: .center,
                       spacing: 8,
                       children: [
                         Icon(Icons.search, color: Colors.grey.shade300),
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.grey.shade900,
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: .circular(6),
                           ),
                         );
                       }),

@@ -20,46 +20,34 @@ class MessageBubble extends StatelessWidget {
 
     return Container(
       alignment: message.senderId == currentUser.value!.uid
-          ? Alignment.centerRight
-          : Alignment.centerLeft,
+          ? .centerRight
+          : .centerLeft,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        padding: .symmetric(horizontal: 16, vertical: 4),
         child: Column(
-          crossAxisAlignment: isMe
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start,
+          crossAxisAlignment: isMe ? .end : .start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              padding: .only(left: 10.0, right: 10.0),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   // The main bubble
                   Container(
-                    constraints: const BoxConstraints(maxWidth: 200),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
+                    constraints: BoxConstraints(maxWidth: 200),
+                    padding: .symmetric(horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
                       color: bubbleColor,
                       borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(8),
-                        topRight: const Radius.circular(8),
-                        bottomLeft: isMe
-                            ? const Radius.circular(8)
-                            : Radius.zero,
-                        bottomRight: isMe
-                            ? Radius.zero
-                            : const Radius.circular(8),
+                        topLeft: .circular(8),
+                        topRight: .circular(8),
+                        bottomLeft: isMe ? .circular(8) : .zero,
+                        bottomRight: isMe ? .zero : .circular(8),
                       ),
                     ),
                     child: Text(
                       message.content,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 16, fontWeight: .bold),
                     ),
                   ),
                   // Triangle tail
@@ -81,7 +69,7 @@ class MessageBubble extends StatelessWidget {
 
             showTimestamp
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    padding: .symmetric(vertical: 4),
                     child: Text(
                       '${message.createdAt.hour.toString().padLeft(2, '0')}:${message.createdAt.minute.toString().padLeft(2, '0')}',
                       style: TextStyle(
@@ -90,7 +78,7 @@ class MessageBubble extends StatelessWidget {
                       ),
                     ),
                   )
-                : const SizedBox.shrink(),
+                : SizedBox.shrink(),
           ],
         ),
       ),

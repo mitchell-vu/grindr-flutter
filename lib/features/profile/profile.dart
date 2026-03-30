@@ -56,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SingleChildScrollView(
                   physics: const TopClampedScrollPhysics(),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: .start,
                     children: [
                       Stack(
                         children: [
@@ -69,13 +69,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
                           Positioned.fill(
                             child: Align(
-                              alignment: Alignment.centerRight,
+                              alignment: .centerRight,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: .center,
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.all(16),
-                                    padding: EdgeInsets.symmetric(
+                                    margin: .all(16),
+                                    padding: .symmetric(
                                       vertical: 14,
                                       horizontal: 6,
                                     ),
@@ -86,8 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       borderRadius: BorderRadius.circular(100),
                                     ),
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: .center,
                                       spacing: 6,
                                       children: [
                                         ...List.generate(3, (index) {
@@ -107,9 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           );
                                         }),
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 4,
-                                          ),
+                                          padding: const .only(top: 4),
                                           child: Icon(
                                             Icons.lock,
                                             size: 16,
@@ -133,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       SafeArea(
                         top: false,
                         child: Padding(
-                          padding: const EdgeInsets.only(
+                          padding: const .only(
                             left: 20,
                             right: 20,
                             top: 16,
@@ -141,17 +138,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: Column(
                             spacing: 4,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: .start,
                             children: [
                               Row(
                                 spacing: 8,
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                crossAxisAlignment: .end,
                                 children: [
                                   Text(
                                     user!.displayName ?? "",
                                     style: GoogleFonts.ibmPlexSans(
                                       fontSize: 28,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: .bold,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -256,8 +253,8 @@ class ActionBar extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                begin: .topCenter,
+                end: .bottomCenter,
                 colors: [
                   Colors.black.withValues(alpha: 0.9),
                   Colors.black.withValues(alpha: 0.5),
@@ -273,7 +270,7 @@ class ActionBar extends StatelessWidget {
           child: Padding(
             padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: .spaceBetween,
               children: [
                 IconButton(
                   onPressed: () => Navigator.pop(context),
@@ -328,8 +325,8 @@ class ChatBottom extends StatelessWidget {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
+                  begin: .bottomCenter,
+                  end: .topCenter,
                   colors: [Colors.black, Colors.transparent],
                   stops: [0.5, 1],
                 ),
@@ -340,12 +337,7 @@ class ChatBottom extends StatelessWidget {
           SafeArea(
             top: false,
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-                bottom: 8,
-                top: 20,
-              ),
+              padding: const .only(left: 20, right: 20, bottom: 8, top: 20),
               child: isMe
                   ? SizedBox(
                       width: double.infinity,
@@ -358,10 +350,7 @@ class ChatBottom extends StatelessWidget {
                         ),
                         child: Text(
                           "Edit Profile",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                          style: TextStyle(fontWeight: .bold, fontSize: 16),
                         ),
                       ),
                     )
@@ -370,7 +359,7 @@ class ChatBottom extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
-                            padding: const EdgeInsets.only(
+                            padding: const .only(
                               left: 20,
                               right: 4,
                               top: 4,
@@ -459,26 +448,22 @@ class AboutMeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       spacing: 12,
       children: [
         Text(
           "About me".toUpperCase(),
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: .bold),
         ),
         Container(
-          padding: EdgeInsets.all(20),
+          padding: .all(20),
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.grey.shade900,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-              bottomRight: Radius.circular(16),
+              topLeft: .circular(16),
+              topRight: .circular(16),
+              bottomRight: .circular(16),
             ),
           ),
           child: Text(bio, style: TextStyle(fontSize: 16, color: Colors.white)),

@@ -22,19 +22,14 @@ class _ChatListPageState extends State<ChatListPage> {
         SafeArea(
           bottom: false,
           child: Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 8,
-              bottom: 16,
-            ),
+            padding: const .only(left: 16, right: 16, top: 8, bottom: 16),
             child: Row(
               children: [
                 Text(
                   "Inbox",
                   style: GoogleFonts.ibmPlexSans(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                     color: Colors.white,
                   ),
                 ),
@@ -45,16 +40,13 @@ class _ChatListPageState extends State<ChatListPage> {
 
         Expanded(
           child: ListView(
-            padding: EdgeInsets.zero,
+            padding: .zero,
             children: [
               // Horizontal stories row
               SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: .horizontal,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
+                  padding: const .symmetric(horizontal: 16, vertical: 8),
                   child: Row(
                     spacing: 24,
                     children: [
@@ -123,17 +115,17 @@ class MyStories extends StatelessWidget {
               bottom: -4,
               right: -4,
               child: Container(
-                padding: EdgeInsets.all(4),
+                padding: .all(4),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(100),
-                  border: Border.all(color: Colors.black, width: 4),
+                  borderRadius: .circular(100),
+                  border: .all(color: Colors.black, width: 4),
                 ),
                 child: Icon(
                   Icons.add,
                   color: Colors.black,
                   size: 16,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: .bold,
                 ),
               ),
             ),
@@ -143,7 +135,7 @@ class MyStories extends StatelessWidget {
           "Stories",
           style: TextStyle(color: Colors.grey, fontSize: 14),
           maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          overflow: .ellipsis,
         ),
       ],
     );
@@ -165,7 +157,7 @@ class UserStories extends StatelessWidget {
           user.displayName ?? "",
           style: TextStyle(color: Colors.white, fontSize: 14),
           maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          overflow: .ellipsis,
         ),
       ],
     );

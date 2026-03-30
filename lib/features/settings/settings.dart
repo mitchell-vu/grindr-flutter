@@ -19,12 +19,12 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(title: Text('Settings')),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(
               'Account'.toUpperCase(),
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
                 fontSize: 14,
                 color: Colors.grey,
               ),
@@ -35,7 +35,7 @@ class SettingsPage extends StatelessWidget {
             Text(
               'Notification'.toUpperCase(),
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: .bold,
                 fontSize: 14,
                 color: Colors.grey,
               ),
@@ -44,7 +44,7 @@ class SettingsPage extends StatelessWidget {
             SizedBox(height: 24),
             Text(
               'Actions'.toUpperCase(),
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+              style: TextStyle(fontWeight: .bold, color: Colors.grey),
             ),
 
             SizedBox(

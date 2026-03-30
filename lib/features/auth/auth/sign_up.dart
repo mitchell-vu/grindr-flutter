@@ -68,7 +68,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       appBar: AppBar(title: const Text('Create Account')),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: .all(16),
         child: Column(
           spacing: 16,
           children: [
@@ -102,19 +102,19 @@ class _SignUpState extends State<SignUp> {
                 onPressed: signUp,
                 child: const Text(
                   'Create Account',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: .bold),
                 ),
               ),
             ),
             SizedBox(height: 24),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: .centerLeft,
               child: Text(
                 "Or login with".toUpperCase(),
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: .w600,
                 ),
               ),
             ),
@@ -147,7 +147,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                     child: Row(
                       spacing: 8,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: .center,
                       children: [
                         SizedBox(
                           width: 24,
@@ -162,7 +162,7 @@ class _SignUpState extends State<SignUp> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: .bold,
                           ),
                         ),
                       ],

@@ -107,7 +107,7 @@ class _ChatPageState extends State<ChatPage> {
             children: [
               Avatar(url: otherUser?.photoUrl, size: 40),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
                   Row(
                     spacing: 4,
@@ -115,10 +115,7 @@ class _ChatPageState extends State<ChatPage> {
                       Icon(Icons.circle, size: 12, color: AppTheme.success),
                       Text(
                         otherUser?.displayName ?? '',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: TextStyle(fontSize: 14, fontWeight: .w700),
                       ),
                     ],
                   ),
@@ -135,7 +132,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          padding: const .symmetric(vertical: 16.0),
           child: Column(
             children: [
               Expanded(
@@ -171,7 +168,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(
+                padding: const .only(
                   left: 12.0,
                   right: 12.0,
                   top: 16.0,
@@ -181,7 +178,7 @@ class _ChatPageState extends State<ChatPage> {
                   spacing: 8,
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(
+                      padding: const .only(
                         left: 20,
                         right: 4,
                         top: 4,
@@ -213,7 +210,7 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: .spaceAround,
                       children: [
                         IconButton(
                           onPressed: () {},

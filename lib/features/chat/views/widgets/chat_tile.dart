@@ -28,111 +28,126 @@ class ChatListItem extends StatelessWidget {
     final isOnline = Random().nextInt(10) > 5;
     final contentColor = isUnread ? Colors.white : Colors.grey;
 
-    return Row(
-      children: [
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            Navigator.push(
-              context,
-              slideToTopPageTransaction(ProfilePage(uid: user.uid)),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Avatar(url: user.photoUrl, size: 72),
-          ),
-        ),
-
-        Expanded(
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: .stretch,
+        children: [
+          GestureDetector(
+            behavior: .opaque,
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ChatPage(otherUserId: user.uid),
-                ),
+              Navigator.push(
+                context,
+                slideToTopPageTransaction(ProfilePage(uid: user.uid)),
               );
             },
-
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 2,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        spacing: 4,
-                        children: [
-                          if (isOnline)
-                            Icon(
-                              Icons.circle,
-                              size: 12,
-                              color: AppTheme.success,
-                            ),
-                          Text(
-                            user.displayName ?? '',
-                            style: TextStyle(fontSize: 16, color: contentColor),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        lastMessage ?? '',
-                        style: GoogleFonts.ibmPlexSans(
-                          fontSize: 16,
-                          fontWeight: isUnread
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                          color: contentColor,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Time + unread badge
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    spacing: 8,
-                    children: [
-                      Text(
-                        '${time?.hour.toString().padLeft(2, '0')}:${time?.minute.toString().padLeft(2, '0')}',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                      if (isUnread)
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: AppTheme.primary,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            '$unreadCount',
-                            style: GoogleFonts.ibmPlexSans(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
-                      else
-                        const SizedBox(width: 24, height: 24),
-                    ],
-                  ),
-                ),
-              ],
+            child: Padding(
+              padding: const .symmetric(horizontal: 16, vertical: 10),
+              child: Avatar(url: user.photoUrl, size: 72),
             ),
           ),
-        ),
-      ],
+
+          Expanded(
+            flex: 1,
+            child: GestureDetector(
+              behavior: .opaque,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ChatPage(otherUserId: user.uid),
+                  ),
+                );
+              },
+
+              child: Container(
+                padding: const .symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.15),
+                    ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: .start,
+                      mainAxisAlignment: .center,
+                      spacing: 2,
+                      children: [
+                        Row(
+                          crossAxisAlignment: .center,
+                          spacing: 4,
+                          children: [
+                            if (isOnline)
+                              Icon(
+                                Icons.circle,
+                                size: 12,
+                                color: AppTheme.success,
+                              ),
+                            Text(
+                              user.displayName ?? '',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: contentColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          lastMessage ?? '',
+                          style: GoogleFonts.ibmPlexSans(
+                            fontSize: 16,
+                            fontWeight: isUnread ? .bold : .normal,
+                            color: contentColor,
+                          ),
+                          maxLines: 1,
+                          overflow: .ellipsis,
+                        ),
+                      ],
+                    ),
+
+                    Container(
+                      padding: const .only(left: 8, right: 16),
+                      child: Column(
+                        crossAxisAlignment: .end,
+                        mainAxisAlignment: .center,
+                        spacing: 8,
+                        children: [
+                          Text(
+                            '${time?.hour.toString().padLeft(2, '0')}:${time?.minute.toString().padLeft(2, '0')}',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                          if (isUnread)
+                            Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: AppTheme.primary,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              alignment: .center,
+                              child: Text(
+                                '$unreadCount',
+                                style: GoogleFonts.ibmPlexSans(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: .bold,
+                                ),
+                              ),
+                            )
+                          else
+                            const SizedBox(width: 24, height: 24),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

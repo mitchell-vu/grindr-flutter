@@ -15,7 +15,7 @@ class AppDrawer extends StatelessWidget {
       child: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const .all(8.0),
             child: ValueListenableBuilder(
               valueListenable: currentUser,
               builder: (context, value, child) {
@@ -39,7 +39,7 @@ class AppDrawer extends StatelessWidget {
                     ),
 
                     Container(
-                      padding: const EdgeInsets.only(
+                      padding: const .only(
                         left: 16,
                         right: 2,
                         top: 2,

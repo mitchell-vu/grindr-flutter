@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: .fromSeed(seedColor: Colors.amber, brightness: .dark),
         textTheme: GoogleFonts.ibmPlexSansTextTheme(),
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: .dark,
       home: const AuthLayout(),
     );
   }

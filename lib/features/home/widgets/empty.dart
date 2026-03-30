@@ -9,13 +9,13 @@ class Empty extends StatelessWidget {
     return Center(
       child: Column(
         spacing: 4,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: .center,
         children: [
           Text(
             "No results",
             style: GoogleFonts.ibmPlexSans(
               fontSize: 32,
-              fontWeight: FontWeight.bold,
+              fontWeight: .bold,
               color: Colors.white,
             ),
           ),
@@ -23,7 +23,7 @@ class Empty extends StatelessWidget {
             "Try changing your filters",
             style: GoogleFonts.ibmPlexSans(
               fontSize: 16,
-              fontWeight: FontWeight.w600,
+              fontWeight: .w600,
               color: Colors.grey,
             ),
           ),

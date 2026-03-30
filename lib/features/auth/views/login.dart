@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: .all(16),
         child: Column(
           spacing: 16,
           children: [
@@ -99,7 +99,7 @@ class _LoginState extends State<Login> {
                 onPressed: login,
                 child: const Text(
                   'Login',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: .bold),
                 ),
               ),
             ),
@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                 ),
               ),
@@ -135,7 +135,7 @@ class _LoginState extends State<Login> {
                     ),
                     child: Row(
                       spacing: 8,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: .center,
                       children: [
                         SizedBox(
                           width: 24,
@@ -150,7 +150,7 @@ class _LoginState extends State<Login> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: .bold,
                           ),
                         ),
                       ],

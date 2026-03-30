@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttr/configs/theme.dart';
 import 'package:fluttr/features/app/drawer.dart';
 import 'package:fluttr/features/chat/views/chat_list.dart';
@@ -56,14 +55,14 @@ class _AppState extends State<App> {
             builder: (context, value, child) {
               return BottomAppBar(
                 color: Colors.black,
-                padding: EdgeInsets.zero,
+                padding: .zero,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: .spaceEvenly,
                   children: _pages
                       .map(
                         (page) => IconButton(
                           iconSize: 28,
-                          padding: EdgeInsets.zero,
+                          padding: .zero,
 
                           icon: Icon(page['icon'], color: Colors.grey),
                           selectedIcon: Icon(
