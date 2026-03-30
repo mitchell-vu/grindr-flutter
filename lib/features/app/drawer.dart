@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/constants.dart';
 import 'package:grindr_flutter/features/profile/profile.dart';
 import 'package:grindr_flutter/features/settings/settings.dart';
 import 'package:grindr_flutter/shared/services/auth_service.dart';
@@ -36,8 +37,7 @@ class AppDrawer extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(6),
                           child: Image.network(
-                            currentUser.value?.photoUrl ??
-                                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                            currentUser.value?.photoUrl ?? avatarPlaceholderUrl,
                             fit: BoxFit.cover,
                           ),
                         ),

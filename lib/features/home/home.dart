@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/constants.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
 import 'package:grindr_flutter/features/home/widgets/empty.dart';
 import 'package:grindr_flutter/features/home/widgets/user_tile.dart';
@@ -43,8 +44,7 @@ class _HomeState extends State<Home> {
                       return CircleAvatar(
                         radius: 22,
                         backgroundImage: NetworkImage(
-                          currentUser.value?.photoUrl ??
-                              'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+                          currentUser.value?.photoUrl ?? avatarPlaceholderUrl,
                         ),
                       );
                     },

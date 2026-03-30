@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/app/app.dart';
 import 'package:grindr_flutter/shared/services/auth_service.dart';
 
@@ -78,6 +79,7 @@ class _SignUpState extends State<SignUp> {
                 border: UnderlineInputBorder(),
                 hintText: 'Email',
               ),
+              style: TextStyle(color: AppTheme.textColor),
             ),
             TextField(
               controller: _passwordController,
@@ -86,6 +88,7 @@ class _SignUpState extends State<SignUp> {
                 border: UnderlineInputBorder(),
                 hintText: 'Password',
               ),
+              style: TextStyle(color: AppTheme.textColor),
             ),
             TextField(
               controller: _confirmPasswordController,
@@ -94,6 +97,7 @@ class _SignUpState extends State<SignUp> {
                 border: UnderlineInputBorder(),
                 hintText: 'Confirm Password',
               ),
+              style: TextStyle(color: AppTheme.textColor),
             ),
             SizedBox(
               width: double.infinity,

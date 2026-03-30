@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/constants.dart';
 import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
 import 'package:grindr_flutter/features/chat/models/message_model.dart';
@@ -106,14 +107,12 @@ class _ChatPageState extends State<ChatPage> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
-                child: otherUser?.photoUrl != null
-                    ? Image.network(
-                        otherUser!.photoUrl!,
-                        fit: BoxFit.cover,
-                        width: 40,
-                        height: 40,
-                      )
-                    : Container(width: 40, height: 40, color: Colors.grey),
+                child: Image.network(
+                  otherUser!.photoUrl ?? avatarPlaceholderUrl,
+                  fit: BoxFit.cover,
+                  width: 40,
+                  height: 40,
+                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

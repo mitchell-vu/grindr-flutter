@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grindr_flutter/configs/constants.dart';
 import 'package:grindr_flutter/configs/theme.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
 import 'package:grindr_flutter/features/profile/profile.dart';
@@ -23,8 +24,7 @@ class UserTile extends StatelessWidget {
           children: [
             Positioned.fill(
               child: Image.network(
-                user.photoUrl ??
-                    'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+                user.photoUrl ?? avatarPlaceholderUrl,
                 fit: BoxFit.cover,
               ),
             ),

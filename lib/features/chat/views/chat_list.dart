@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grindr_flutter/configs/constants.dart';
 import 'package:grindr_flutter/features/auth/models/user_model.dart';
 import 'package:grindr_flutter/features/chat/services/chat_service.dart';
 import 'package:grindr_flutter/features/chat/views/widgets/chat_tile.dart';
@@ -124,7 +125,9 @@ class MyStories extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 32,
-              backgroundImage: NetworkImage(currentUser.value!.photoUrl ?? ""),
+              backgroundImage: NetworkImage(
+                currentUser.value!.photoUrl ?? avatarPlaceholderUrl,
+              ),
             ),
             Positioned(
               bottom: -4,
@@ -169,7 +172,7 @@ class UserStories extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 32,
-          backgroundImage: NetworkImage(user.photoUrl ?? ""),
+          backgroundImage: NetworkImage(user.photoUrl ?? avatarPlaceholderUrl),
         ),
         Text(
           user.displayName ?? "",

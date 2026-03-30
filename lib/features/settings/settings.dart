@@ -10,7 +10,7 @@ class SettingsPage extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    Navigator.pop(context);
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   @override
