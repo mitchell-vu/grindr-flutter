@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:grindr_flutter/features/chat/models/chat_model.dart';
-import 'package:grindr_flutter/features/auth/models/user_model.dart';
-import 'package:grindr_flutter/features/chat/models/message_model.dart';
-import 'package:grindr_flutter/shared/services/firestore_service.dart';
+import 'package:fluttr/features/chat/models/chat_model.dart';
+import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/chat/models/message_model.dart';
+import 'package:fluttr/shared/services/firestore_service.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

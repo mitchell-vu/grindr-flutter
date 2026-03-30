@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/configs/constants.dart';
-import 'package:grindr_flutter/configs/theme.dart';
-import 'package:grindr_flutter/features/auth/models/user_model.dart';
-import 'package:grindr_flutter/features/profile/profile.dart';
-import 'package:grindr_flutter/shared/utils/page_transaction.dart';
+import 'package:fluttr/configs/theme.dart';
+import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/profile/profile.dart';
+import 'package:fluttr/shared/utils/page_transaction.dart';
+import 'package:fluttr/shared/widgets/avatar.dart';
 
 class UserTile extends StatelessWidget {
   const UserTile({super.key, required this.user});
@@ -22,12 +22,7 @@ class UserTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
         child: Stack(
           children: [
-            Positioned.fill(
-              child: Image.network(
-                user.photoUrl ?? avatarPlaceholderUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
+            Avatar(url: user.photoUrl, size: double.infinity, radius: 0),
             Positioned(
               top: 0,
               left: 0,

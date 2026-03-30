@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/features/app/auth_layout.dart';
+import 'package:fluttr/features/app/auth_layout.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'configs/firebase_options.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Grindr',
+      title: 'Fluttr',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.amber, brightness: .dark),

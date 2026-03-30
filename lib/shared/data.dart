@@ -1,4 +1,4 @@
-import 'package:grindr_flutter/features/auth/models/user_model.dart';
+import 'package:fluttr/features/auth/models/user_model.dart';
 
 UserModel mockUser = UserModel(
   uid: '123123',

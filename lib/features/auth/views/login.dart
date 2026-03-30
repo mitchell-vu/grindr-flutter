@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:grindr_flutter/features/auth/views/sign_up.dart';
-import 'package:grindr_flutter/shared/services/auth_service.dart';
+import 'package:fluttr/features/auth/views/sign_up.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

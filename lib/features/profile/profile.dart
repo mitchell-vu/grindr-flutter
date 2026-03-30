@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grindr_flutter/configs/constants.dart';
-import 'package:grindr_flutter/configs/theme.dart';
-import 'package:grindr_flutter/features/auth/models/user_model.dart';
-import 'package:grindr_flutter/features/chat/views/chat.dart';
-import 'package:grindr_flutter/shared/data.dart';
-import 'package:grindr_flutter/shared/services/auth_service.dart';
-import 'package:grindr_flutter/shared/services/firestore_service.dart';
+import 'package:fluttr/configs/theme.dart';
+import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/chat/views/chat.dart';
+import 'package:fluttr/shared/data.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/shared/services/firestore_service.dart';
+import 'package:fluttr/shared/widgets/avatar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, this.uid});
@@ -60,13 +60,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Stack(
                         children: [
-                          SizedBox(
+                          Avatar(
+                            url: user!.photoUrl,
                             width: double.infinity,
                             height: 640,
-                            child: Image.network(
-                              user!.photoUrl ?? avatarPlaceholderUrl,
-                              fit: BoxFit.cover,
-                            ),
+                            radius: 0,
                           ),
 
                           Positioned.fill(
@@ -408,8 +406,7 @@ class ChatBottom extends StatelessWidget {
 
                         IconButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
+                            Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
                                     ChatPage(otherUserId: uid),

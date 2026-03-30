@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/configs/constants.dart';
-import 'package:grindr_flutter/features/auth/models/user_model.dart';
-import 'package:grindr_flutter/features/home/widgets/empty.dart';
-import 'package:grindr_flutter/features/home/widgets/user_tile.dart';
-import 'package:grindr_flutter/shared/services/auth_service.dart';
-import 'package:grindr_flutter/shared/services/firestore_service.dart';
+import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/home/widgets/empty.dart';
+import 'package:fluttr/features/home/widgets/user_tile.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/shared/services/firestore_service.dart';
+import 'package:fluttr/shared/widgets/avatar.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key, this.onOpenDrawer});
@@ -41,11 +41,10 @@ class _HomeState extends State<Home> {
                   child: ValueListenableBuilder(
                     valueListenable: currentUser,
                     builder: (context, value, child) {
-                      return CircleAvatar(
-                        radius: 22,
-                        backgroundImage: NetworkImage(
-                          currentUser.value?.photoUrl ?? avatarPlaceholderUrl,
-                        ),
+                      return Avatar(
+                        url: currentUser.value!.photoUrl,
+                        size: 44,
+                        rounded: true,
                       );
                     },
                   ),

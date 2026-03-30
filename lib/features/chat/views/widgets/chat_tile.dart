@@ -1,27 +1,25 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grindr_flutter/configs/theme.dart';
-import 'package:grindr_flutter/shared/utils/page_transaction.dart';
-import 'package:grindr_flutter/features/chat/views/chat.dart';
-import 'package:grindr_flutter/features/profile/profile.dart';
+import 'package:fluttr/configs/theme.dart';
+import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/shared/utils/page_transaction.dart';
+import 'package:fluttr/features/chat/views/chat.dart';
+import 'package:fluttr/features/profile/profile.dart';
+import 'package:fluttr/shared/widgets/avatar.dart';
 
 class ChatListItem extends StatelessWidget {
   const ChatListItem({
     super.key,
-    required this.userId,
-    required this.avatarUrl,
-    required this.name,
+    required this.user,
     required this.lastMessage,
     required this.time,
     this.unreadCount = 0,
   });
 
-  final String userId;
-  final String avatarUrl;
-  final String name;
-  final String lastMessage;
-  final String time;
+  final UserModel user;
+  final String? lastMessage;
+  final DateTime? time;
   final int unreadCount;
 
   @override
@@ -32,26 +30,17 @@ class ChatListItem extends StatelessWidget {
 
     return Row(
       children: [
-        // Avatar
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
             Navigator.push(
               context,
-              slideToTopPageTransaction(ProfilePage(uid: userId)),
+              slideToTopPageTransaction(ProfilePage(uid: user.uid)),
             );
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Image.network(
-                avatarUrl,
-                width: 72,
-                height: 72,
-                fit: BoxFit.cover,
-              ),
-            ),
+            child: Avatar(url: user.photoUrl, size: 72),
           ),
         ),
 
@@ -59,10 +48,9 @@ class ChatListItem extends StatelessWidget {
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              Navigator.push(
-                context,
+              Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => ChatPage(otherUserId: userId),
+                  builder: (context) => ChatPage(otherUserId: user.uid),
                 ),
               );
             },
@@ -85,13 +73,13 @@ class ChatListItem extends StatelessWidget {
                               color: AppTheme.success,
                             ),
                           Text(
-                            name,
+                            user.displayName ?? '',
                             style: TextStyle(fontSize: 16, color: contentColor),
                           ),
                         ],
                       ),
                       Text(
-                        lastMessage,
+                        lastMessage ?? '',
                         style: GoogleFonts.ibmPlexSans(
                           fontSize: 16,
                           fontWeight: isUnread
@@ -114,7 +102,7 @@ class ChatListItem extends StatelessWidget {
                     spacing: 8,
                     children: [
                       Text(
-                        time,
+                        '${time?.hour.toString().padLeft(2, '0')}:${time?.minute.toString().padLeft(2, '0')}',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                       if (isUnread)

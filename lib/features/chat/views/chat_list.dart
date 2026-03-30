@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grindr_flutter/configs/constants.dart';
-import 'package:grindr_flutter/features/auth/models/user_model.dart';
-import 'package:grindr_flutter/features/chat/services/chat_service.dart';
-import 'package:grindr_flutter/features/chat/views/widgets/chat_tile.dart';
-import 'package:grindr_flutter/shared/data.dart';
-import 'package:grindr_flutter/shared/services/auth_service.dart';
+import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/chat/services/chat_service.dart';
+import 'package:fluttr/features/chat/views/widgets/chat_tile.dart';
+import 'package:fluttr/shared/data.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/shared/widgets/avatar.dart';
 
 class ChatListPage extends StatefulWidget {
   const ChatListPage({super.key});
@@ -59,7 +59,7 @@ class _ChatListPageState extends State<ChatListPage> {
                     spacing: 24,
                     children: [
                       MyStories(),
-                      ...List.generate(8, (index) {
+                      ...List.generate(4, (index) {
                         return UserStories(user: mockUser);
                       }),
                     ],
@@ -86,14 +86,9 @@ class _ChatListPageState extends State<ChatListPage> {
                         final user = item.user;
 
                         return ChatListItem(
-                          userId: user.uid,
-                          avatarUrl:
-                              user.photoUrl ??
-                              'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                          name: user.displayName ?? 'Unknown',
-                          lastMessage: chat.lastMessage ?? 'No messages yet',
-                          time:
-                              '${chat.lastMessageTime?.hour.toString().padLeft(2, '0')}:${chat.lastMessageTime?.minute.toString().padLeft(2, '0')}',
+                          user: user,
+                          lastMessage: chat.lastMessage,
+                          time: chat.lastMessageTime,
                           // unreadCount: isUnread ? index : 0,
                         );
                       }).toList(),
@@ -123,12 +118,7 @@ class MyStories extends StatelessWidget {
       children: [
         Stack(
           children: [
-            CircleAvatar(
-              radius: 32,
-              backgroundImage: NetworkImage(
-                currentUser.value!.photoUrl ?? avatarPlaceholderUrl,
-              ),
-            ),
+            Avatar(url: currentUser.value!.photoUrl, size: 64, rounded: true),
             Positioned(
               bottom: -4,
               right: -4,
@@ -170,10 +160,7 @@ class UserStories extends StatelessWidget {
     return Column(
       spacing: 8,
       children: [
-        CircleAvatar(
-          radius: 32,
-          backgroundImage: NetworkImage(user.photoUrl ?? avatarPlaceholderUrl),
-        ),
+        Avatar(url: user.photoUrl, size: 64, rounded: true),
         Text(
           user.displayName ?? "",
           style: TextStyle(color: Colors.white, fontSize: 14),

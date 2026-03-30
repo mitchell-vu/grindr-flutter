@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/configs/constants.dart';
-import 'package:grindr_flutter/configs/theme.dart';
-import 'package:grindr_flutter/features/auth/models/user_model.dart';
-import 'package:grindr_flutter/features/chat/models/message_model.dart';
-import 'package:grindr_flutter/features/chat/services/chat_service.dart';
-import 'package:grindr_flutter/features/chat/views/widgets/message_bubble.dart';
-import 'package:grindr_flutter/shared/services/auth_service.dart';
-import 'package:grindr_flutter/shared/services/firestore_service.dart';
-import 'package:grindr_flutter/shared/utils/page_transaction.dart';
-import 'package:grindr_flutter/features/profile/profile.dart';
+import 'package:fluttr/configs/theme.dart';
+import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/chat/models/message_model.dart';
+import 'package:fluttr/features/chat/services/chat_service.dart';
+import 'package:fluttr/features/chat/views/widgets/message_bubble.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/shared/services/firestore_service.dart';
+import 'package:fluttr/shared/utils/page_transaction.dart';
+import 'package:fluttr/features/profile/profile.dart';
+import 'package:fluttr/shared/widgets/avatar.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.otherUserId});
@@ -105,15 +105,7 @@ class _ChatPageState extends State<ChatPage> {
           child: Row(
             spacing: 12,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: Image.network(
-                  otherUser!.photoUrl ?? avatarPlaceholderUrl,
-                  fit: BoxFit.cover,
-                  width: 40,
-                  height: 40,
-                ),
-              ),
+              Avatar(url: otherUser?.photoUrl, size: 40),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

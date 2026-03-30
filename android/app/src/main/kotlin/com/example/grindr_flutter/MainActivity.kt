@@ -1,4 +1,4 @@
-package com.example.grindr_flutter
+package com.example.fluttr
 
 import io.flutter.embedding.android.FlutterActivity
 

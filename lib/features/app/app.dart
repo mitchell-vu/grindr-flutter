@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grindr_flutter/configs/theme.dart';
-import 'package:grindr_flutter/features/app/drawer.dart';
-import 'package:grindr_flutter/features/chat/views/chat_list.dart';
-import 'package:grindr_flutter/features/home/home.dart';
-import 'package:grindr_flutter/features/interest/views/views.dart';
+import 'package:fluttr/configs/theme.dart';
+import 'package:fluttr/features/app/drawer.dart';
+import 'package:fluttr/features/chat/views/chat_list.dart';
+import 'package:fluttr/features/home/home.dart';
+import 'package:fluttr/features/interest/views/views.dart';
 
 class App extends StatefulWidget {
   const App({super.key});

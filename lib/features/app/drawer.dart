@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/configs/constants.dart';
-import 'package:grindr_flutter/features/profile/profile.dart';
-import 'package:grindr_flutter/features/settings/settings.dart';
-import 'package:grindr_flutter/shared/services/auth_service.dart';
-import 'package:grindr_flutter/shared/utils/page_transaction.dart';
+import 'package:fluttr/features/profile/profile.dart';
+import 'package:fluttr/features/settings/settings.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/shared/utils/page_transaction.dart';
+import 'package:fluttr/shared/widgets/avatar.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -31,16 +31,10 @@ class AppDrawer extends StatelessWidget {
                           ),
                         );
                       },
-                      child: SizedBox(
-                        width: 120,
-                        height: 120,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Image.network(
-                            currentUser.value?.photoUrl ?? avatarPlaceholderUrl,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                      child: Avatar(
+                        url: currentUser.value!.photoUrl,
+                        size: 120,
+                        radius: 6,
                       ),
                     ),
 

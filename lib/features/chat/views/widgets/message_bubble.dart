@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grindr_flutter/configs/theme.dart';
-import 'package:grindr_flutter/features/chat/models/message_model.dart';
-import 'package:grindr_flutter/shared/services/auth_service.dart';
+import 'package:fluttr/configs/theme.dart';
+import 'package:fluttr/features/chat/models/message_model.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
