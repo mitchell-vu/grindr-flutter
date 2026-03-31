@@ -12,6 +12,14 @@ class FirestoreService {
     }
   }
 
+  Future<void> updateUser(String uid, Map<String, dynamic> data) async {
+    try {
+      await _firestore.collection('users').doc(uid).update(data);
+    } catch (e) {
+      throw Exception('Failed to update user: ${e.toString()}');
+    }
+  }
+
   Future<UserModel?> getUser(String uid) async {
     try {
       final DocumentSnapshot doc = await _firestore

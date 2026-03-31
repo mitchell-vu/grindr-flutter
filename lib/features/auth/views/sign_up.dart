@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fluttr/features/app/app.dart';
 import 'package:fluttr/features/auth/views/widgets/socials_login.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
