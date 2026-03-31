@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/chat/models/chat_model.dart';
 import 'package:fluttr/features/chat/services/chat_service.dart';
 import 'package:fluttr/features/chat/views/widgets/chat_tile.dart';
 import 'package:fluttr/shared/data.dart';
@@ -15,6 +16,27 @@ class ChatListPage extends StatefulWidget {
 }
 
 class _ChatListPageState extends State<ChatListPage> {
+  late Future<List<({ChatModel chat, UserModel user})>> _chatsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadChats();
+  }
+
+  void _loadChats() {
+    _chatsFuture = ChatService().getChatListWithUsers(currentUser.value!.uid);
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _loadChats();
+    });
+    try {
+      await _chatsFuture;
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,60 +67,72 @@ class _ChatListPageState extends State<ChatListPage> {
         ),
 
         Expanded(
-          child: ListView(
-            padding: .zero,
-            children: [
-              // Horizontal stories row
-              SingleChildScrollView(
-                scrollDirection: .horizontal,
-                child: Padding(
-                  padding: const .symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    spacing: 24,
-                    children: [
-                      MyStories(),
-                      ...List.generate(4, (index) {
-                        return UserStories(user: mockUser);
-                      }),
-                    ],
+          child: RefreshIndicator(
+            onRefresh: _refresh,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: .zero,
+              children: [
+                // Horizontal stories row
+                SingleChildScrollView(
+                  scrollDirection: .horizontal,
+                  child: Padding(
+                    padding: const .symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      spacing: 24,
+                      children: [
+                        MyStories(),
+                        ...List.generate(4, (index) {
+                          return UserStories(user: mockUser);
+                        }),
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              SizedBox(height: 8),
+                SizedBox(height: 8),
 
-              // Chat list
-              FutureBuilder(
-                future: ChatService().getChatListWithUsers(
-                  currentUser.value!.uid,
-                ),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
+                // Chat list
+                FutureBuilder<List<({ChatModel chat, UserModel user})>>(
+                  future: _chatsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting &&
+                        !snapshot.hasData) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
 
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: snapshot.data!.map((item) {
-                        final chat = item.chat;
-                        final user = item.user;
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: snapshot.data!.map((item) {
+                          final chat = item.chat;
+                          final user = item.user;
 
-                        return ChatListItem(
-                          user: user,
-                          lastMessage: chat.lastMessage,
-                          time: chat.lastMessageTime,
-                          // unreadCount: isUnread ? index : 0,
-                        );
-                      }).toList(),
+                          return ChatListItem(
+                            user: user,
+                            lastMessage: chat.lastMessage,
+                            lastMessageSenderId: chat.lastMessageSenderId,
+                            time: chat.lastMessageTime,
+                            // unreadCount: isUnread ? index : 0,
+                          );
+                        }).toList(),
+                      );
+                    }
+
+                    return Center(
+                      child: Text(
+                        "Error",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     );
-                  }
-
-                  return Center(
-                    child: Text("Error", style: TextStyle(color: Colors.white)),
-                  );
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],

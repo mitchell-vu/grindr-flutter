@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttr/features/chat/models/message_model.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+const double _bubbleRadius = 6.0;
+const double _bubbleTailWidth = 8.0;
+const double _bubbleTailHeight = 12.0;
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
@@ -28,43 +33,28 @@ class MessageBubble extends StatelessWidget {
         child: Column(
           crossAxisAlignment: isMe ? .end : .start,
           children: [
-            Padding(
-              padding: .only(left: 10.0, right: 10.0),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  // The main bubble
-                  Container(
-                    constraints: BoxConstraints(maxWidth: 200),
-                    padding: .symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: bubbleColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: .circular(8),
-                        topRight: .circular(8),
-                        bottomLeft: isMe ? .circular(8) : .zero,
-                        bottomRight: isMe ? .zero : .circular(8),
+            ClipPath(
+              clipper: _BubbleClipper(isMe: isMe),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 250),
+                color: bubbleColor,
+                padding: message.type == .image
+                    ? .zero
+                    : .only(
+                        left: isMe ? 16 : _bubbleTailWidth + 16,
+                        right: isMe ? _bubbleTailWidth + 16 : 16,
+                        top: 12,
+                        bottom: 12,
                       ),
-                    ),
-                    child: Text(
-                      message.content,
-                      style: TextStyle(fontSize: 16, fontWeight: .bold),
-                    ),
-                  ),
-                  // Triangle tail
-                  Positioned(
-                    bottom: 0,
-                    left: isMe ? null : -8,
-                    right: isMe ? -8 : null,
-                    child: CustomPaint(
-                      size: const Size(10, 12),
-                      painter: _BubbleTailPainter(
-                        color: bubbleColor,
-                        isMe: isMe,
+                child: message.type == MessageType.image
+                    ? Image.network(message.attachment!.url, fit: .cover)
+                    : Text(
+                        message.content,
+                        style: GoogleFonts.ibmPlexSans(
+                          fontSize: 16,
+                          fontWeight: .w500,
+                        ),
                       ),
-                    ),
-                  ),
-                ],
               ),
             ),
 
@@ -87,37 +77,69 @@ class MessageBubble extends StatelessWidget {
   }
 }
 
-class _BubbleTailPainter extends CustomPainter {
-  const _BubbleTailPainter({required this.color, required this.isMe});
-
-  final Color color;
+class _BubbleClipper extends CustomClipper<Path> {
   final bool isMe;
+  const _BubbleClipper({required this.isMe});
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
+  Path getClip(Size size) {
     final path = Path();
 
     if (isMe) {
-      // Tail points to the bottom-right
-      path.moveTo(0, 0);
-      path.lineTo(size.width, size.height);
-      path.lineTo(0, size.height);
-    } else {
-      // Tail points to the bottom-left
-      path.moveTo(size.width, 0);
-      path.lineTo(0, size.height);
-      path.lineTo(size.width, size.height);
-    }
+      final mainRect = Rect.fromLTRB(
+        0,
+        0,
+        size.width - _bubbleTailWidth,
+        size.height,
+      );
+      path.addRRect(
+        RRect.fromRectAndCorners(
+          mainRect,
+          topLeft: .circular(_bubbleRadius),
+          topRight: .circular(_bubbleRadius),
+          bottomLeft: .circular(_bubbleRadius),
+          bottomRight: .zero,
+        ),
+      );
 
-    path.close();
-    canvas.drawPath(path, paint);
+      final tailPath = Path();
+      tailPath.moveTo(
+        size.width - _bubbleTailWidth - 2,
+        size.height - _bubbleTailHeight,
+      );
+      tailPath.lineTo(size.width, size.height);
+      tailPath.lineTo(size.width - _bubbleTailWidth - 2, size.height);
+      tailPath.close();
+
+      path.addPath(tailPath, Offset.zero);
+    } else {
+      final mainRect = Rect.fromLTRB(
+        _bubbleTailWidth,
+        0,
+        size.width,
+        size.height,
+      );
+      path.addRRect(
+        RRect.fromRectAndCorners(
+          mainRect,
+          topLeft: .circular(_bubbleRadius),
+          topRight: .circular(_bubbleRadius),
+          bottomLeft: .zero,
+          bottomRight: .circular(_bubbleRadius),
+        ),
+      );
+
+      final tailPath = Path();
+      tailPath.moveTo(_bubbleTailWidth + 2, size.height - _bubbleTailHeight);
+      tailPath.lineTo(_bubbleTailWidth + 2, size.height);
+      tailPath.lineTo(0, size.height);
+      tailPath.close();
+
+      path.addPath(tailPath, Offset.zero);
+    }
+    return path;
   }
 
   @override
-  bool shouldRepaint(_BubbleTailPainter oldDelegate) =>
-      color != oldDelegate.color || isMe != oldDelegate.isMe;
+  bool shouldReclip(_BubbleClipper oldClipper) => isMe != oldClipper.isMe;
 }

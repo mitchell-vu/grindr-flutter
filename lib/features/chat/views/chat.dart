@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/chat/models/attachment_model.dart';
 import 'package:fluttr/features/chat/models/message_model.dart';
 import 'package:fluttr/features/chat/services/chat_service.dart';
 import 'package:fluttr/features/chat/views/widgets/message_bubble.dart';
@@ -9,6 +10,7 @@ import 'package:fluttr/shared/utils/page_transaction.dart';
 import 'package:fluttr/features/profile/views/profile.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 import 'package:fluttr/theme/color.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.otherUserId});
@@ -87,6 +89,19 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  String _formatDate(DateTime date) {
+    final messageDate = DateTime(date.year, date.month, date.day);
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
+
+    if (messageDate == today) return 'Today';
+    if (messageDate == yesterday) return 'Yesterday';
+
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,11 +127,20 @@ class _ChatPageState extends State<ChatPage> {
                       Icon(Icons.circle, size: 12, color: AppColors.success),
                       Text(
                         otherUser?.displayName ?? '',
-                        style: TextStyle(fontSize: 14, fontWeight: .w700),
+                        style: GoogleFonts.ibmPlexSans(
+                          fontSize: 14,
+                          fontWeight: .w600,
+                        ),
                       ),
                     ],
                   ),
-                  Text('2km away', style: TextStyle(fontSize: 14)),
+                  Text(
+                    '2km away',
+                    style: GoogleFonts.ibmPlexSans(
+                      fontSize: 14,
+                      fontWeight: .normal,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -144,26 +168,89 @@ class _ChatPageState extends State<ChatPage> {
                       return Center(child: CircularProgressIndicator());
                     }
 
-                    final messages = snapshot.data!;
-                    return ListView.builder(
-                      controller: _scrollController,
-                      itemCount: messages.length,
-                      itemBuilder: (context, index) {
-                        final chatMessage = messages[index];
-                        final isNextMessageSameUser =
-                            index < messages.length - 1 &&
-                            messages[index + 1].senderId ==
-                                chatMessage.senderId;
+                    final messages = [
+                      ...snapshot.data!,
+                      MessageModel(
+                        senderId: currentUser.value!.uid,
+                        content: "Image",
+                        type: .image,
+                        attachment: AttachmentModel(
+                          fileName: "testing",
+                          type: .image,
+                          width: 1200,
+                          height: 1200,
+                          url:
+                              'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
+                        ),
+                        isRead: false,
+                        createdAt: DateTime.now(),
+                        updatedAt: DateTime.now(),
+                      ),
+                    ];
 
-                        return MessageBubble(
-                          message: chatMessage,
-                          showTimestamp: !isNextMessageSameUser,
-                        );
-                      },
+                    final Map<DateTime, List<MessageModel>> groupedMessages =
+                        {};
+
+                    for (final msg in messages) {
+                      final date = DateTime(
+                        msg.createdAt.year,
+                        msg.createdAt.month,
+                        msg.createdAt.day,
+                      );
+                      if (!groupedMessages.containsKey(date)) {
+                        groupedMessages[date] = [];
+                      }
+                      groupedMessages[date]!.add(msg);
+                    }
+
+                    //? Method cascade operator (..)
+                    // https://news.dartlang.org/2012/02/method-cascades-in-dart-posted-by-gilad.html
+                    final sortedDates = groupedMessages.keys.toList()
+                      ..sort((a, b) => a.compareTo(b));
+
+                    return CustomScrollView(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: [
+                        for (final date in sortedDates) ...[
+                          SliverToBoxAdapter(
+                            child: Center(
+                              child: Padding(
+                                padding: .symmetric(vertical: 16),
+                                child: Text(
+                                  _formatDate(date),
+                                  style: GoogleFonts.ibmPlexSans(
+                                    color: Colors.grey.shade500,
+                                    fontSize: 12,
+                                    fontWeight: .w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SliverList.builder(
+                            itemCount: groupedMessages[date]!.length,
+                            itemBuilder: (context, index) {
+                              final dateMessages = groupedMessages[date]!;
+                              final chatMessage = dateMessages[index];
+                              final isNextMessageSameUser =
+                                  index < dateMessages.length - 1 &&
+                                  dateMessages[index + 1].senderId ==
+                                      chatMessage.senderId;
+
+                              return MessageBubble(
+                                message: chatMessage,
+                                showTimestamp: !isNextMessageSameUser,
+                              );
+                            },
+                          ),
+                        ],
+                      ],
                     );
                   },
                 ),
               ),
+
               Padding(
                 padding: const .only(
                   left: 12.0,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttr/features/chat/models/attachment_model.dart';
 
 enum MessageType { text, image }
 
@@ -6,6 +7,7 @@ class MessageModel {
   final String senderId;
   final String content;
   final MessageType type;
+  final AttachmentModel? attachment;
   final bool isRead;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -14,6 +16,7 @@ class MessageModel {
     required this.senderId,
     required this.content,
     required this.type,
+    this.attachment,
     required this.isRead,
     required this.createdAt,
     required this.updatedAt,

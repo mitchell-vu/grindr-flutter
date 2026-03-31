@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:fluttr/features/auth/models/user_model.dart';
 import 'package:fluttr/features/profile/views/widgets/about_me_section.dart';
 import 'package:fluttr/features/profile/views/widgets/action_bar.dart';
@@ -12,6 +11,8 @@ import 'package:fluttr/shared/services/firestore_service.dart';
 import 'package:fluttr/shared/utils/top_clamped_scroll_physics.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 import 'package:fluttr/theme/color.dart';
+
+final double imageHeight = 640;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, this.uid});
@@ -53,21 +54,25 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: user == null
-          ? const Center(child: CircularProgressIndicator())
-          : Stack(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            physics: const TopClampedScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: .start,
               children: [
-                SingleChildScrollView(
-                  physics: const TopClampedScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Stack(
+                user == null
+                    ? Container(
+                        width: double.infinity,
+                        height: imageHeight,
+                        color: Colors.black,
+                      )
+                    : Stack(
                         children: [
                           Avatar(
                             url: user!.photoUrl,
                             width: double.infinity,
-                            height: 640,
+                            height: imageHeight,
                             radius: 0,
                           ),
 
@@ -131,114 +136,153 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
 
-                      SafeArea(
-                        top: false,
-                        child: Padding(
-                          padding: const .only(
-                            left: 20,
-                            right: 20,
-                            top: 16,
-                            bottom: 110,
-                          ),
-                          child: Column(
-                            spacing: 4,
-                            crossAxisAlignment: .start,
-                            children: [
-                              Row(
-                                spacing: 8,
-                                crossAxisAlignment: .end,
-                                children: [
-                                  Text(
-                                    user!.displayName ?? "",
-                                    style: GoogleFonts.ibmPlexSans(
-                                      fontSize: 28,
-                                      fontWeight: .bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  if (user!.showAge == true &&
-                                      user!.age != null &&
-                                      user!.age!.isNotEmpty)
-                                    Text(
-                                      user!.age!,
-                                      style: GoogleFonts.ibmPlexSans(
-                                        fontSize: 28,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                ],
-                              ),
-
-                              Row(
-                                spacing: 12,
-                                children: [
-                                  Row(
-                                    spacing: 4,
-                                    children: [
-                                      Icon(
-                                        Icons.circle,
-                                        color: AppColors.success,
-                                        size: 14,
-                                      ),
-                                      Text(
-                                        "Online now",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: AppColors.success,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    spacing: 4,
-                                    children: [
-                                      Icon(
-                                        Icons.navigation_rounded,
-                                        color: Colors.white,
-                                        size: 14,
-                                      ),
-                                      Text(
-                                        "152m away",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-
-                              QuickStatsStrip(user: user!),
-
-                              SizedBox(height: 24),
-
-                              user?.bio != null && user!.bio!.trim().isNotEmpty
-                                  ? AboutMeSection(bio: user!.bio!)
-                                  : SizedBox.shrink(),
-
-                              SizedBox(height: 24),
-                              DetailedStatsSection(user: user!),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const .only(
+                      left: 20,
+                      right: 20,
+                      top: 16,
+                      bottom: 100,
+                    ),
+                    child: user != null
+                        ? ProfileDetail(user: user)
+                        : ProfileDetailSkeleton(),
                   ),
                 ),
-
-                ActionBar(
-                  isFavorite: isFavorite,
-                  onToggleFavorite: () {
-                    setState(() {
-                      isFavorite = !isFavorite;
-                    });
-                  },
-                ),
-
-                ChatBottom(isMe: isMe, uid: user!.uid),
               ],
             ),
+          ),
+
+          ActionBar(
+            isFavorite: isFavorite,
+            onToggleFavorite: () {
+              setState(() {
+                isFavorite = !isFavorite;
+              });
+            },
+          ),
+
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: ChatBottom(isMe: isMe, uid: user?.uid),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileDetailSkeleton extends StatelessWidget {
+  const ProfileDetailSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: .start,
+      spacing: 16,
+      children: [
+        SizedBox(height: 64),
+        Container(
+          width: 160,
+          height: 20,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade900,
+            borderRadius: .circular(100),
+          ),
+        ),
+        Container(
+          width: .infinity,
+          height: 160,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade900,
+            borderRadius: .only(
+              topLeft: .circular(12),
+              topRight: .circular(12),
+              bottomRight: .circular(12),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ProfileDetail extends StatelessWidget {
+  const ProfileDetail({super.key, required this.user});
+
+  final UserModel? user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: 4,
+      crossAxisAlignment: .start,
+      children: [
+        Row(
+          spacing: 8,
+          crossAxisAlignment: .end,
+          children: [
+            Text(
+              user!.displayName ?? "",
+              style: GoogleFonts.ibmPlexSans(
+                fontSize: 28,
+                fontWeight: .bold,
+                color: Colors.white,
+              ),
+            ),
+            if (user!.showAge == true &&
+                user!.age != null &&
+                user!.age!.isNotEmpty)
+              Text(
+                user!.age!,
+                style: GoogleFonts.ibmPlexSans(
+                  fontSize: 28,
+                  color: Colors.white,
+                ),
+              ),
+          ],
+        ),
+
+        Row(
+          spacing: 12,
+          children: [
+            Row(
+              spacing: 4,
+              children: [
+                Icon(Icons.circle, color: AppColors.success, size: 14),
+                Text(
+                  "Online now",
+                  style: TextStyle(fontSize: 14, color: AppColors.success),
+                ),
+              ],
+            ),
+            Row(
+              spacing: 4,
+              children: [
+                Icon(Icons.navigation_rounded, color: Colors.white, size: 14),
+                Text(
+                  "152m away",
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        QuickStatsStrip(user: user!),
+
+        SizedBox(height: 24),
+
+        user?.bio != null && user!.bio!.trim().isNotEmpty
+            ? AboutMeSection(bio: user!.bio!)
+            : SizedBox.shrink(),
+
+        SizedBox(height: 24),
+        DetailedStatsSection(user: user!),
+      ],
     );
   }
 }

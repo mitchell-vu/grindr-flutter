@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/theme/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
@@ -13,12 +14,14 @@ class ChatListItem extends StatelessWidget {
     super.key,
     required this.user,
     required this.lastMessage,
+    required this.lastMessageSenderId,
     required this.time,
     this.unreadCount = 0,
   });
 
   final UserModel user;
   final String? lastMessage;
+  final String? lastMessageSenderId;
   final DateTime? time;
   final int unreadCount;
 
@@ -94,15 +97,22 @@ class ChatListItem extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text(
-                          lastMessage ?? '',
-                          style: GoogleFonts.ibmPlexSans(
-                            fontSize: 16,
-                            fontWeight: isUnread ? .bold : .normal,
-                            color: contentColor,
-                          ),
-                          maxLines: 1,
-                          overflow: .ellipsis,
+                        Row(
+                          spacing: 4,
+                          children: [
+                            if (lastMessageSenderId == currentUser.value!.uid)
+                              Icon(Icons.reply, size: 14, color: contentColor),
+                            Text(
+                              lastMessage ?? '',
+                              style: GoogleFonts.ibmPlexSans(
+                                fontSize: 16,
+                                fontWeight: isUnread ? .bold : .normal,
+                                color: contentColor,
+                              ),
+                              maxLines: 1,
+                              overflow: .ellipsis,
+                            ),
+                          ],
                         ),
                       ],
                     ),

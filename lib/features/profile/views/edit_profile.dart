@@ -5,6 +5,7 @@ import 'package:fluttr/theme/color.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/features/profile/services/user_service.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -265,7 +266,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   (val) => setState(() => showAge = val),
                 ),
                 Divider(color: dividerColor, height: 1, indent: 16),
-                _buildInlineTextFieldTile('Age', ageController, 'None'),
+                _buildInlineTextFieldTile(
+                  'Age',
+                  ageController,
+                  'None',
+                  TextInputType.number,
+                ),
                 Divider(color: dividerColor, height: 1, indent: 16),
                 _buildValueTile('Height', height, () {
                   _showPicker(
@@ -478,8 +484,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget _buildInlineTextFieldTile(
     String title,
     TextEditingController controller,
-    String hint,
-  ) {
+    String hint, [
+    TextInputType? keyboardType,
+  ]) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       title: Text(
@@ -491,7 +498,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: TextField(
           controller: controller,
           textAlign: TextAlign.right,
-          keyboardType: TextInputType.number,
+          keyboardType: keyboardType ?? TextInputType.text,
           style: const TextStyle(color: Colors.white, fontSize: 16),
           decoration: InputDecoration(
             hintText: hint,
@@ -537,62 +544,73 @@ class _EditProfilePageState extends State<EditProfilePage> {
       context: context,
       builder: (context) {
         return Container(
-          height: 250,
+          height: 360,
           color: const Color(0xFF1F1F20),
-          child: Column(
-            children: [
-              Container(
-                color: Colors.grey[900],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        if (selectedIndex == 0) {
-                          onSelected(null);
-                        } else {
-                          onSelected(options[selectedIndex]);
-                        }
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Done',
-                        style: TextStyle(color: Colors.amber),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: CupertinoPicker(
-                  itemExtent: 32.0,
-                  scrollController: FixedExtentScrollController(
-                    initialItem: selectedIndex,
-                  ),
-                  onSelectedItemChanged: (index) {
-                    selectedIndex = index;
-                  },
-                  children: options.map((option) {
-                    return Center(
-                      child: Text(
-                        option,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
+          child: SafeArea(
+            top: false,
+            child: Column(
+              crossAxisAlignment: .stretch,
+              children: [
+                Container(
+                  color: AppColors.primary,
+                  child: Stack(
+                    alignment: .center,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.ibmPlexSans(
+                          fontSize: 20,
+                          fontWeight: .w600,
+                          color: Colors.black,
+                          decoration: TextDecoration.none,
                         ),
                       ),
-                    );
-                  }).toList(),
+                      Align(
+                        alignment: .centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            if (selectedIndex == 0) {
+                              onSelected(null);
+                            } else {
+                              onSelected(options[selectedIndex]);
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Done',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+
+                Expanded(
+                  child: CupertinoPicker(
+                    itemExtent: 52.0,
+                    scrollController: FixedExtentScrollController(
+                      initialItem: selectedIndex,
+                    ),
+                    onSelectedItemChanged: (index) {
+                      selectedIndex = index;
+                    },
+                    children: options.map((option) {
+                      return Center(
+                        child: Text(
+                          option,
+                          style: GoogleFonts.ibmPlexSans(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: .w600,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
