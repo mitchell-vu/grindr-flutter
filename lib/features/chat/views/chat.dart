@@ -1,6 +1,6 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
-import 'package:fluttr/features/chat/models/attachment_model.dart';
 import 'package:fluttr/features/chat/models/message_model.dart';
 import 'package:fluttr/features/chat/services/chat_service.dart';
 import 'package:fluttr/features/chat/views/widgets/message_bubble.dart';
@@ -9,8 +9,10 @@ import 'package:fluttr/shared/services/firestore_service.dart';
 import 'package:fluttr/shared/utils/page_transaction.dart';
 import 'package:fluttr/features/profile/views/profile.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
+import 'package:fluttr/shared/widgets/camera.dart';
 import 'package:fluttr/theme/color.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.otherUserId});
@@ -22,6 +24,8 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final ImagePicker _picker = ImagePicker();
+
   UserModel? otherUser;
   late final String chatId;
   late Stream<List<MessageModel>> messagesStream;
@@ -102,6 +106,46 @@ class _ChatPageState extends State<ChatPage> {
     return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
   }
 
+  void handleOpenCamera() async {
+    try {
+      final cameras = await availableCameras();
+
+      if (!mounted) return;
+
+      if (cameras.isEmpty) {
+        throw CameraException('No camera found', 'No camera found');
+      }
+
+      Navigator.push(
+        context,
+        slideToTopPageTransition(CameraView(type: .photo, cameras: cameras)),
+      );
+    } on CameraException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Camera Error: ${e.description}'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
+  }
+
+  void pickImageFromGallery() async {
+    final XFile? imageXFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (imageXFile != null) {
+      ChatService().sendMessageWithImage(
+        currentUser.value!.uid,
+        widget.otherUserId,
+        imageXFile,
+      );
+
+      scrollToBottom();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +173,7 @@ class _ChatPageState extends State<ChatPage> {
                         otherUser?.displayName ?? '',
                         style: GoogleFonts.ibmPlexSans(
                           fontSize: 14,
-                          fontWeight: .w600,
+                          fontWeight: .w500,
                         ),
                       ),
                     ],
@@ -152,177 +196,144 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const .symmetric(vertical: 16.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: StreamBuilder<List<MessageModel>>(
-                  stream: messagesStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder<List<MessageModel>>(
+                stream: messagesStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  final Map<DateTime, List<MessageModel>> groupedMessages = {};
+
+                  for (final msg in snapshot.data!) {
+                    final date = DateTime(
+                      msg.createdAt.year,
+                      msg.createdAt.month,
+                      msg.createdAt.day,
+                    );
+                    if (!groupedMessages.containsKey(date)) {
+                      groupedMessages[date] = [];
                     }
+                    groupedMessages[date]!.add(msg);
+                  }
 
-                    if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
-                    }
+                  //? Method cascade operator (..)
+                  // https://news.dartlang.org/2012/02/method-cascades-in-dart-posted-by-gilad.html
+                  final sortedDates = groupedMessages.keys.toList()
+                    ..sort((a, b) => a.compareTo(b));
 
-                    final messages = [
-                      ...snapshot.data!,
-                      MessageModel(
-                        senderId: currentUser.value!.uid,
-                        content: "Image",
-                        type: .image,
-                        attachment: AttachmentModel(
-                          fileName: "testing",
-                          type: .image,
-                          width: 1200,
-                          height: 1200,
-                          url:
-                              'https://static.wikia.nocookie.net/marias/images/9/95/CINEMA.jpg/revision/latest/scale-to-width-down/1200?cb=20250708183259',
-                        ),
-                        isRead: false,
-                        createdAt: DateTime.now(),
-                        updatedAt: DateTime.now(),
-                      ),
-                    ];
-
-                    final Map<DateTime, List<MessageModel>> groupedMessages =
-                        {};
-
-                    for (final msg in messages) {
-                      final date = DateTime(
-                        msg.createdAt.year,
-                        msg.createdAt.month,
-                        msg.createdAt.day,
-                      );
-                      if (!groupedMessages.containsKey(date)) {
-                        groupedMessages[date] = [];
-                      }
-                      groupedMessages[date]!.add(msg);
-                    }
-
-                    //? Method cascade operator (..)
-                    // https://news.dartlang.org/2012/02/method-cascades-in-dart-posted-by-gilad.html
-                    final sortedDates = groupedMessages.keys.toList()
-                      ..sort((a, b) => a.compareTo(b));
-
-                    return CustomScrollView(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        for (final date in sortedDates) ...[
-                          SliverToBoxAdapter(
-                            child: Center(
-                              child: Padding(
-                                padding: .symmetric(vertical: 16),
-                                child: Text(
-                                  _formatDate(date),
-                                  style: GoogleFonts.ibmPlexSans(
-                                    color: Colors.grey.shade500,
-                                    fontSize: 12,
-                                    fontWeight: .w700,
-                                  ),
+                  return CustomScrollView(
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: [
+                      for (final date in sortedDates) ...[
+                        SliverToBoxAdapter(
+                          child: Center(
+                            child: Padding(
+                              padding: .symmetric(vertical: 16),
+                              child: Text(
+                                _formatDate(date),
+                                style: GoogleFonts.ibmPlexSans(
+                                  color: Colors.grey.shade500,
+                                  fontSize: 12,
+                                  fontWeight: .w700,
                                 ),
                               ),
                             ),
                           ),
-                          SliverList.builder(
-                            itemCount: groupedMessages[date]!.length,
-                            itemBuilder: (context, index) {
-                              final dateMessages = groupedMessages[date]!;
-                              final chatMessage = dateMessages[index];
-                              final isNextMessageSameUser =
-                                  index < dateMessages.length - 1 &&
-                                  dateMessages[index + 1].senderId ==
-                                      chatMessage.senderId;
+                        ),
+                        SliverList.builder(
+                          itemCount: groupedMessages[date]!.length,
+                          itemBuilder: (context, index) {
+                            final dateMessages = groupedMessages[date]!;
+                            final chatMessage = dateMessages[index];
+                            final isNextMessageSameUser =
+                                index < dateMessages.length - 1 &&
+                                dateMessages[index + 1].senderId ==
+                                    chatMessage.senderId;
 
-                              return MessageBubble(
-                                message: chatMessage,
-                                showTimestamp: !isNextMessageSameUser,
-                              );
-                            },
-                          ),
-                        ],
+                            return MessageBubble(
+                              message: chatMessage,
+                              showTimestamp: !isNextMessageSameUser,
+                            );
+                          },
+                        ),
                       ],
-                    );
-                  },
-                ),
+                    ],
+                  );
+                },
               ),
+            ),
 
-              Padding(
-                padding: const .only(
-                  left: 12.0,
-                  right: 12.0,
-                  top: 16.0,
-                  bottom: 8.0,
-                ),
-                child: Column(
-                  spacing: 8,
-                  children: [
-                    Container(
-                      padding: const .only(
-                        left: 20,
-                        right: 4,
-                        top: 4,
-                        bottom: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade900,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _messageController,
-                              decoration: InputDecoration(
-                                hintText: 'Say something...',
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(color: Colors.grey),
-                              ),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.send),
-                            color: AppColors.primary,
-                            onPressed: handleSendMessage,
-                          ),
-                        ],
-                      ),
+            Padding(
+              padding: const .only(left: 12.0, right: 12.0, top: 16.0),
+              child: Column(
+                spacing: 4,
+                children: [
+                  Container(
+                    padding: const .only(left: 20, right: 4, top: 4, bottom: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade900,
+                      borderRadius: BorderRadius.circular(100),
                     ),
-                    Row(
-                      mainAxisAlignment: .spaceAround,
+                    child: Row(
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.photo_camera),
-                          color: Colors.grey,
+                        Expanded(
+                          child: TextField(
+                            controller: _messageController,
+                            decoration: InputDecoration(
+                              hintText: 'Say something...',
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                         IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.gif_box),
-                          color: Colors.grey,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.navigation_sharp),
-                          color: Colors.grey,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.emoji_emotions),
-                          color: Colors.grey,
+                          icon: Icon(Icons.send),
+                          color: AppColors.primary,
+                          onPressed: handleSendMessage,
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+
+                  Row(
+                    mainAxisAlignment: .spaceAround,
+                    children: [
+                      IconButton(
+                        onPressed: handleOpenCamera,
+                        icon: Icon(Icons.photo_camera),
+                        color: Colors.grey,
+                      ),
+                      IconButton(
+                        onPressed: pickImageFromGallery,
+                        icon: Icon(Icons.photo),
+                        color: Colors.grey,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.navigation_sharp),
+                        color: Colors.grey,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.emoji_emotions),
+                        color: Colors.grey,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

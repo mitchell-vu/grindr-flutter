@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttr/features/chat/models/attachment_model.dart';
 import 'package:fluttr/features/chat/models/chat_model.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
 import 'package:fluttr/features/chat/models/message_model.dart';
+import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/shared/services/firestore_service.dart';
+import 'package:fluttr/shared/services/upload_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -94,12 +101,55 @@ class ChatService {
       await _firestore.collection('chats').doc(chat.id).update({
         'lastMessage': message.content,
         'lastMessageTime': message.createdAt,
+        'lastMessageType': message.type.name,
         'lastMessageSenderId': message.senderId,
         'updateAt': DateTime.now(),
       });
     } catch (e) {
       throw Exception('Failed to send message: ${e.toString()}');
     }
+  }
+
+  Future<void> sendMessageWithImage(
+    String selfId,
+    String otherId,
+    XFile imageXFile,
+  ) async {
+    AttachmentModel? attachment;
+
+    final File imageFile = File(imageXFile.path);
+    final decodedImage = await decodeImageFromList(imageFile.readAsBytesSync());
+
+    UploadService.upload(
+      // TODO: taskId = Current message ID with Pending status
+      taskId: DateTime.now().millisecondsSinceEpoch.toString(),
+      file: File(imageFile.path),
+      path: 'attachments/${currentUser.value!.uid}/${imageXFile.name}',
+      onUploadDone: (snapshot) async {
+        final url = await snapshot.ref.getDownloadURL();
+
+        attachment = AttachmentModel(
+          fileName: snapshot.ref.name,
+          type: .image,
+          width: decodedImage.width,
+          height: decodedImage.height,
+          url: url,
+        );
+
+        final newMessage = MessageModel(
+          senderId: currentUser.value!.uid,
+          content: '',
+          type: .image,
+          attachment: attachment,
+          isRead: false,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        await sendMessage(selfId, otherId, newMessage);
+      },
+      onUploadError: () {},
+    );
   }
 }
 

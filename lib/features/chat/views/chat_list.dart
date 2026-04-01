@@ -115,6 +115,7 @@ class _ChatListPageState extends State<ChatListPage> {
                           return ChatListItem(
                             user: user,
                             lastMessage: chat.lastMessage,
+                            lastMessageType: chat.lastMessageType,
                             lastMessageSenderId: chat.lastMessageSenderId,
                             time: chat.lastMessageTime,
                             // unreadCount: isUnread ? index : 0,

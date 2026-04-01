@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
-import 'package:fluttr/features/home/widgets/empty.dart';
 import 'package:fluttr/features/home/widgets/user_tile.dart';
 import 'package:fluttr/shared/data.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/shared/services/firestore_service.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
+import 'package:fluttr/shared/widgets/no_result.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
@@ -32,10 +32,10 @@ class _HomeState extends State<Home> {
       children: [
         SafeArea(
           child: Padding(
-            padding: .symmetric(horizontal: 20, vertical: 12),
+            padding: .symmetric(horizontal: 16, vertical: 8),
             child: Column(
               crossAxisAlignment: .stretch,
-              spacing: 12,
+              spacing: 8,
               children: [
                 Row(
                   spacing: 12,
@@ -120,15 +120,15 @@ class _HomeState extends State<Home> {
               }
 
               if (snapshot.data == null || snapshot.data!.isEmpty) {
-                return Empty();
+                return NoResult();
               }
 
               return CustomScrollView(
                 slivers: [
                   SliverGrid.count(
                     crossAxisCount: 3,
-                    crossAxisSpacing: 2,
-                    mainAxisSpacing: 2,
+                    crossAxisSpacing: 1,
+                    mainAxisSpacing: 1,
                     children: [
                       ...snapshot.data!.map((user) {
                         return UserTile(user: user);
@@ -161,7 +161,7 @@ class UsersFilter extends StatelessWidget {
             "Online",
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
-          selected: true,
+          selected: false,
           onSelected: (value) {},
         ),
         ChoiceChip(

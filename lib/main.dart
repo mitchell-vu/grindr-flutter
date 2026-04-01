@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:fluttr/features/app/auth_layout.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fluttr/theme/theme.dart';
-import 'configs/firebase_options.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+
+import 'configs/firebase_options.dart';
+import 'features/app/auth_layout.dart';
+import 'theme/theme.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

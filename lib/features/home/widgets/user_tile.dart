@@ -49,10 +49,10 @@ class UserTile extends StatelessWidget {
               child: Row(
                 spacing: 4,
                 children: [
-                  Icon(Icons.circle, color: AppColors.success, size: 12),
+                  Icon(Icons.circle, color: AppColors.success, size: 10),
                   Text(
                     user.displayName ?? "",
-                    style: TextStyle(color: Colors.white, fontSize: 14),
+                    style: TextStyle(color: Colors.white, fontSize: 13),
                     maxLines: 1,
                     overflow: .ellipsis,
                   ),

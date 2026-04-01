@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttr/features/chat/models/message_model.dart';
 
 class ChatModel {
   final String id;
@@ -6,6 +7,7 @@ class ChatModel {
   final String? lastMessage;
   final DateTime? lastMessageTime;
   final String? lastMessageSenderId;
+  final MessageType? lastMessageType;
   final DateTime? lastMessageReadAt;
   final DateTime createAt;
   final DateTime updateAt;
@@ -16,6 +18,7 @@ class ChatModel {
     this.lastMessage,
     this.lastMessageTime,
     this.lastMessageSenderId,
+    this.lastMessageType = MessageType.text,
     this.lastMessageReadAt,
     required this.createAt,
     required this.updateAt,
@@ -27,6 +30,9 @@ class ChatModel {
       participantIds: List<String>.from(map['participantIds'] ?? []),
       lastMessage: map['lastMessage'],
       lastMessageTime: (map['lastMessageTime'] as Timestamp?)?.toDate(),
+      lastMessageType: map['lastMessageType'] != null
+          ? MessageType.values.byName(map['lastMessageType'])
+          : MessageType.text,
       lastMessageSenderId: map['lastMessageSenderId'],
       lastMessageReadAt: (map['lastMessageReadAt'] as Timestamp?)?.toDate(),
       createAt: (map['createAt'] as Timestamp).toDate(),
@@ -41,6 +47,7 @@ class ChatModel {
       'lastMessage': lastMessage,
       'lastMessageTime': lastMessageTime,
       'lastMessageSenderId': lastMessageSenderId,
+      'lastMessageType': lastMessageType?.name,
       'lastMessageReadAt': lastMessageReadAt,
       'createAt': createAt,
       'updateAt': updateAt,

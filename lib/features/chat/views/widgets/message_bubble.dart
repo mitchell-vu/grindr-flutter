@@ -19,15 +19,14 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMe = message.senderId == currentUser.value!.uid;
+    final isMe =
+        currentUser.value != null && message.senderId == currentUser.value!.uid;
     final bubbleColor = isMe
         ? Theme.of(context).colorScheme.primary
         : Theme.of(context).colorScheme.secondary;
 
     return Container(
-      alignment: message.senderId == currentUser.value!.uid
-          ? .centerRight
-          : .centerLeft,
+      alignment: isMe ? .centerRight : .centerLeft,
       child: Padding(
         padding: .symmetric(horizontal: 16, vertical: 4),
         child: Column(
@@ -46,8 +45,46 @@ class MessageBubble extends StatelessWidget {
                         top: 12,
                         bottom: 12,
                       ),
-                child: message.type == MessageType.image
-                    ? Image.network(message.attachment!.url, fit: .cover)
+                child:
+                    message.type == MessageType.image &&
+                        message.attachment?.url != null
+                    ? AspectRatio(
+                        aspectRatio:
+                            message.attachment!.width! /
+                            message.attachment!.height!,
+                        child: Container(
+                          color: Colors.grey.shade900,
+                          child: Image.network(
+                            message.attachment!.url,
+                            fit: .cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.grey.shade700,
+                                  value:
+                                      loadingProgress.expectedTotalBytes !=
+                                              null &&
+                                          loadingProgress.expectedTotalBytes! >
+                                              0
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Center(
+                                child: Icon(
+                                  Icons.broken_image_outlined,
+                                  color: Colors.grey.shade700,
+                                  size: 40,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      )
                     : Text(
                         message.content,
                         style: GoogleFonts.ibmPlexSans(

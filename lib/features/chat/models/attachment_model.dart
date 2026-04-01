@@ -3,8 +3,8 @@ enum AttachmentType { image, voice, video }
 class AttachmentModel {
   final String fileName;
   final AttachmentType type;
-  final double? width;
-  final double? height;
+  final int? width;
+  final int? height;
   final String url;
 
   AttachmentModel({

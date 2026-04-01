@@ -30,6 +30,9 @@ class MessageModel {
         (e) => e.name == map['type'],
         orElse: () => MessageType.text,
       ),
+      attachment: map['attachment'] != null
+          ? AttachmentModel.fromMap(map['attachment'])
+          : null,
       isRead: map['isRead'],
       createdAt: (map['createdAt'] as Timestamp).toDate(),
       updatedAt: (map['updatedAt'] as Timestamp).toDate(),
@@ -41,6 +44,7 @@ class MessageModel {
       'senderId': senderId,
       'content': content,
       'type': type.name,
+      'attachment': attachment?.toMap(),
       'isRead': isRead,
       'createdAt': createdAt,
       'updatedAt': updatedAt,

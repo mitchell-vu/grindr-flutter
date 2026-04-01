@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:fluttr/theme/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Empty extends StatelessWidget {
-  const Empty({super.key});
+class NoResult extends StatelessWidget {
+  const NoResult({
+    super.key,
+    this.title = "No results",
+    this.subtitle = "Try changing your filters",
+  });
+
+  final String title;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +20,7 @@ class Empty extends StatelessWidget {
         mainAxisAlignment: .center,
         children: [
           Text(
-            "No results",
+            title,
             style: GoogleFonts.ibmPlexSans(
               fontSize: 32,
               fontWeight: .bold,
@@ -20,11 +28,22 @@ class Empty extends StatelessWidget {
             ),
           ),
           Text(
-            "Try changing your filters",
+            subtitle,
             style: GoogleFonts.ibmPlexSans(
               fontSize: 16,
               fontWeight: .w600,
               color: Colors.grey,
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              "Reset Filter",
+              style: GoogleFonts.ibmPlexSans(
+                fontSize: 16,
+                fontWeight: .w600,
+                color: AppColors.primary,
+              ),
             ),
           ),
         ],

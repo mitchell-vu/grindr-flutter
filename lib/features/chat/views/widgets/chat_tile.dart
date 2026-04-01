@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fluttr/features/chat/models/message_model.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/theme/color.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +15,7 @@ class ChatListItem extends StatelessWidget {
     super.key,
     required this.user,
     required this.lastMessage,
+    this.lastMessageType,
     required this.lastMessageSenderId,
     required this.time,
     this.unreadCount = 0,
@@ -21,6 +23,7 @@ class ChatListItem extends StatelessWidget {
 
   final UserModel user;
   final String? lastMessage;
+  final MessageType? lastMessageType;
   final String? lastMessageSenderId;
   final DateTime? time;
   final int unreadCount;
@@ -102,16 +105,32 @@ class ChatListItem extends StatelessWidget {
                           children: [
                             if (lastMessageSenderId == currentUser.value!.uid)
                               Icon(Icons.reply, size: 14, color: contentColor),
-                            Text(
-                              lastMessage ?? '',
-                              style: GoogleFonts.ibmPlexSans(
-                                fontSize: 16,
-                                fontWeight: isUnread ? .bold : .normal,
+                            if (lastMessageType == MessageType.image) ...[
+                              Icon(
+                                Icons.camera_alt,
+                                size: 14,
                                 color: contentColor,
                               ),
-                              maxLines: 1,
-                              overflow: .ellipsis,
-                            ),
+                              Text(
+                                'Photo ${lastMessageSenderId == currentUser.value!.uid ? 'sent' : 'received'}',
+                                style: GoogleFonts.ibmPlexSans(
+                                  fontSize: 16,
+                                  fontWeight: isUnread ? .bold : .normal,
+                                  color: contentColor,
+                                ),
+                              ),
+                            ],
+                            if (lastMessageType == MessageType.text)
+                              Text(
+                                lastMessage ?? '',
+                                style: GoogleFonts.ibmPlexSans(
+                                  fontSize: 16,
+                                  fontWeight: isUnread ? .bold : .normal,
+                                  color: contentColor,
+                                ),
+                                maxLines: 1,
+                                overflow: .ellipsis,
+                              ),
                           ],
                         ),
                       ],
