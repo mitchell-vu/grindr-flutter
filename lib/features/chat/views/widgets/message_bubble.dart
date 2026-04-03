@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/features/chat/models/message_model.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/models/message_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const double _bubbleRadius = 6.0;
@@ -11,16 +10,16 @@ class MessageBubble extends StatelessWidget {
   const MessageBubble({
     super.key,
     required this.message,
+    required this.isMe,
     this.showTimestamp = false,
   });
 
   final MessageModel message;
+  final bool isMe;
   final bool showTimestamp;
 
   @override
   Widget build(BuildContext context) {
-    final isMe =
-        currentUser.value != null && message.senderId == currentUser.value!.uid;
     final bubbleColor = isMe
         ? Theme.of(context).colorScheme.primary
         : Theme.of(context).colorScheme.secondary;

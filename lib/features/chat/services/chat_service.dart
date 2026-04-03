@@ -2,17 +2,19 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttr/features/chat/models/attachment_model.dart';
-import 'package:fluttr/features/chat/models/chat_model.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
-import 'package:fluttr/features/chat/models/message_model.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/features/auth/controllers/auth_controller.dart';
+import 'package:fluttr/models/attachment_model.dart';
+import 'package:fluttr/models/chat_model.dart';
+import 'package:fluttr/models/user_model.dart';
+import 'package:fluttr/models/message_model.dart';
 import 'package:fluttr/shared/services/firestore_service.dart';
 import 'package:fluttr/shared/services/upload_service.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthController _authController = Get.put(AuthController());
 
   Future<List<({ChatModel chat, UserModel user})>> getChatListWithUsers(
     String selfId,
@@ -124,7 +126,7 @@ class ChatService {
       // TODO: taskId = Current message ID with Pending status
       taskId: DateTime.now().millisecondsSinceEpoch.toString(),
       file: File(imageFile.path),
-      path: 'attachments/${currentUser.value!.uid}/${imageXFile.name}',
+      path: 'attachments/${_authController.userModel!.uid}/${imageXFile.name}',
       onUploadDone: (snapshot) async {
         final url = await snapshot.ref.getDownloadURL();
 
@@ -137,7 +139,7 @@ class ChatService {
         );
 
         final newMessage = MessageModel(
-          senderId: currentUser.value!.uid,
+          senderId: _authController.userModel!.uid,
           content: '',
           type: .image,
           attachment: attachment,

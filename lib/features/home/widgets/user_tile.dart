@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
-import 'package:fluttr/features/profile/views/profile.dart';
-import 'package:fluttr/shared/utils/page_transaction.dart';
+import 'package:fluttr/models/user_model.dart';
+import 'package:fluttr/routing/pages.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 import 'package:fluttr/theme/color.dart';
+import 'package:get/get.dart';
 
 class UserTile extends StatelessWidget {
   const UserTile({super.key, required this.user});
@@ -14,15 +14,13 @@ class UserTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(slideToTopPageTransition(ProfilePage(uid: user.uid)));
+        Get.toNamed(Routes.profile, arguments: {'uid': user.uid});
       },
       child: ClipRRect(
         borderRadius: .circular(4),
         child: Stack(
           children: [
-            Avatar(url: user.photoUrl, size: double.infinity, radius: 0),
+            Avatar(url: user.photoUrl, size: .infinity, radius: 0),
             Positioned(
               top: 0,
               left: 0,
@@ -51,7 +49,7 @@ class UserTile extends StatelessWidget {
                 children: [
                   Icon(Icons.circle, color: AppColors.success, size: 10),
                   Text(
-                    user.displayName ?? "",
+                    user.displayName ?? '',
                     style: TextStyle(color: Colors.white, fontSize: 13),
                     maxLines: 1,
                     overflow: .ellipsis,

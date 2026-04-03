@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 class NoResult extends StatelessWidget {
   const NoResult({
     super.key,
-    this.title = "No results",
-    this.subtitle = "Try changing your filters",
+    this.title = 'No results',
+    this.subtitle = 'Try changing your filters',
   });
 
   final String title;
@@ -38,7 +38,7 @@ class NoResult extends StatelessWidget {
           TextButton(
             onPressed: () {},
             child: Text(
-              "Reset Filter",
+              'Reset Filter',
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 16,
                 fontWeight: .w600,

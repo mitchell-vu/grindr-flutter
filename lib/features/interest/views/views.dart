@@ -15,7 +15,7 @@ class ViewsPage extends StatelessWidget {
           Padding(
             padding: .only(left: 16, right: 16, top: 8, bottom: 16),
             child: Text(
-              "Interest",
+              'Interest',
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 24,
                 fontWeight: .bold,

@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 enum CameraType { video, photo }
 
@@ -113,7 +114,7 @@ class CameraActions extends StatelessWidget {
                     IconButton(
                       iconSize: 24,
                       icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () => Get.back(),
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(
                           Colors.black.withValues(alpha: 0.25),
@@ -155,9 +156,7 @@ class CameraActions extends StatelessWidget {
                 onTap: () async {
                   try {
                     final image = await controller.takePicture();
-                    if (context.mounted) {
-                      Navigator.of(context).pop(image);
-                    }
+                    Get.back(result: image);
                   } catch (e) {
                     debugPrint(e.toString());
                   }

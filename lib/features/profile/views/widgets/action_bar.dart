@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ActionBar extends StatelessWidget {
   const ActionBar({
@@ -25,8 +26,8 @@ class ActionBar extends StatelessWidget {
                 begin: .topCenter,
                 end: .bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.9), // using withOpacity to be safe on all versions
-                  Colors.black.withOpacity(0.5),
+                  Colors.black.withValues(alpha: 0.9),
+                  Colors.black.withValues(alpha: 0.5),
                   Colors.transparent,
                 ],
                 stops: const [0, 0.2, 0.8],
@@ -41,7 +42,7 @@ class ActionBar extends StatelessWidget {
               mainAxisAlignment: .spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Get.back(),
                   icon: const Icon(Icons.close, color: Colors.white),
                   iconSize: 28,
                 ),
@@ -49,7 +50,10 @@ class ActionBar extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () {},
-                      icon: const Icon(Icons.block_outlined, color: Colors.white),
+                      icon: const Icon(
+                        Icons.block_outlined,
+                        color: Colors.white,
+                      ),
                       iconSize: 28,
                     ),
                     IconButton(

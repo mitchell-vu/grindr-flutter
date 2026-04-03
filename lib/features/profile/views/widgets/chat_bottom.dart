@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/features/profile/views/edit_profile.dart';
-import 'package:fluttr/features/chat/views/chat.dart';
+import 'package:fluttr/routing/pages.dart';
 import 'package:fluttr/theme/color.dart';
+import 'package:get/get.dart';
 
 class ChatBottom extends StatelessWidget {
   const ChatBottom({super.key, this.isMe = false, this.uid});
@@ -35,23 +35,18 @@ class ChatBottom extends StatelessWidget {
             padding: const .only(left: 20, right: 20, bottom: 8, top: 20),
             child: isMe
                 ? SizedBox(
-                    width: double.infinity,
+                    width: .infinity,
                     height: 48,
                     child: FilledButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EditProfilePage(),
-                          ),
-                        );
+                        Get.toNamed(Routes.editProfile);
                       },
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.black,
                       ),
                       child: const Text(
-                        "Edit Profile",
+                        'Edit Profile',
                         style: TextStyle(fontWeight: .bold, fontSize: 16),
                       ),
                     ),
@@ -97,11 +92,9 @@ class ChatBottom extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           if (uid != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ChatPage(otherUserId: uid!),
-                              ),
+                            Get.toNamed(
+                              Routes.chat,
+                              arguments: {'otherUserId': uid!},
                             );
                           }
                         },

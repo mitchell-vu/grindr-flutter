@@ -1,11 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/models/user_model.dart';
 import 'package:fluttr/shared/services/firestore_service.dart';
-
-ValueNotifier<AuthService> authService = ValueNotifier(AuthService());
-ValueNotifier<UserModel?> currentUser = ValueNotifier(null);
 
 class AuthService {
   final firebaseAuth = FirebaseAuth.instance;
@@ -27,8 +24,6 @@ class AuthService {
 
     // TODO: Update user online status
     UserModel? user = await firestoreService.getUser(userCredential.user!.uid);
-
-    currentUser.value = user;
 
     return user;
   }
@@ -67,11 +62,9 @@ class AuthService {
         await firestoreService.createUser(user);
       }
 
-      currentUser.value = user;
-
       return user;
     } catch (e) {
-      debugPrint("Sign-in error: $e");
+      debugPrint('Sign-in error: $e');
       rethrow;
     }
   }
@@ -100,10 +93,9 @@ class AuthService {
 
       await firestoreService.createUser(user);
 
-      currentUser.value = user;
       return user;
     } catch (e) {
-      debugPrint("Sign-up error: $e");
+      debugPrint('Sign-up error: $e');
       rethrow;
     }
   }
@@ -112,6 +104,5 @@ class AuthService {
     // TODO: Update user online status
     await firebaseAuth.signOut();
     await googleSignIn.signOut();
-    currentUser.value = null;
   }
 }

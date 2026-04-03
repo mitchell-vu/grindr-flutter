@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/features/auth/controllers/auth_controller.dart';
+import 'package:fluttr/routing/pages.dart';
 import 'package:fluttr/shared/widgets/section_heading.dart';
 import 'package:fluttr/theme/color.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 enum SettingItemType { text, bool }
+
+final AuthController _authController = Get.find<AuthController>();
 
 class SettingItem {
   final String label;
@@ -36,11 +40,11 @@ class SettingsPage extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, false),
+              onPressed: () => Get.back(result: false),
               child: Text('Cancel'),
             ),
             TextButton(
-              onPressed: () => Navigator.pop(context, true),
+              onPressed: () => Get.back(result: true),
               child: Text('Log out', style: TextStyle(color: AppColors.error)),
             ),
           ],
@@ -50,11 +54,11 @@ class SettingsPage extends StatelessWidget {
 
     if (confirm != true) return;
 
-    await authService.value.signOut();
+    await _authController.signOut();
 
     if (!context.mounted) return;
 
-    Navigator.popUntil(context, (route) => route.isFirst);
+    Get.offAllNamed(Routes.login);
   }
 
   @override
@@ -71,7 +75,7 @@ class SettingsPage extends StatelessWidget {
                 SettingItem(
                   label: 'Email',
                   type: .text,
-                  value: currentUser.value!.email,
+                  value: _authController.userModel!.email,
                   onTap: () {},
                 ),
                 SettingItem(label: 'Password', type: .text, onTap: () {}),

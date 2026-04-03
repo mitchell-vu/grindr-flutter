@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["fluttr", "getx", "grindr"]
+  "cSpell.words": ["fluttr", "getx", "grindr"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  }
 }

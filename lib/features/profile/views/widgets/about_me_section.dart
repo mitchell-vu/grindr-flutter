@@ -11,12 +11,16 @@ class AboutMeSection extends StatelessWidget {
       spacing: 12,
       children: [
         Text(
-          "About me".toUpperCase(),
-          style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: .bold),
+          'About me'.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+            fontWeight: .bold,
+          ),
         ),
         Container(
           padding: const .all(20),
-          width: double.infinity,
+          width: .infinity,
           decoration: BoxDecoration(
             color: Colors.grey.shade900,
             borderRadius: const BorderRadius.only(
@@ -25,7 +29,10 @@ class AboutMeSection extends StatelessWidget {
               bottomRight: .circular(16),
             ),
           ),
-          child: Text(bio, style: const TextStyle(fontSize: 16, color: Colors.white)),
+          child: Text(
+            bio,
+            style: const TextStyle(fontSize: 16, color: Colors.white),
+          ),
         ),
       ],
     );

@@ -1,44 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:fluttr/features/auth/controllers/auth_controller.dart';
+import 'package:fluttr/features/chat/controllers/chat_controller.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
-import 'package:fluttr/features/chat/models/chat_model.dart';
-import 'package:fluttr/features/chat/services/chat_service.dart';
+import 'package:fluttr/models/user_model.dart';
 import 'package:fluttr/features/chat/views/widgets/chat_tile.dart';
 import 'package:fluttr/shared/data.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 
-class ChatListPage extends StatefulWidget {
+class ChatListPage extends GetView<ChatController> {
   const ChatListPage({super.key});
 
   @override
-  State<ChatListPage> createState() => _ChatListPageState();
-}
-
-class _ChatListPageState extends State<ChatListPage> {
-  late Future<List<({ChatModel chat, UserModel user})>> _chatsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadChats();
-  }
-
-  void _loadChats() {
-    _chatsFuture = ChatService().getChatListWithUsers(currentUser.value!.uid);
-  }
-
-  Future<void> _refresh() async {
-    setState(() {
-      _loadChats();
-    });
-    try {
-      await _chatsFuture;
-    } catch (_) {}
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Get.put(ChatController());
     return Column(
       children: [
         SafeArea(
@@ -50,7 +25,7 @@ class _ChatListPageState extends State<ChatListPage> {
               spacing: 4,
               children: [
                 Text(
-                  "Inbox",
+                  'Inbox',
                   style: GoogleFonts.ibmPlexSans(
                     fontSize: 24,
                     fontWeight: .bold,
@@ -68,7 +43,7 @@ class _ChatListPageState extends State<ChatListPage> {
 
         Expanded(
           child: RefreshIndicator(
-            onRefresh: _refresh,
+            onRefresh: () async => await controller.refreshChatList(),
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: .zero,
@@ -93,44 +68,22 @@ class _ChatListPageState extends State<ChatListPage> {
                 SizedBox(height: 8),
 
                 // Chat list
-                FutureBuilder<List<({ChatModel chat, UserModel user})>>(
-                  future: _chatsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting &&
-                        !snapshot.hasData) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-
-                    if (snapshot.hasData) {
-                      return Column(
-                        children: snapshot.data!.map((item) {
-                          final chat = item.chat;
-                          final user = item.user;
-
+                Obx(
+                  () => Column(
+                    children:
+                        controller.chatWithUserList.value?.map((chatWithUser) {
                           return ChatListItem(
-                            user: user,
-                            lastMessage: chat.lastMessage,
-                            lastMessageType: chat.lastMessageType,
-                            lastMessageSenderId: chat.lastMessageSenderId,
-                            time: chat.lastMessageTime,
+                            user: chatWithUser.user,
+                            lastMessage: chatWithUser.chat.lastMessage,
+                            lastMessageType: chatWithUser.chat.lastMessageType,
+                            lastMessageSenderId:
+                                chatWithUser.chat.lastMessageSenderId,
+                            time: chatWithUser.chat.lastMessageTime,
                             // unreadCount: isUnread ? index : 0,
                           );
-                        }).toList(),
-                      );
-                    }
-
-                    return Center(
-                      child: Text(
-                        "Error",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  },
+                        }).toList() ??
+                        [],
+                  ),
                 ),
               ],
             ),
@@ -151,7 +104,7 @@ class ChatsFilter extends StatelessWidget {
       children: [
         ChoiceChip(
           label: Text(
-            "Unread",
+            'Unread',
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
           selected: true,
@@ -159,7 +112,7 @@ class ChatsFilter extends StatelessWidget {
         ),
         ChoiceChip(
           label: Text(
-            "Online",
+            'Online',
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
           selected: false,
@@ -167,7 +120,7 @@ class ChatsFilter extends StatelessWidget {
         ),
         ChoiceChip(
           label: Text(
-            "Distance",
+            'Distance',
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
           selected: false,
@@ -183,12 +136,17 @@ class MyStories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthController authController = Get.put(AuthController());
     return Column(
       spacing: 4,
       children: [
         Stack(
           children: [
-            Avatar(url: currentUser.value!.photoUrl, size: 64, rounded: true),
+            Avatar(
+              url: authController.userModel!.photoUrl,
+              size: 64,
+              rounded: true,
+            ),
             Positioned(
               bottom: -4,
               right: -4,
@@ -210,7 +168,7 @@ class MyStories extends StatelessWidget {
           ],
         ),
         Text(
-          "Stories",
+          'Stories',
           style: TextStyle(color: Colors.grey, fontSize: 14),
           maxLines: 1,
           overflow: .ellipsis,
@@ -232,7 +190,7 @@ class UserStories extends StatelessWidget {
       children: [
         Avatar(url: user.photoUrl, size: 64, rounded: true),
         Text(
-          user.displayName ?? "",
+          user.displayName ?? '',
           style: TextStyle(color: Colors.white, fontSize: 14),
           maxLines: 1,
           overflow: .ellipsis,

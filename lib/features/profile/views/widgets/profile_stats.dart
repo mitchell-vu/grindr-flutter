@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/models/user_model.dart';
 
 class QuickStatsStrip extends StatelessWidget {
   final UserModel user;
@@ -136,7 +136,7 @@ class DetailedStatsSection extends StatelessWidget {
       spacing: 16,
       children: [
         const Text(
-          "STATS",
+          'STATS',
           style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: .bold),
         ),
         ...rows,

@@ -1,16 +1,16 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
-import 'package:fluttr/features/camera/camera.dart';
-import 'package:fluttr/features/chat/models/message_model.dart';
+import 'package:fluttr/features/auth/controllers/auth_controller.dart';
+import 'package:fluttr/features/camera/views/camera.dart';
 import 'package:fluttr/features/chat/services/chat_service.dart';
 import 'package:fluttr/features/chat/views/widgets/message_bubble.dart';
-import 'package:fluttr/features/profile/views/profile.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/models/message_model.dart';
+import 'package:fluttr/models/user_model.dart';
+import 'package:fluttr/routing/pages.dart';
 import 'package:fluttr/shared/services/firestore_service.dart';
-import 'package:fluttr/shared/utils/page_transaction.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 import 'package:fluttr/theme/color.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,6 +24,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final AuthController _authController = Get.find<AuthController>();
   final ImagePicker _picker = ImagePicker();
 
   UserModel? otherUser;
@@ -38,7 +39,7 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     _loadOtherUser();
 
-    chatId = generateChatId(currentUser.value!.uid, widget.otherUserId);
+    chatId = generateChatId(_authController.userModel!.uid, widget.otherUserId);
     messagesStream = ChatService().getChatStream(chatId);
     scrollToBottom();
   }
@@ -61,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
 
     if (message.isNotEmpty) {
       final newMessage = MessageModel(
-        senderId: currentUser.value!.uid,
+        senderId: _authController.userModel!.uid,
         content: message,
         type: MessageType.text,
         isRead: false,
@@ -70,7 +71,7 @@ class _ChatPageState extends State<ChatPage> {
       );
 
       ChatService().sendMessage(
-        currentUser.value!.uid,
+        _authController.userModel!.uid,
         widget.otherUserId,
         newMessage,
       );
@@ -116,22 +117,22 @@ class _ChatPageState extends State<ChatPage> {
         throw CameraException('No camera found', 'No camera found');
       }
 
-      final XFile? imageXFile = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CameraView(type: .photo, cameras: cameras),
-        ),
+      final XFile? imageXFile = await Get.toNamed(
+        Routes.camera,
+        arguments: {'type': CameraType.photo, 'cameras': cameras},
       );
 
       if (imageXFile != null && mounted) {
         ChatService().sendMessageWithImage(
-          currentUser.value!.uid,
+          _authController.userModel!.uid,
           widget.otherUserId,
           imageXFile,
         );
         scrollToBottom();
       }
     } on CameraException catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Camera Error: ${e.description}'),
@@ -148,7 +149,7 @@ class _ChatPageState extends State<ChatPage> {
 
     if (imageXFile != null) {
       ChatService().sendMessageWithImage(
-        currentUser.value!.uid,
+        _authController.userModel!.uid,
         widget.otherUserId,
         imageXFile,
       );
@@ -165,7 +166,7 @@ class _ChatPageState extends State<ChatPage> {
         leadingWidth: 32,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Get.back(),
           padding: EdgeInsets.zero,
           iconSize: 24,
           style: IconButton.styleFrom(splashFactory: NoSplash.splashFactory),
@@ -174,10 +175,7 @@ class _ChatPageState extends State<ChatPage> {
         title: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            Navigator.push(
-              context,
-              slideToTopPageTransition(ProfilePage(uid: widget.otherUserId)),
-            );
+            Get.toNamed(Routes.profile, arguments: {'uid': widget.otherUserId});
           },
           child: Row(
             spacing: 12,
@@ -286,6 +284,9 @@ class _ChatPageState extends State<ChatPage> {
 
                             return MessageBubble(
                               message: chatMessage,
+                              isMe:
+                                  _authController.userModel!.uid ==
+                                  chatMessage.senderId,
                               showTimestamp: !isNextMessageSameUser,
                             );
                           },

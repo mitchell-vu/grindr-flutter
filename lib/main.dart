@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-
+import 'package:fluttr/routing/pages.dart';
+import 'package:get/get.dart';
 import 'configs/firebase_options.dart';
-import 'features/app/auth_layout.dart';
 import 'theme/theme.dart';
 
 void main() async {
@@ -21,12 +21,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Fluttr',
       debugShowCheckedModeBanner: false,
       darkTheme: AppTheme.darkTheme,
       themeMode: .dark,
-      home: const AuthLayout(),
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
     );
   }
 }

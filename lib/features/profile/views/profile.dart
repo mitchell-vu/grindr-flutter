@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:fluttr/features/auth/controllers/auth_controller.dart';
+import 'package:fluttr/features/profile/controllers/profile_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/models/user_model.dart';
 import 'package:fluttr/features/profile/views/widgets/about_me_section.dart';
 import 'package:fluttr/features/profile/views/widgets/action_bar.dart';
 import 'package:fluttr/features/profile/views/widgets/chat_bottom.dart';
 import 'package:fluttr/features/profile/views/widgets/profile_stats.dart';
 import 'package:fluttr/shared/data.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
-import 'package:fluttr/shared/services/firestore_service.dart';
 import 'package:fluttr/shared/utils/top_clamped_scroll_physics.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 import 'package:fluttr/theme/color.dart';
+import 'package:get/get.dart';
 
 final double imageHeight = 640;
 
@@ -23,6 +24,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final ProfileController _profileController = Get.put(ProfileController());
+  final AuthController _authController = Get.put(AuthController());
   UserModel? user;
   late final bool isMe;
 
@@ -33,13 +36,13 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
 
-    isMe = widget.uid == currentUser.value?.uid;
+    isMe = widget.uid == _authController.userModel?.uid;
     _loadUser();
   }
 
   Future<void> _loadUser() async {
     if (widget.uid != null) {
-      final fetchedUser = await FirestoreService().getUser(widget.uid!);
+      final fetchedUser = await _profileController.getUser(widget.uid!);
 
       setState(() {
         user = fetchedUser ?? mockUser;
@@ -63,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 user == null
                     ? Container(
-                        width: double.infinity,
+                        width: .infinity,
                         height: imageHeight,
                         color: Colors.black,
                       )
@@ -71,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           Avatar(
                             url: user!.photoUrl,
-                            width: double.infinity,
+                            width: .infinity,
                             height: imageHeight,
                             radius: 0,
                           ),
@@ -226,7 +229,7 @@ class ProfileDetail extends StatelessWidget {
           crossAxisAlignment: .end,
           children: [
             Text(
-              user!.displayName ?? "",
+              user!.displayName ?? '',
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 28,
                 fontWeight: .bold,
@@ -254,7 +257,7 @@ class ProfileDetail extends StatelessWidget {
               children: [
                 Icon(Icons.circle, color: AppColors.success, size: 14),
                 Text(
-                  "Online now",
+                  'Online now',
                   style: TextStyle(fontSize: 14, color: AppColors.success),
                 ),
               ],
@@ -264,7 +267,7 @@ class ProfileDetail extends StatelessWidget {
               children: [
                 Icon(Icons.navigation_rounded, color: Colors.white, size: 14),
                 Text(
-                  "152m away",
+                  '152m away',
                   style: TextStyle(fontSize: 14, color: Colors.white),
                 ),
               ],

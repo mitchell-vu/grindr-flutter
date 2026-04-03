@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttr/features/chat/models/attachment_model.dart';
+import 'package:fluttr/models/attachment_model.dart';
 
 enum MessageType { text, image }
 

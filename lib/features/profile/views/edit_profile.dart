@@ -1,11 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttr/shared/data.dart';
+import 'package:fluttr/features/auth/controllers/auth_controller.dart';
 import 'package:fluttr/theme/color.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
-import 'package:fluttr/features/profile/services/user_service.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/profile/controllers/profile_controller.dart';
+import 'package:fluttr/models/user_model.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+final List<String> heightOptions = [
+  'Do not show',
+  ...List.generate(81, (i) => '${140 + i} cm'),
+];
+final List<String> weightOptions = [
+  'Do not show',
+  ...List.generate(101, (i) => '${40 + i} kg'),
+];
+final List<String> bodyTypeOptions = [
+  'Do not show',
+  'Average',
+  'Slim',
+  'Athletic',
+  'Muscular',
+  'Large',
+];
+final List<String> positionOptions = [
+  'Do not show',
+  'Top',
+  'Versatile',
+  'Bottom',
+];
+final List<String> ethnicityOptions = [
+  'Do not show',
+  'Asian',
+  'Black',
+  'Mixed',
+  'White',
+  'Other',
+];
+final List<String> relationshipStatusOptions = [
+  'Do not show',
+  'Single',
+  'Dating',
+  'Married',
+  'Open Relationship',
+];
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -31,48 +69,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController aboutController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
 
-  final List<String> heightOptions = [
-    'Do not show',
-    ...List.generate(81, (i) => '${140 + i} cm'),
-  ];
-  final List<String> weightOptions = [
-    'Do not show',
-    ...List.generate(101, (i) => '${40 + i} kg'),
-  ];
-  final List<String> bodyTypeOptions = [
-    'Do not show',
-    'Average',
-    'Slim',
-    'Athletic',
-    'Muscular',
-    'Large',
-  ];
-  final List<String> positionOptions = [
-    'Do not show',
-    'Top',
-    'Versatile',
-    'Bottom',
-  ];
-  final List<String> ethnicityOptions = [
-    'Do not show',
-    'Asian',
-    'Black',
-    'Mixed',
-    'White',
-    'Other',
-  ];
-  final List<String> relationshipStatusOptions = [
-    'Do not show',
-    'Single',
-    'Dating',
-    'Married',
-    'Open Relationship',
-  ];
+  final AuthController _authController = Get.put(AuthController());
+  final ProfileController _profileController = Get.put(ProfileController());
 
   @override
   void initState() {
     super.initState();
-    _user = currentUser.value ?? mockUser;
+    _user = _authController.userModel!;
     nameController.text = _user.displayName ?? '';
     aboutController.text = _user.bio ?? '';
     ageController.text = _user.age ?? '';
@@ -97,12 +100,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _saveProfile() async {
-    // If we're working with mockUser, let's just pop for now
-    if (_user.uid == mockUser.uid) {
-      Navigator.of(context).pop();
-      return;
-    }
-
     setState(() => _isLoading = true);
 
     final data = {
@@ -122,28 +119,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     };
 
     try {
-      await UserService().updateUserProfile(_user.uid, data);
+      await _profileController.updateUserProfile(_user.uid, data);
 
-      final updatedUser = _user.copyWith(
-        displayName: nameController.text.trim(),
-        bio: aboutController.text.trim(),
-        showAge: showAge,
-        showPosition: showPosition,
-        age: ageController.text.trim().isEmpty
-            ? null
-            : ageController.text.trim(),
-        height: height,
-        weight: weight,
-        bodyType: bodyType,
-        position: position,
-        ethnicity: ethnicity,
-        relationshipStatus: relationshipStatus,
-      );
-      currentUser.value = updatedUser;
-
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
+      Get.back();
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -167,7 +145,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Get.back(),
         ),
         title: const Text(
           'Edit Profile',
@@ -197,7 +175,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               : TextButton(
                   onPressed: _saveProfile,
                   child: Text(
-                    "Save",
+                    'Save',
                     style: TextStyle(color: AppColors.primary),
                   ),
                 ),
@@ -574,7 +552,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             } else {
                               onSelected(options[selectedIndex]);
                             }
-                            Navigator.pop(context);
+                            Get.back();
                           },
                           child: const Text(
                             'Done',

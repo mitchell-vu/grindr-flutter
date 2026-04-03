@@ -1,22 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
 
 class SocialsLogin extends StatelessWidget {
-  const SocialsLogin({super.key});
+  final VoidCallback? onLoginGoogle;
 
-  void loginWithGoogle(BuildContext context) async {
-    try {
-      await authService.value.signInWithGoogle();
-    } catch (e) {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-
-      debugPrint("Sign-in error: $e");
-    }
-  }
+  const SocialsLogin({super.key, this.onLoginGoogle});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +13,7 @@ class SocialsLogin extends StatelessWidget {
       spacing: 20,
       children: [
         ElevatedButton(
-          onPressed: () => loginWithGoogle(context),
+          onPressed: onLoginGoogle,
           child: Row(
             spacing: 8,
             mainAxisAlignment: .center,
@@ -67,7 +55,7 @@ class SocialsLogin extends StatelessWidget {
                 height: 24,
                 child: SvgPicture.asset(
                   'assets/svgs/apple.svg',
-                  colorFilter: ColorFilter.mode(Colors.white, .srcIn),
+                  colorFilter: .mode(Colors.white, .srcIn),
                 ),
               ),
               Text('Sign in with Apple'),

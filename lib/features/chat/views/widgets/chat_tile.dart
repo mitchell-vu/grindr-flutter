@@ -1,13 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:fluttr/features/chat/models/message_model.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
+import 'package:fluttr/features/auth/controllers/auth_controller.dart';
+import 'package:fluttr/models/message_model.dart';
+import 'package:fluttr/routing/pages.dart';
 import 'package:fluttr/theme/color.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
-import 'package:fluttr/shared/utils/page_transaction.dart';
-import 'package:fluttr/features/chat/views/chat.dart';
-import 'package:fluttr/features/profile/views/profile.dart';
+import 'package:fluttr/models/user_model.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 
 class ChatListItem extends StatelessWidget {
@@ -30,6 +29,8 @@ class ChatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthController authController = Get.put(AuthController());
+
     final isUnread = unreadCount > 0;
     final isOnline = Random().nextInt(10) > 5;
     final contentColor = isUnread ? Colors.white : Colors.grey;
@@ -41,10 +42,7 @@ class ChatListItem extends StatelessWidget {
           GestureDetector(
             behavior: .opaque,
             onTap: () {
-              Navigator.push(
-                context,
-                slideToTopPageTransition(ProfilePage(uid: user.uid)),
-              );
+              Get.toNamed(Routes.profile, arguments: {'uid': user.uid});
             },
             child: Padding(
               padding: .symmetric(horizontal: 16, vertical: 10),
@@ -57,11 +55,7 @@ class ChatListItem extends StatelessWidget {
             child: GestureDetector(
               behavior: .opaque,
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ChatPage(otherUserId: user.uid),
-                  ),
-                );
+                Get.toNamed(Routes.chat, arguments: {'otherUserId': user.uid});
               },
 
               child: Container(
@@ -103,7 +97,8 @@ class ChatListItem extends StatelessWidget {
                         Row(
                           spacing: 4,
                           children: [
-                            if (lastMessageSenderId == currentUser.value!.uid)
+                            if (lastMessageSenderId ==
+                                authController.userModel!.uid)
                               Icon(Icons.reply, size: 14, color: contentColor),
                             if (lastMessageType == MessageType.image) ...[
                               Icon(
@@ -112,7 +107,7 @@ class ChatListItem extends StatelessWidget {
                                 color: contentColor,
                               ),
                               Text(
-                                'Photo ${lastMessageSenderId == currentUser.value!.uid ? 'sent' : 'received'}',
+                                'Photo ${lastMessageSenderId == authController.userModel!.uid ? 'sent' : 'received'}',
                                 style: GoogleFonts.ibmPlexSans(
                                   fontSize: 16,
                                   fontWeight: isUnread ? .bold : .normal,

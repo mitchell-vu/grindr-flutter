@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/auth/controllers/auth_controller.dart';
+import 'package:fluttr/models/user_model.dart';
 import 'package:fluttr/features/home/widgets/user_tile.dart';
 import 'package:fluttr/shared/data.dart';
-import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/shared/services/firestore_service.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
 import 'package:fluttr/shared/widgets/no_result.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
@@ -18,12 +19,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final AuthController _authController = Get.put(AuthController());
   late Future<List<UserModel>> users;
 
   @override
   void initState() {
     super.initState();
-    users = FirestoreService().getAllOtherUsers(currentUser.value!.uid);
   }
 
   @override
@@ -44,15 +45,10 @@ class _HomeState extends State<Home> {
                       onTap: () {
                         widget.onOpenDrawer?.call();
                       },
-                      child: ValueListenableBuilder(
-                        valueListenable: currentUser,
-                        builder: (context, value, child) {
-                          return Avatar(
-                            url: currentUser.value!.photoUrl,
-                            size: 44,
-                            rounded: true,
-                          );
-                        },
+                      child: Avatar(
+                        url: _authController.userModel!.photoUrl,
+                        size: 44,
+                        rounded: true,
                       ),
                     ),
                     Expanded(
@@ -70,7 +66,7 @@ class _HomeState extends State<Home> {
                           children: [
                             Icon(Icons.search, color: Colors.grey.shade300),
                             Text(
-                              "Explore more profiles",
+                              'Explore more profiles',
                               style: TextStyle(
                                 color: Colors.grey.shade300,
                                 fontSize: 16,
@@ -93,10 +89,12 @@ class _HomeState extends State<Home> {
         ),
         Expanded(
           child: FutureBuilder(
-            future: users,
+            future: FirestoreService().getAllOtherUsers(
+              _authController.userModel!.uid,
+            ),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return const Center(child: Text("Something went wrong"));
+                return const Center(child: Text('Something went wrong'));
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -158,7 +156,7 @@ class UsersFilter extends StatelessWidget {
       children: [
         ChoiceChip(
           label: Text(
-            "Online",
+            'Online',
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
           selected: false,
@@ -166,7 +164,7 @@ class UsersFilter extends StatelessWidget {
         ),
         ChoiceChip(
           label: Text(
-            "Age",
+            'Age',
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
           selected: false,
@@ -174,7 +172,7 @@ class UsersFilter extends StatelessWidget {
         ),
         ChoiceChip(
           label: Text(
-            "Height",
+            'Height',
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
           selected: false,
@@ -182,7 +180,7 @@ class UsersFilter extends StatelessWidget {
         ),
         ChoiceChip(
           label: Text(
-            "Has photos",
+            'Has photos',
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
           selected: false,
@@ -190,7 +188,7 @@ class UsersFilter extends StatelessWidget {
         ),
         ChoiceChip(
           label: Text(
-            "Popular",
+            'Popular',
             style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
           ),
           selected: false,
