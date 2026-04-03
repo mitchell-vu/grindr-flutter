@@ -48,5 +48,6 @@ class AppTheme {
     filledButtonTheme: AppButtonTheme.filledButtonTheme,
     elevatedButtonTheme: AppButtonTheme.elevatedButtonTheme,
     textButtonTheme: AppButtonTheme.textButtonTheme,
+    iconButtonTheme: AppButtonTheme.iconButtonTheme,
   );
 }

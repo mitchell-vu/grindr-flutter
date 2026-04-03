@@ -51,34 +51,50 @@ class _AppState extends State<App> {
           bottomNavigationBar: ValueListenableBuilder(
             valueListenable: selectedPageIndex,
             builder: (context, value, child) {
-              return BottomAppBar(
-                padding: .zero,
-                child: Row(
-                  mainAxisAlignment: .spaceEvenly,
-                  children: _pages
-                      .map(
-                        (page) => IconButton(
-                          iconSize: 28,
-                          padding: .zero,
-
-                          icon: Icon(page['icon'], color: Colors.grey),
-                          selectedIcon: Icon(
-                            page['selectedIcon'],
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          isSelected: value == _pages.indexOf(page),
-                          onPressed: () {
-                            selectedPageIndex.value = _pages.indexOf(page);
-                          },
-                        ),
-                      )
-                      .toList(),
-                ),
-              );
+              return AppBottomNavBar(selectedIndex: value);
             },
           ),
         );
       },
+    );
+  }
+}
+
+class AppBottomNavBar extends StatelessWidget {
+  const AppBottomNavBar({super.key, required this.selectedIndex});
+
+  final int selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      padding: .zero,
+      height: 64,
+      color: Theme.of(context).colorScheme.surface,
+      child: Row(
+        children: _pages
+            .map(
+              (page) => Expanded(
+                child: IconButton(
+                  iconSize: 28,
+                  padding: .zero,
+                  icon: Icon(page['icon'], color: Colors.grey.shade600),
+                  selectedIcon: Icon(
+                    page['selectedIcon'],
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  isSelected: selectedIndex == _pages.indexOf(page),
+                  onPressed: () {
+                    selectedPageIndex.value = _pages.indexOf(page);
+                  },
+                  style: IconButton.styleFrom(
+                    splashFactory: NoSplash.splashFactory,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }

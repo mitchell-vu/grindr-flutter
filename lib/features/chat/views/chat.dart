@@ -1,15 +1,15 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttr/features/auth/models/user_model.dart';
+import 'package:fluttr/features/camera/camera.dart';
 import 'package:fluttr/features/chat/models/message_model.dart';
 import 'package:fluttr/features/chat/services/chat_service.dart';
 import 'package:fluttr/features/chat/views/widgets/message_bubble.dart';
+import 'package:fluttr/features/profile/views/profile.dart';
 import 'package:fluttr/shared/services/auth_service.dart';
 import 'package:fluttr/shared/services/firestore_service.dart';
 import 'package:fluttr/shared/utils/page_transaction.dart';
-import 'package:fluttr/features/profile/views/profile.dart';
 import 'package:fluttr/shared/widgets/avatar.dart';
-import 'package:fluttr/shared/widgets/camera.dart';
 import 'package:fluttr/theme/color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -116,10 +116,21 @@ class _ChatPageState extends State<ChatPage> {
         throw CameraException('No camera found', 'No camera found');
       }
 
-      Navigator.push(
+      final XFile? imageXFile = await Navigator.push(
         context,
-        slideToTopPageTransition(CameraView(type: .photo, cameras: cameras)),
+        MaterialPageRoute(
+          builder: (context) => CameraView(type: .photo, cameras: cameras),
+        ),
       );
+
+      if (imageXFile != null && mounted) {
+        ChatService().sendMessageWithImage(
+          currentUser.value!.uid,
+          widget.otherUserId,
+          imageXFile,
+        );
+        scrollToBottom();
+      }
     } on CameraException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -150,6 +161,16 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actionsPadding: EdgeInsets.zero,
+        leadingWidth: 32,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.of(context).pop(),
+          padding: EdgeInsets.zero,
+          iconSize: 24,
+          style: IconButton.styleFrom(splashFactory: NoSplash.splashFactory),
+        ),
+        titleSpacing: 8,
         title: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
@@ -161,7 +182,7 @@ class _ChatPageState extends State<ChatPage> {
           child: Row(
             spacing: 12,
             children: [
-              Avatar(url: otherUser?.photoUrl, size: 40),
+              Avatar(url: otherUser?.photoUrl, size: 32),
               Column(
                 crossAxisAlignment: .start,
                 children: [
@@ -194,6 +215,10 @@ class _ChatPageState extends State<ChatPage> {
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz_rounded)),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(height: 1, color: Colors.grey.shade900),
+        ),
       ),
       body: SafeArea(
         child: Column(

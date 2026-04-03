@@ -54,4 +54,13 @@ class AppButtonTheme {
       enableFeedback: false,
     ),
   );
+
+  static IconButtonThemeData iconButtonTheme = IconButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: WidgetStatePropertyAll(Colors.transparent),
+      foregroundColor: WidgetStatePropertyAll(Colors.white),
+      overlayColor: WidgetStatePropertyAll(Colors.transparent),
+      splashFactory: NoSplash.splashFactory,
+    ),
+  );
 }
