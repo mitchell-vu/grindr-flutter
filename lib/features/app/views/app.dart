@@ -62,7 +62,7 @@ class AppBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      padding: .zero,
+      padding: EdgeInsets.zero,
       height: 64,
       color: Theme.of(context).colorScheme.surface,
       child: Row(
@@ -71,7 +71,7 @@ class AppBottomNavBar extends StatelessWidget {
               (page) => Expanded(
                 child: IconButton(
                   iconSize: 28,
-                  padding: .zero,
+                  padding: EdgeInsets.zero,
                   icon: Icon(page['icon'], color: Colors.grey.shade600),
                   selectedIcon: Icon(
                     page['selectedIcon'],

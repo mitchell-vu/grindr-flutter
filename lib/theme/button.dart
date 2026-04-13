@@ -8,11 +8,13 @@ class AppButtonTheme {
       backgroundColor: WidgetStatePropertyAll(AppColors.primary),
       foregroundColor: WidgetStatePropertyAll(Colors.black),
       shape: WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: .circular(32)),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
       ),
-      padding: WidgetStatePropertyAll(.symmetric(vertical: 16, horizontal: 20)),
+      padding: WidgetStatePropertyAll(
+        EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      ),
       textStyle: WidgetStatePropertyAll(
-        GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w600),
+        GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w600),
       ),
       splashFactory: NoSplash.splashFactory,
       enableFeedback: false,
@@ -27,11 +29,13 @@ class AppButtonTheme {
         Colors.black.withValues(alpha: 0.25),
       ),
       shape: WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: .circular(32)),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
       ),
-      padding: WidgetStatePropertyAll(.symmetric(vertical: 16, horizontal: 20)),
+      padding: WidgetStatePropertyAll(
+        EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      ),
       textStyle: WidgetStatePropertyAll(
-        GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w600),
+        GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w600),
       ),
       splashFactory: NoSplash.splashFactory,
       enableFeedback: false,
@@ -44,11 +48,13 @@ class AppButtonTheme {
       foregroundColor: WidgetStatePropertyAll(Color(0xFF9E9EA9)),
       overlayColor: WidgetStatePropertyAll(Colors.transparent),
       shape: WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: .circular(32)),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
       ),
-      padding: WidgetStatePropertyAll(.symmetric(vertical: 16, horizontal: 20)),
+      padding: WidgetStatePropertyAll(
+        EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      ),
       textStyle: WidgetStatePropertyAll(
-        GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w600),
+        GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: FontWeight.w600),
       ),
       splashFactory: NoSplash.splashFactory,
       enableFeedback: false,

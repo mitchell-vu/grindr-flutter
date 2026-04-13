@@ -25,20 +25,22 @@ class MessageBubble extends StatelessWidget {
         : Theme.of(context).colorScheme.secondary;
 
     return Container(
-      alignment: isMe ? .centerRight : .centerLeft,
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Padding(
-        padding: .symmetric(horizontal: 16, vertical: 4),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Column(
-          crossAxisAlignment: isMe ? .end : .start,
+          crossAxisAlignment: isMe
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           children: [
             ClipPath(
               clipper: _BubbleClipper(isMe: isMe),
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 250),
                 color: bubbleColor,
-                padding: message.type == .image
-                    ? .zero
-                    : .only(
+                padding: message.type == MessageType.image
+                    ? EdgeInsets.zero
+                    : EdgeInsets.only(
                         left: isMe ? 16 : _bubbleTailWidth + 16,
                         right: isMe ? _bubbleTailWidth + 16 : 16,
                         top: 12,
@@ -55,7 +57,7 @@ class MessageBubble extends StatelessWidget {
                           color: Colors.grey.shade900,
                           child: Image.network(
                             message.attachment!.url,
-                            fit: .cover,
+                            fit: BoxFit.cover,
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
                               return Center(
@@ -88,7 +90,7 @@ class MessageBubble extends StatelessWidget {
                         message.content,
                         style: GoogleFonts.ibmPlexSans(
                           fontSize: 16,
-                          fontWeight: .w500,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
               ),
@@ -96,7 +98,7 @@ class MessageBubble extends StatelessWidget {
 
             showTimestamp
                 ? Padding(
-                    padding: .symmetric(vertical: 4),
+                    padding: EdgeInsets.symmetric(vertical: 4),
                     child: Text(
                       '${message.createdAt.hour.toString().padLeft(2, '0')}:${message.createdAt.minute.toString().padLeft(2, '0')}',
                       style: TextStyle(
@@ -131,10 +133,10 @@ class _BubbleClipper extends CustomClipper<Path> {
       path.addRRect(
         RRect.fromRectAndCorners(
           mainRect,
-          topLeft: .circular(_bubbleRadius),
-          topRight: .circular(_bubbleRadius),
-          bottomLeft: .circular(_bubbleRadius),
-          bottomRight: .zero,
+          topLeft: Radius.circular(_bubbleRadius),
+          topRight: Radius.circular(_bubbleRadius),
+          bottomLeft: Radius.circular(_bubbleRadius),
+          bottomRight: Radius.zero,
         ),
       );
 
@@ -158,10 +160,10 @@ class _BubbleClipper extends CustomClipper<Path> {
       path.addRRect(
         RRect.fromRectAndCorners(
           mainRect,
-          topLeft: .circular(_bubbleRadius),
-          topRight: .circular(_bubbleRadius),
-          bottomLeft: .zero,
-          bottomRight: .circular(_bubbleRadius),
+          topLeft: Radius.circular(_bubbleRadius),
+          topRight: Radius.circular(_bubbleRadius),
+          bottomLeft: Radius.zero,
+          bottomRight: Radius.circular(_bubbleRadius),
         ),
       );
 

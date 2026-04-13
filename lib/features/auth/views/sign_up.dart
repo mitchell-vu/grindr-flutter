@@ -11,7 +11,7 @@ class SignUp extends GetView<SignUpController> {
     return Scaffold(
       appBar: AppBar(title: const Text('Create Account')),
       body: Container(
-        padding: .all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           spacing: 16,
           children: [
@@ -39,29 +39,25 @@ class SignUp extends GetView<SignUpController> {
               ),
             ),
             SizedBox(
-              width: .infinity,
+              width: double.infinity,
               child: FilledButton(
                 onPressed: controller.signUp,
                 child: Text('Create Account'),
               ),
             ),
-
             SizedBox(height: 24),
-
             Align(
-              alignment: .centerLeft,
+              alignment: Alignment.centerLeft,
               child: Text(
                 'Or login with'.toUpperCase(),
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
-                  fontWeight: .w600,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            SocialsLogin(
-              onLoginGoogle: controller.loginWithGoogle,
-            ),
+            SocialsLogin(onLoginGoogle: controller.loginWithGoogle),
           ],
         ),
       ),

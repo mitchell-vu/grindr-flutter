@@ -23,8 +23,8 @@ class ActionBar extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: .topCenter,
-                end: .bottomCenter,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
                 colors: [
                   Colors.black.withValues(alpha: 0.9),
                   Colors.black.withValues(alpha: 0.5),
@@ -37,9 +37,9 @@ class ActionBar extends StatelessWidget {
         ),
         SafeArea(
           child: Padding(
-            padding: const .symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
-              mainAxisAlignment: .spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
                   onPressed: () => Get.back(),

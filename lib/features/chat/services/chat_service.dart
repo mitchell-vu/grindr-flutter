@@ -45,10 +45,8 @@ class ChatService {
   Future<ChatModel> getOrCreateChat(String selfId, String otherId) async {
     try {
       final chatId = generateChatId(selfId, otherId);
-      final docSnapshot = await _firestore
-          .collection('chats')
-          .doc(chatId)
-          .get();
+      final docSnapshot =
+          await _firestore.collection('chats').doc(chatId).get();
 
       if (docSnapshot.exists) {
         return ChatModel.fromMap(docSnapshot.data() as Map<String, dynamic>);
@@ -132,7 +130,7 @@ class ChatService {
 
         attachment = AttachmentModel(
           fileName: snapshot.ref.name,
-          type: .image,
+          type: AttachmentType.image,
           width: decodedImage.width,
           height: decodedImage.height,
           url: url,
@@ -141,7 +139,7 @@ class ChatService {
         final newMessage = MessageModel(
           senderId: _authController.userModel!.uid,
           content: '',
-          type: .image,
+          type: MessageType.image,
           attachment: attachment,
           isRead: false,
           createdAt: DateTime.now(),

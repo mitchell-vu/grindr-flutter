@@ -33,9 +33,9 @@ class _HomeState extends State<Home> {
       children: [
         SafeArea(
           child: Padding(
-            padding: .symmetric(horizontal: 16, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Column(
-              crossAxisAlignment: .stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 8,
               children: [
                 Row(
@@ -54,14 +54,14 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: Container(
                         height: 44,
-                        alignment: .centerLeft,
-                        padding: .symmetric(horizontal: 14),
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.symmetric(horizontal: 14),
                         decoration: BoxDecoration(
-                          borderRadius: .circular(24),
+                          borderRadius: BorderRadius.circular(24),
                           color: Theme.of(context).colorScheme.surfaceBright,
                         ),
                         child: Row(
-                          crossAxisAlignment: .center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           spacing: 8,
                           children: [
                             Icon(Icons.search, color: Colors.grey.shade300),
@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
                 ),
 
                 SingleChildScrollView(
-                  scrollDirection: .horizontal,
+                  scrollDirection: Axis.horizontal,
                   child: UsersFilter(),
                 ),
               ],
@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.grey.shade900,
-                            borderRadius: .circular(6),
+                            borderRadius: BorderRadius.circular(6),
                           ),
                         );
                       }),
@@ -157,7 +157,10 @@ class UsersFilter extends StatelessWidget {
         ChoiceChip(
           label: Text(
             'Online',
-            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+            style: GoogleFonts.ibmPlexSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           selected: false,
           onSelected: (value) {},
@@ -165,7 +168,10 @@ class UsersFilter extends StatelessWidget {
         ChoiceChip(
           label: Text(
             'Age',
-            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+            style: GoogleFonts.ibmPlexSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           selected: false,
           onSelected: (value) {},
@@ -173,7 +179,10 @@ class UsersFilter extends StatelessWidget {
         ChoiceChip(
           label: Text(
             'Height',
-            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+            style: GoogleFonts.ibmPlexSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           selected: false,
           onSelected: (value) {},
@@ -181,7 +190,10 @@ class UsersFilter extends StatelessWidget {
         ChoiceChip(
           label: Text(
             'Has photos',
-            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+            style: GoogleFonts.ibmPlexSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           selected: false,
           onSelected: (value) {},
@@ -189,7 +201,10 @@ class UsersFilter extends StatelessWidget {
         ChoiceChip(
           label: Text(
             'Popular',
-            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+            style: GoogleFonts.ibmPlexSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           selected: false,
           onSelected: (value) {},

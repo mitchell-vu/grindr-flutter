@@ -8,7 +8,7 @@ class AppTheme {
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Colors.black,
     colorScheme: ColorScheme(
-      brightness: .dark,
+      brightness: Brightness.dark,
       primary: AppColors.primary,
       onPrimary: Colors.black,
       secondary: AppColors.secondary,
@@ -25,7 +25,10 @@ class AppTheme {
     textTheme: GoogleFonts.ibmPlexSansTextTheme(),
 
     appBarTheme: AppBarTheme(
-      titleTextStyle: GoogleFonts.ibmPlexSans(fontWeight: .w600, fontSize: 18),
+      titleTextStyle: GoogleFonts.ibmPlexSans(
+        fontWeight: FontWeight.w600,
+        fontSize: 18,
+      ),
       backgroundColor: Colors.black,
       surfaceTintColor: Colors.black,
     ),
@@ -33,10 +36,10 @@ class AppTheme {
     chipTheme: ChipThemeData(
       backgroundColor: Color(0xFF1F1F20),
       selectedColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: .circular(24)),
-      side: .none,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      side: BorderSide.none,
       showCheckmark: false,
-      padding: .symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     ),
 
     snackBarTheme: SnackBarThemeData(

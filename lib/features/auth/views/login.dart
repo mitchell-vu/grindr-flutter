@@ -25,7 +25,7 @@ class Login extends GetView<LoginController> {
         ],
       ),
       body: Container(
-        padding: .all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           spacing: 16,
           children: [
@@ -44,25 +44,21 @@ class Login extends GetView<LoginController> {
                 hintText: 'Password',
               ),
             ),
-
             SizedBox(
-              width: .infinity,
+              width: double.infinity,
               child: FilledButton(
                 onPressed: controller.login,
                 child: Text('Login'),
               ),
             ),
-
             SizedBox(
-              width: .infinity,
+              width: double.infinity,
               child: TextButton(
                 onPressed: () {},
                 child: Text('Forgot Password'),
               ),
             ),
-
             SizedBox(height: 24),
-
             SocialsLogin(onLoginGoogle: controller.loginWithGoogle),
           ],
         ),

@@ -67,48 +67,61 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(title: Text('Settings')),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: .start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SettingsSection(
               title: 'Account',
               items: [
                 SettingItem(
                   label: 'Email',
-                  type: .text,
+                  type: SettingItemType.text,
                   value: _authController.userModel!.email,
                   onTap: () {},
                 ),
-                SettingItem(label: 'Password', type: .text, onTap: () {}),
+                SettingItem(
+                  label: 'Password',
+                  type: SettingItemType.text,
+                  onTap: () {},
+                ),
               ],
             ),
-
             SettingsSection(
               title: 'Notifications',
               items: [
                 SettingItem(
                   label: 'Received Taps',
-                  type: .bool,
+                  type: SettingItemType.bool,
                   boolValue: true,
                 ),
-                SettingItem(label: 'Sound', type: .bool, boolValue: true),
-                SettingItem(label: 'Vibrations', type: .bool, boolValue: true),
+                SettingItem(
+                  label: 'Sound',
+                  type: SettingItemType.bool,
+                  boolValue: true,
+                ),
+                SettingItem(
+                  label: 'Vibrations',
+                  type: SettingItemType.bool,
+                  boolValue: true,
+                ),
               ],
             ),
-
             Padding(
-              padding: .only(top: 24, left: 16, right: 16, bottom: 16),
+              padding: EdgeInsets.only(
+                top: 24,
+                left: 16,
+                right: 16,
+                bottom: 16,
+              ),
               child: SectionHeading(text: 'Actions'),
             ),
-
             Column(
               spacing: 24,
-              crossAxisAlignment: .stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ElevatedButton(
                   onPressed: () => logout(context),
                   child: Text('Logout'),
                 ),
-
                 FilledButton(
                   onPressed: () {},
                   style: ButtonStyle(
@@ -137,7 +150,7 @@ class SettingsSection extends StatelessWidget {
     Widget trailingWidget(SettingItem item) {
       List<Widget> widgets = [];
 
-      if (item.type == .bool) {
+      if (item.type == SettingItemType.bool) {
         widgets.add(
           Switch.adaptive(
             value: item.boolValue ?? false,
@@ -147,7 +160,7 @@ class SettingsSection extends StatelessWidget {
         );
       }
 
-      if (item.type == .text && item.value != null) {
+      if (item.type == SettingItemType.text && item.value != null) {
         widgets.add(Text(item.value!));
       }
 
@@ -155,16 +168,19 @@ class SettingsSection extends StatelessWidget {
         widgets.add(Icon(Icons.arrow_forward_ios, size: 16));
       }
 
-      return Row(spacing: 8, crossAxisAlignment: .center, children: widgets);
+      return Row(
+        spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: widgets,
+      );
     }
 
     return Column(
       children: [
         Padding(
-          padding: .only(top: 24, left: 16, right: 16, bottom: 16),
+          padding: EdgeInsets.only(top: 24, left: 16, right: 16, bottom: 16),
           child: SectionHeading(text: title),
         ),
-
         Container(
           color: Color(0xFF1F1F20),
           child: Column(
@@ -180,7 +196,7 @@ class SettingsSection extends StatelessWidget {
                         Text(
                           item.label,
                           style: GoogleFonts.ibmPlexSans(
-                            fontWeight: .w500,
+                            fontWeight: FontWeight.w500,
                             fontSize: 16,
                           ),
                         ),
@@ -188,7 +204,10 @@ class SettingsSection extends StatelessWidget {
                         trailingWidget(item),
                       ],
                     ),
-                    contentPadding: .symmetric(horizontal: 16, vertical: 4),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
                   ),
                   if (!isLast)
                     Divider(color: Color(0xFF434343), height: 1, indent: 16),

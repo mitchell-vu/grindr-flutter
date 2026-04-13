@@ -7,7 +7,7 @@ class AboutMeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 12,
       children: [
         Text(
@@ -15,18 +15,18 @@ class AboutMeSection extends StatelessWidget {
           style: const TextStyle(
             fontSize: 14,
             color: Colors.grey,
-            fontWeight: .bold,
+            fontWeight: FontWeight.bold,
           ),
         ),
         Container(
-          padding: const .all(20),
-          width: .infinity,
+          padding: EdgeInsets.all(20),
+          width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.grey.shade900,
             borderRadius: const BorderRadius.only(
-              topLeft: .circular(16),
-              topRight: .circular(16),
-              bottomRight: .circular(16),
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+              bottomRight: Radius.circular(16),
             ),
           ),
           child: Text(

@@ -62,11 +62,11 @@ class _ProfilePageState extends State<ProfilePage> {
           SingleChildScrollView(
             physics: const TopClampedScrollPhysics(),
             child: Column(
-              crossAxisAlignment: .start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 user == null
                     ? Container(
-                        width: .infinity,
+                        width: double.infinity,
                         height: imageHeight,
                         color: Colors.black,
                       )
@@ -74,20 +74,20 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           Avatar(
                             url: user!.photoUrl,
-                            width: .infinity,
+                            width: double.infinity,
                             height: imageHeight,
                             radius: 0,
                           ),
 
                           Positioned.fill(
                             child: Align(
-                              alignment: .centerRight,
+                              alignment: Alignment.centerRight,
                               child: Column(
-                                mainAxisAlignment: .center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    margin: const .all(16),
-                                    padding: const .symmetric(
+                                    margin: const EdgeInsets.all(16),
+                                    padding: const EdgeInsets.symmetric(
                                       vertical: 14,
                                       horizontal: 6,
                                     ),
@@ -98,7 +98,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       borderRadius: BorderRadius.circular(100),
                                     ),
                                     child: Column(
-                                      mainAxisAlignment: .center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       spacing: 6,
                                       children: [
                                         ...List.generate(3, (index) {
@@ -118,7 +119,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                           );
                                         }),
                                         Padding(
-                                          padding: const .only(top: 4),
+                                          padding: const EdgeInsets.only(
+                                            top: 4,
+                                          ),
                                           child: Icon(
                                             Icons.lock,
                                             size: 16,
@@ -142,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SafeArea(
                   top: false,
                   child: Padding(
-                    padding: const .only(
+                    padding: const EdgeInsets.only(
                       left: 20,
                       right: 20,
                       top: 16,
@@ -184,7 +187,7 @@ class ProfileDetailSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16,
       children: [
         SizedBox(height: 64),
@@ -193,18 +196,18 @@ class ProfileDetailSkeleton extends StatelessWidget {
           height: 20,
           decoration: BoxDecoration(
             color: Colors.grey.shade900,
-            borderRadius: .circular(100),
+            borderRadius: BorderRadius.circular(100),
           ),
         ),
         Container(
-          width: .infinity,
+          width: double.infinity,
           height: 160,
           decoration: BoxDecoration(
             color: Colors.grey.shade900,
-            borderRadius: .only(
-              topLeft: .circular(12),
-              topRight: .circular(12),
-              bottomRight: .circular(12),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+              bottomRight: Radius.circular(12),
             ),
           ),
         ),
@@ -222,17 +225,17 @@ class ProfileDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       spacing: 4,
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           spacing: 8,
-          crossAxisAlignment: .end,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
               user!.displayName ?? '',
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 28,
-                fontWeight: .bold,
+                fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),

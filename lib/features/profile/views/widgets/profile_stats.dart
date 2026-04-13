@@ -73,7 +73,7 @@ class DetailedStatsSection extends StatelessWidget {
     final detailedTextStyle = GoogleFonts.ibmPlexSans(
       color: Colors.white,
       fontSize: 16,
-      fontWeight: .w500,
+      fontWeight: FontWeight.w500,
     );
 
     if (bodyStats.isNotEmpty) {
@@ -132,12 +132,16 @@ class DetailedStatsSection extends StatelessWidget {
     if (rows.isEmpty) return SizedBox.shrink();
 
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16,
       children: [
         const Text(
           'STATS',
-          style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: .bold),
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         ...rows,
       ],
@@ -216,12 +220,12 @@ class BodyStatsRow extends StatelessWidget {
 
     return Row(
       spacing: spacing,
-      crossAxisAlignment: .center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(icon, color: iconColor, size: iconSize),
         Row(
           spacing: spacing,
-          crossAxisAlignment: .center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: statWidgets,
         ),
       ],

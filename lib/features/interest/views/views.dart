@@ -10,15 +10,15 @@ class ViewsPage extends StatelessWidget {
     return SafeArea(
       bottom: false,
       child: Column(
-        crossAxisAlignment: .start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: .only(left: 16, right: 16, top: 8, bottom: 16),
+            padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
             child: Text(
               'Interest',
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 24,
-                fontWeight: .bold,
+                fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),

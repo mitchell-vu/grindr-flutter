@@ -100,16 +100,16 @@ class CameraActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Align(
-        alignment: .bottomCenter,
+        alignment: Alignment.bottomCenter,
         child: Padding(
-          padding: .symmetric(horizontal: 20.0, vertical: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
           child: Row(
-            mainAxisAlignment: .spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Row(
-                  mainAxisAlignment: .start,
-                  crossAxisAlignment: .center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
                       iconSize: 24,
@@ -121,7 +121,6 @@ class CameraActions extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     IconButton(
                       icon: Icon(
                         controller.value.flashMode == FlashMode.off
@@ -151,7 +150,6 @@ class CameraActions extends StatelessWidget {
                   ],
                 ),
               ),
-
               GestureDetector(
                 onTap: () async {
                   try {
@@ -165,22 +163,21 @@ class CameraActions extends StatelessWidget {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    shape: .circle,
-                    border: .all(color: Colors.white, width: 4),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 4),
                   ),
                   child: Center(
                     child: Container(
                       width: 64,
                       height: 64,
                       decoration: const BoxDecoration(
-                        shape: .circle,
+                        shape: BoxShape.circle,
                         color: Colors.white,
                       ),
                     ),
                   ),
                 ),
               ),
-
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -196,7 +193,6 @@ class CameraActions extends StatelessWidget {
                       ),
                       onPressed: () async {},
                     ),
-
                     IconButton(
                       iconSize: 24,
                       icon: const Icon(

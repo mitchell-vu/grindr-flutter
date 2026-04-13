@@ -21,8 +21,8 @@ class ChatBottom extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: .bottomCenter,
-                end: .topCenter,
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
                 colors: [Colors.black, Colors.transparent],
                 stops: const [0.5, 1],
               ),
@@ -32,10 +32,15 @@ class ChatBottom extends StatelessWidget {
         SafeArea(
           top: false,
           child: Padding(
-            padding: const .only(left: 20, right: 20, bottom: 8, top: 20),
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              bottom: 8,
+              top: 20,
+            ),
             child: isMe
                 ? SizedBox(
-                    width: .infinity,
+                    width: double.infinity,
                     height: 48,
                     child: FilledButton(
                       onPressed: () {
@@ -47,7 +52,10 @@ class ChatBottom extends StatelessWidget {
                       ),
                       child: const Text(
                         'Edit Profile',
-                        style: TextStyle(fontWeight: .bold, fontSize: 16),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   )
@@ -56,7 +64,7 @@ class ChatBottom extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Container(
-                          padding: const .only(
+                          padding: const EdgeInsets.only(
                             left: 20,
                             right: 4,
                             top: 4,

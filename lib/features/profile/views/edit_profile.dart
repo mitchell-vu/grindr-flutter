@@ -370,7 +370,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[800], // Màu nền của ô trống
-        borderRadius: .circular(2),
+        borderRadius: BorderRadius.circular(2),
       ),
       child: Stack(
         fit: StackFit.expand,
@@ -527,24 +527,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: SafeArea(
             top: false,
             child: Column(
-              crossAxisAlignment: .stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
                   color: AppColors.primary,
                   child: Stack(
-                    alignment: .center,
+                    alignment: Alignment.center,
                     children: [
                       Text(
                         title,
                         style: GoogleFonts.ibmPlexSans(
                           fontSize: 20,
-                          fontWeight: .w600,
+                          fontWeight: FontWeight.w600,
                           color: Colors.black,
                           decoration: TextDecoration.none,
                         ),
                       ),
                       Align(
-                        alignment: .centerRight,
+                        alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
                             if (selectedIndex == 0) {
@@ -580,7 +580,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           style: GoogleFonts.ibmPlexSans(
                             color: Colors.white,
                             fontSize: 24,
-                            fontWeight: .w600,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       );

@@ -17,13 +17,13 @@ class NoResult extends StatelessWidget {
     return Center(
       child: Column(
         spacing: 4,
-        mainAxisAlignment: .center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             title,
             style: GoogleFonts.ibmPlexSans(
               fontSize: 32,
-              fontWeight: .bold,
+              fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
@@ -31,7 +31,7 @@ class NoResult extends StatelessWidget {
             subtitle,
             style: GoogleFonts.ibmPlexSans(
               fontSize: 16,
-              fontWeight: .w600,
+              fontWeight: FontWeight.w600,
               color: Colors.grey,
             ),
           ),
@@ -41,7 +41,7 @@ class NoResult extends StatelessWidget {
               'Reset Filter',
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 16,
-                fontWeight: .w600,
+                fontWeight: FontWeight.w600,
                 color: AppColors.primary,
               ),
             ),

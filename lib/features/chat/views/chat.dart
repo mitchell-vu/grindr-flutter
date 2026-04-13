@@ -162,7 +162,6 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actionsPadding: EdgeInsets.zero,
         leadingWidth: 32,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded),
@@ -182,7 +181,7 @@ class _ChatPageState extends State<ChatPage> {
             children: [
               Avatar(url: otherUser?.photoUrl, size: 32),
               Column(
-                crossAxisAlignment: .start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     spacing: 4,
@@ -192,7 +191,7 @@ class _ChatPageState extends State<ChatPage> {
                         otherUser?.displayName ?? '',
                         style: GoogleFonts.ibmPlexSans(
                           fontSize: 14,
-                          fontWeight: .w500,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -201,7 +200,7 @@ class _ChatPageState extends State<ChatPage> {
                     '2km away',
                     style: GoogleFonts.ibmPlexSans(
                       fontSize: 14,
-                      fontWeight: .normal,
+                      fontWeight: FontWeight.normal,
                     ),
                   ),
                 ],
@@ -260,13 +259,13 @@ class _ChatPageState extends State<ChatPage> {
                         SliverToBoxAdapter(
                           child: Center(
                             child: Padding(
-                              padding: .symmetric(vertical: 16),
+                              padding: EdgeInsets.symmetric(vertical: 16),
                               child: Text(
                                 _formatDate(date),
                                 style: GoogleFonts.ibmPlexSans(
                                   color: Colors.grey.shade500,
                                   fontSize: 12,
-                                  fontWeight: .w700,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -279,13 +278,12 @@ class _ChatPageState extends State<ChatPage> {
                             final chatMessage = dateMessages[index];
                             final isNextMessageSameUser =
                                 index < dateMessages.length - 1 &&
-                                dateMessages[index + 1].senderId ==
-                                    chatMessage.senderId;
+                                    dateMessages[index + 1].senderId ==
+                                        chatMessage.senderId;
 
                             return MessageBubble(
                               message: chatMessage,
-                              isMe:
-                                  _authController.userModel!.uid ==
+                              isMe: _authController.userModel!.uid ==
                                   chatMessage.senderId,
                               showTimestamp: !isNextMessageSameUser,
                             );
@@ -297,14 +295,22 @@ class _ChatPageState extends State<ChatPage> {
                 },
               ),
             ),
-
             Padding(
-              padding: const .only(left: 12.0, right: 12.0, top: 16.0),
+              padding: const EdgeInsets.only(
+                left: 12.0,
+                right: 12.0,
+                top: 16.0,
+              ),
               child: Column(
                 spacing: 4,
                 children: [
                   Container(
-                    padding: const .only(left: 20, right: 4, top: 4, bottom: 4),
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 4,
+                      top: 4,
+                      bottom: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade900,
                       borderRadius: BorderRadius.circular(100),
@@ -330,9 +336,8 @@ class _ChatPageState extends State<ChatPage> {
                       ],
                     ),
                   ),
-
                   Row(
-                    mainAxisAlignment: .spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
                         onPressed: handleOpenCamera,

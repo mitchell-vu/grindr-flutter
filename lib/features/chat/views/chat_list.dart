@@ -19,40 +19,47 @@ class ChatListPage extends GetView<ChatController> {
         SafeArea(
           bottom: false,
           child: Padding(
-            padding: const .only(left: 16, right: 16, top: 8, bottom: 16),
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 8,
+              bottom: 16,
+            ),
             child: Column(
-              crossAxisAlignment: .stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 4,
               children: [
                 Text(
                   'Inbox',
                   style: GoogleFonts.ibmPlexSans(
                     fontSize: 24,
-                    fontWeight: .bold,
+                    fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
                 SingleChildScrollView(
-                  scrollDirection: .horizontal,
+                  scrollDirection: Axis.horizontal,
                   child: ChatsFilter(),
                 ),
               ],
             ),
           ),
         ),
-
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async => await controller.refreshChatList(),
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: .zero,
+              padding: EdgeInsets.zero,
               children: [
                 // Horizontal stories row
                 SingleChildScrollView(
-                  scrollDirection: .horizontal,
+                  scrollDirection: Axis.horizontal,
                   child: Padding(
-                    padding: const .symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     child: Row(
                       spacing: 24,
                       children: [
@@ -70,8 +77,8 @@ class ChatListPage extends GetView<ChatController> {
                 // Chat list
                 Obx(
                   () => Column(
-                    children:
-                        controller.chatWithUserList.value?.map((chatWithUser) {
+                    children: controller.chatWithUserList.value
+                            ?.map((chatWithUser) {
                           return ChatListItem(
                             user: chatWithUser.user,
                             lastMessage: chatWithUser.chat.lastMessage,
@@ -105,7 +112,10 @@ class ChatsFilter extends StatelessWidget {
         ChoiceChip(
           label: Text(
             'Unread',
-            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+            style: GoogleFonts.ibmPlexSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           selected: true,
           onSelected: (value) {},
@@ -113,7 +123,10 @@ class ChatsFilter extends StatelessWidget {
         ChoiceChip(
           label: Text(
             'Online',
-            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+            style: GoogleFonts.ibmPlexSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           selected: false,
           onSelected: (value) {},
@@ -121,7 +134,10 @@ class ChatsFilter extends StatelessWidget {
         ChoiceChip(
           label: Text(
             'Distance',
-            style: GoogleFonts.ibmPlexSans(fontSize: 16, fontWeight: .w500),
+            style: GoogleFonts.ibmPlexSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           selected: false,
           onSelected: (value) {},
@@ -151,17 +167,16 @@ class MyStories extends StatelessWidget {
               bottom: -4,
               right: -4,
               child: Container(
-                padding: .all(4),
+                padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: .circular(100),
-                  border: .all(color: Colors.black, width: 4),
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(color: Colors.black, width: 4),
                 ),
                 child: Icon(
                   Icons.add,
                   color: Colors.black,
                   size: 16,
-                  fontWeight: .bold,
                 ),
               ),
             ),
@@ -171,7 +186,7 @@ class MyStories extends StatelessWidget {
           'Stories',
           style: TextStyle(color: Colors.grey, fontSize: 14),
           maxLines: 1,
-          overflow: .ellipsis,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -193,7 +208,7 @@ class UserStories extends StatelessWidget {
           user.displayName ?? '',
           style: TextStyle(color: Colors.white, fontSize: 14),
           maxLines: 1,
-          overflow: .ellipsis,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );

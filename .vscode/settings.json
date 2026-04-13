@@ -1,6 +1,8 @@
 {
-  "cSpell.words": ["fluttr", "getx", "grindr"],
+  "cSpell.words": ["cupertino", "firestore", "fluttr", "getx", "grindr", "svgs"],
   "editor.codeActionsOnSave": {
-    "source.fixAll": "always"
-  }
+    "source.fixAll": "always",
+    "source.organizeImports": "always"
+  },
+  "dart.flutterSdkPath": ".fvm/versions/3.27.4"
 }

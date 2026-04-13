@@ -9,14 +9,14 @@ class SocialsLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: .stretch,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       spacing: 20,
       children: [
         ElevatedButton(
           onPressed: onLoginGoogle,
           child: Row(
             spacing: 8,
-            mainAxisAlignment: .center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 width: 24,
@@ -32,7 +32,7 @@ class SocialsLogin extends StatelessWidget {
           onPressed: () {},
           child: Row(
             spacing: 8,
-            mainAxisAlignment: .center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 width: 24,
@@ -48,14 +48,17 @@ class SocialsLogin extends StatelessWidget {
           onPressed: () {},
           child: Row(
             spacing: 8,
-            mainAxisAlignment: .center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 width: 24,
                 height: 24,
                 child: SvgPicture.asset(
                   'assets/svgs/apple.svg',
-                  colorFilter: .mode(Colors.white, .srcIn),
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
               Text('Sign in with Apple'),

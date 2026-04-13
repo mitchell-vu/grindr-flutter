@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fluttr/routing/pages.dart';
 import 'package:get/get.dart';
+
 import 'configs/firebase_options.dart';
 import 'theme/theme.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Fluttr',
       debugShowCheckedModeBanner: false,
       darkTheme: AppTheme.darkTheme,
-      themeMode: .dark,
+      themeMode: ThemeMode.dark,
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
     );

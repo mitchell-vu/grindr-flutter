@@ -9,11 +9,11 @@ class SectionHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: .centerLeft,
+      alignment: Alignment.centerLeft,
       child: Text(
         text.toUpperCase(),
         style: GoogleFonts.ibmPlexSans(
-          fontWeight: .bold,
+          fontWeight: FontWeight.bold,
           fontSize: 14,
           color: Colors.grey,
         ),

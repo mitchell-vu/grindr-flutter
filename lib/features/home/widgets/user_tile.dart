@@ -17,10 +17,10 @@ class UserTile extends StatelessWidget {
         Get.toNamed(Routes.profile, arguments: {'uid': user.uid});
       },
       child: ClipRRect(
-        borderRadius: .circular(4),
+        borderRadius: BorderRadius.circular(4),
         child: Stack(
           children: [
-            Avatar(url: user.photoUrl, size: .infinity, radius: 0),
+            Avatar(url: user.photoUrl, size: double.infinity, radius: 0),
             Positioned(
               top: 0,
               left: 0,
@@ -29,8 +29,8 @@ class UserTile extends StatelessWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: .bottomCenter,
-                    end: .topCenter,
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
                     colors: [
                       Colors.black.withValues(alpha: 0.9),
                       Colors.transparent,
@@ -52,7 +52,7 @@ class UserTile extends StatelessWidget {
                     user.displayName ?? '',
                     style: TextStyle(color: Colors.white, fontSize: 13),
                     maxLines: 1,
-                    overflow: .ellipsis,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

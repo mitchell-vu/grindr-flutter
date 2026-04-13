@@ -37,15 +37,15 @@ class ChatListItem extends StatelessWidget {
 
     return IntrinsicHeight(
       child: Row(
-        crossAxisAlignment: .stretch,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           GestureDetector(
-            behavior: .opaque,
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Get.toNamed(Routes.profile, arguments: {'uid': user.uid});
             },
             child: Padding(
-              padding: .symmetric(horizontal: 16, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Avatar(url: user.photoUrl, size: 72),
             ),
           ),
@@ -53,13 +53,13 @@ class ChatListItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: GestureDetector(
-              behavior: .opaque,
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 Get.toNamed(Routes.chat, arguments: {'otherUserId': user.uid});
               },
 
               child: Container(
-                padding: const .symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
@@ -68,15 +68,15 @@ class ChatListItem extends StatelessWidget {
                   ),
                 ),
                 child: Row(
-                  mainAxisAlignment: .spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
-                      crossAxisAlignment: .start,
-                      mainAxisAlignment: .center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       spacing: 2,
                       children: [
                         Row(
-                          crossAxisAlignment: .center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           spacing: 4,
                           children: [
                             if (isOnline)
@@ -110,7 +110,9 @@ class ChatListItem extends StatelessWidget {
                                 'Photo ${lastMessageSenderId == authController.userModel!.uid ? 'sent' : 'received'}',
                                 style: GoogleFonts.ibmPlexSans(
                                   fontSize: 16,
-                                  fontWeight: isUnread ? .bold : .normal,
+                                  fontWeight: isUnread
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
                                   color: contentColor,
                                 ),
                               ),
@@ -120,11 +122,13 @@ class ChatListItem extends StatelessWidget {
                                 lastMessage ?? '',
                                 style: GoogleFonts.ibmPlexSans(
                                   fontSize: 16,
-                                  fontWeight: isUnread ? .bold : .normal,
+                                  fontWeight: isUnread
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
                                   color: contentColor,
                                 ),
                                 maxLines: 1,
-                                overflow: .ellipsis,
+                                overflow: TextOverflow.ellipsis,
                               ),
                           ],
                         ),
@@ -132,10 +136,10 @@ class ChatListItem extends StatelessWidget {
                     ),
 
                     Container(
-                      padding: .only(left: 8, right: 16),
+                      padding: EdgeInsets.only(left: 8, right: 16),
                       child: Column(
-                        crossAxisAlignment: .end,
-                        mainAxisAlignment: .center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 8,
                         children: [
                           Text(
@@ -150,13 +154,13 @@ class ChatListItem extends StatelessWidget {
                                     color: AppColors.primary,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  alignment: .center,
+                                  alignment: Alignment.center,
                                   child: Text(
                                     '$unreadCount',
                                     style: GoogleFonts.ibmPlexSans(
                                       color: Colors.black,
                                       fontSize: 14,
-                                      fontWeight: .bold,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 )

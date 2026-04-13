@@ -15,7 +15,7 @@ class AppDrawer extends StatelessWidget {
       child: ListView(
         children: [
           Padding(
-            padding: const .all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Column(
               spacing: 16,
               children: [
@@ -33,9 +33,13 @@ class AppDrawer extends StatelessWidget {
                     radius: 6,
                   ),
                 ),
-
                 Container(
-                  padding: const .only(left: 16, right: 2, top: 2, bottom: 2),
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    right: 2,
+                    top: 2,
+                    bottom: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surfaceBright,
                     borderRadius: BorderRadius.circular(100),
@@ -66,7 +70,6 @@ class AppDrawer extends StatelessWidget {
               ],
             ),
           ),
-
           ListTile(
             leading: Icon(Icons.edit, color: Colors.grey),
             title: Text('Edit Profile'),
@@ -75,13 +78,11 @@ class AppDrawer extends StatelessWidget {
               Get.toNamed(Routes.editProfile);
             },
           ),
-
           ListTile(
             leading: Icon(Icons.photo, color: Colors.grey),
             title: Text('My Albums'),
             onTap: () {},
           ),
-
           ListTile(
             leading: Icon(Icons.settings, color: Colors.grey),
             title: Text('Settings'),

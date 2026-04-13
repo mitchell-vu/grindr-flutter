@@ -10,13 +10,13 @@ class ComingSoon extends StatelessWidget {
       child: Center(
         child: Column(
           spacing: 4,
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               'Coming soon',
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 24,
-                fontWeight: .bold,
+                fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
@@ -24,7 +24,7 @@ class ComingSoon extends StatelessWidget {
               'This feature is not available yet',
               style: GoogleFonts.ibmPlexSans(
                 fontSize: 16,
-                fontWeight: .w600,
+                fontWeight: FontWeight.w600,
                 color: Colors.grey,
               ),
             ),
